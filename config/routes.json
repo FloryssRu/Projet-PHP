@@ -1,0 +1,37 @@
+[{
+	"path" : "/blogphp/",
+	"controller" : "Home",
+	"action" : "Home",
+	"method" : "GET",
+	"param" : [],
+	"manager": [
+		
+	]
+},
+{
+	"path" : "/blogphp/Login",
+	"controller" : "Login",
+	"action" : "Login",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
+	"path" : "/blogphp/Login",
+	"controller" : "Login",
+	"action" : "Authenticate",
+	"method" : "POST",
+	"param" : [
+		"login",
+		"password"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/Error",
+	"controller" : "Error",
+	"action" : "Show",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+}]

@@ -1,0 +1,9 @@
+home:
+  - action: home
+    path: /
+    methods: GET
+posts:
+  - action: posts
+    path: /
+    methods: GET
+

@@ -1,0 +1,18 @@
+{
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/",
+            "App/Controller\\": "src/Controller/",
+            "App/Core\\": "src/Core/",
+            "App/Core/Exceptions\\": "src/Core/Exceptions/",
+            "App/Entity\\": "src/Entity/",
+            "App/Entity/Manager\\": "src/Entity/Manager/",
+            "App/Repository\\": "src/Repository/",
+            "App/Services\\": "src/Services/"
+        }
+    },
+    "require": {
+        "twig/twig": "3.0",
+        "symfony/yaml": "^5.2"
+    }
+}
