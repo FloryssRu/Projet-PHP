@@ -28,10 +28,40 @@
 	"manager": []
 },
 {
+	"path" : "/blogphp/addPost",
+	"controller" : "AddPost",
+	"action" : "NewPost",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
+	"path" : "/blogphp/addPost",
+	"controller" : "AddPost",
+	"action" : "AddPost",
+	"method" : "POST",
+	"param" : [
+		"title",
+		"heading",
+		"content",
+		"author"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/adminPosts",
+	"controller" : "AdminPosts",
+	"action" : "AdminPosts",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
 	"path" : "/blogphp/Error",
 	"controller" : "Error",
 	"action" : "Show",
 	"method" : "GET",
-	"param" : [],
+	"param" : [
+	],
 	"manager": []
 }]

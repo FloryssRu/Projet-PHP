@@ -25,7 +25,6 @@ try
 }
 catch(Exception $e)
 {
-	echo 'Problème attrapé';
 	$httpRequest = new HttpRequest("/blogphp/Error", "GET");
 	$router = new Router();
 	$httpRequest->setRoute($router->run($httpRequest));

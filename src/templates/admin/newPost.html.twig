@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+{% block body %}
+
+<h1>Formulaire pour ajouter un nouveau Post</h1>
+<form action="addPost" method="post">
+    <label>Titre</label><input type="text" name="title">
+	<label>Chapô</label><textarea name="heading"></textarea>
+    <label>Contenu de l'article</label><textarea name="content"></textarea>
+    <label>Auteur</label><input type="text" name="author">
+	<input type="submit" value="Ajouter le post">
+</form>
+
+
+{% endblock %}

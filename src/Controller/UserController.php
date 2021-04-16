@@ -8,7 +8,7 @@ class UserController extends BaseController
 {
 	public function Login()
 	{
-		$this->render("login");
+		$this->render("login", []);
 	}
 		
 	public function Authenticate($login,$password)

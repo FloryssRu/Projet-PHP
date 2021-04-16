@@ -69,7 +69,7 @@ class Route
             if(method_exists($controller, $this->action))
             {
 				//var_dump($httpRequest);
-				$controller->{$this->action}(...$httpRequest->getparam());
+				$controller->{$this->action}(...$httpRequest->getParam()); //pour que le catch marche il faut mettre getParams() ici, mais le reste ne marche plus
             }
             else
             {
@@ -78,7 +78,25 @@ class Route
         }
         else
         {
-            throw new ControllerNotFoundException;
+            $controllerName = 'App\Controller\admin\\' . $this->controller . 'Controller';
+			if(class_exists($controllerName))
+			{
+				$controller = new $controllerName($httpRequest);
+
+				if(method_exists($controller, $this->action))
+				{
+					//var_dump($httpRequest);
+					$controller->{$this->action}(...$httpRequest->getParam());
+				}
+				else
+				{
+					throw new ActionNotFoundException;
+				}
+			}
+			else
+			{
+				throw new ControllerNotFoundException;
+			}
         }
 	}
 }

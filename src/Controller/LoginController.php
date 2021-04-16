@@ -2,13 +2,18 @@
 
 namespace App\Controller;
 
-use App\Core\Controller;
+use App\Core\BaseController;
 
-class LoginController extends Controller
+class LoginController extends BaseController
 {
     public function login()
     {
-        require TEMPLATE_DIR . "/login.html.twig";
+        $test = 'test';
+
+        return $this->render('login.html.twig', [
+            "test" => $test,
+            'test2' => 'test2'
+        ]);
     }
 
     public function authenticate($login, $password)

@@ -31,7 +31,7 @@ class BaseController
 
 		} else
 		{
-			throw new Exceptions\ViewNotFoundException();	
+			throw new Exceptions\ViewNotFoundException();
 		}
 	}
 		

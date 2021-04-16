@@ -3,6 +3,7 @@
         "psr-4": {
             "App\\": "src/",
             "App/Controller\\": "src/Controller/",
+            "App/Controller/admin\\": "src/Controller/admin/",
             "App/Core\\": "src/Core/",
             "App/Core/Exceptions\\": "src/Core/Exceptions/",
             "App/Entity\\": "src/Entity/",
