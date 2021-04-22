@@ -7,8 +7,8 @@
             "App/Core\\": "src/Core/",
             "App/Core/Exceptions\\": "src/Core/Exceptions/",
             "App/Entity\\": "src/Entity/",
-            "App/Entity/Manager\\": "src/Entity/Manager/",
             "App/Repository\\": "src/Repository/",
+            "App/Repository/Manager\\": "src/Entity/Manager/",
             "App/Services\\": "src/Services/"
         }
     },

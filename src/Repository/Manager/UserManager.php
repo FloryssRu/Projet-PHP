@@ -1,5 +1,8 @@
 <?php
-namespace App\Entity\Manager;
+
+//file for example
+
+namespace App\Repository\Manager;
 
 use App\Repository\DatabaseManager;
 

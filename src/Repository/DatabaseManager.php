@@ -10,17 +10,21 @@ class DatabaseManager
 	private object $object;
 	protected object $database;
 		
-	public function __construct($table, $object, $datasource)
+	public function __construct($table, $object)
 	{
 		$this->table = $table;
 		$this->object = $object;
-		$this->bdd = Database::getInstance($datasource);
+		$configFile = file_get_contents("../config/config.json");
+		$config = json_decode($configFile);
+		$datasource = $config->database;
+		//var_dump($datasource);
+		$this->database = Database::getInstance($datasource);
 	}
 		
 	public function getById($id): string
 	{
-		$req = $this->database->prepare("SELECT * FROM " . $this->table . " WHERE id=?");
-		$req->execute(array($id));
+		$req = $this->database->prepare("SELECT * FROM " . $this->table . " WHERE id = :id");
+		$req->execute(array('id' => $id));
 		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE,$this->object);
 		return $req->fetch();
 	}
@@ -33,12 +37,12 @@ class DatabaseManager
 		return $req->fetchAll();
 	}
 		
-	public function create($object, $params)
+	public function insert($object, $params)
 	{		
 		$paramNumber = count($params);
-		$valueArray = array_fill(1, $paramNumber,"?");
+		$valueArray = array_fill(1, $paramNumber, "?");
 		$valueString = implode($valueArray . ", ");
-		$sql = "INSERT INTO " . $this->_table . "(" . implode($params . ", ") . ") VALUES(" . $valueString . ")";
+		$sql = "INSERT INTO " . $this->table . "(" . implode($params . ", ") . ") VALUES(" . $valueString . ")";
 		$req = $this->database->prepare($sql);
 		$boundParam = array();
 		foreach($params as $paramName)

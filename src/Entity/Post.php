@@ -24,6 +24,7 @@ class Post
     private string $dateLastUpdate;
     private string $heading;
     private string $content;
+    private string $author;
     
 
     public function getId(): int
@@ -117,21 +118,42 @@ class Post
         return $content;
     }
 
+    public function setAuthor(string $author): void
+    {
+        $this->author = $author;
+    }
+
+    public function getAuthor(): string
+    {
+        $author = $this->author;
+        return $author;
+    }
+
     
     /**
      * __construct
      *
-     * @param  string $title
-     * @param  string $datePublication
-     * @param  string $dateLastUpdate
-     * @param  string $heading
-     * @param  string $content
+     * @param  string $title The title
+     * @param  string $datePublication The date of the first publication
+     * @param  string $dateLastUpdate The date of the lasted update
+     * @param  string $heading The heading
+     * @param  string $content The content
+     * @param  string $author The author who has written this post
      * @return void
      */
-    public function __construct($title, $datePublication, $dateLastUpdate, $heading, $content)
+    public function __construct($title, $datePublication, $dateLastUpdate, $heading, $content, $author)
     {
-        $data = array($title, $datePublication, $dateLastUpdate, $heading, $content);
+        $this->title = $title;
+        $this->datePublication = $datePublication;
+        $this->dateLastUpdate = $dateLastUpdate;
+        $this->heading = $heading;
+        $this->content = $content;
+        $this->author = $author;
+
+        /* Problème avec la fonction hydrate()
+        $data = array($title, $datePublication, $dateLastUpdate, $heading, $content, $author);
         $this->hydrate($data);
+        */
     }
 
     /**
@@ -143,7 +165,7 @@ class Post
     {
         foreach ($data as $key => $value)
         {
-            $method = 'set'.ucfirst($key);
+            $method = 'set' . ucfirst($key);
             if (method_exists($this, $method))
             {
                 $this->$method($value);

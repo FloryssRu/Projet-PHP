@@ -2,8 +2,6 @@
 require '../vendor/autoload.php';
 
 
-
-
 session_start();
 
 define("CONF_DIR", realpath(dirname(__DIR__)) . "/config");
