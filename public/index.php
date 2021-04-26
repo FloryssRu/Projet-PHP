@@ -17,13 +17,12 @@ try
 	$httpRequest = new HttpRequest;
 	$router = new Router();
 	$httpRequest->setRoute($router->run($httpRequest));
-	//var_dump($router->run($httpRequest)); //bon
     $httpRequest->run();
 
 }
 catch(Exception $e)
 {
-	$httpRequest = new HttpRequest("/blogphp/Error", "GET");
+	$httpRequest = new HttpRequest("/blogphp/Error", "GET", $e);
 	$router = new Router();
 	$httpRequest->setRoute($router->run($httpRequest));
 	$httpRequest->addParam($e);

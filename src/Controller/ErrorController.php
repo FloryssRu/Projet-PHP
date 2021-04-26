@@ -10,8 +10,7 @@ class ErrorController extends BaseController
 	{
 		$this->addParam("exception", $exception);
 		$this->render("error.html.twig", [
-			'message' => $exception->getMessage(),
-			'exe' => $exception->getTraceAsString()
+			'message' => $exception->getMessage()
 		]);
     }
 }

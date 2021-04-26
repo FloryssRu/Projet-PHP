@@ -28,15 +28,15 @@
 	"manager": []
 },
 {
-	"path" : "/blogphp/addPost",
-	"controller" : "AddPost",
+	"path" : "/blogphp/nouveau-post",
+	"controller" : "NewPost",
 	"action" : "NewPost",
 	"method" : "GET",
 	"param" : [],
 	"manager": []
 },
 {
-	"path" : "/blogphp/addPost",
+	"path" : "/blogphp/ajout-post",
 	"controller" : "AddPost",
 	"action" : "AddPost",
 	"method" : "POST",
@@ -49,7 +49,17 @@
 	"manager": []
 },
 {
-	"path" : "/blogphp/adminPosts",
+	"path" : "/blogphp/confirmation",
+	"controller" : "Confirmation",
+	"action" : "Confirm",
+	"method" : "GET",
+	"param" : [
+		"message"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/admin-posts",
 	"controller" : "AdminPosts",
 	"action" : "AdminPosts",
 	"method" : "GET",

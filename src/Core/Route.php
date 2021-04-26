@@ -21,7 +21,6 @@ class Route
 		$this->action = $route->action;
 		$this->method = $route->method;
 		$this->param = $route->param;
-		//$this->params = $route->param;
 		$this->manager = $route->manager;
 	}
 		
@@ -57,10 +56,9 @@ class Route
 
 	public function run($httpRequest)
 	{
-		//var_dump($httpRequest);
+
 		$controller = null;
 		$controllerName = 'App\Controller\\' . $this->controller . 'Controller';
-		//var_dump(class_exists($controllerName));
 		
         if(class_exists($controllerName))
         {
@@ -68,8 +66,7 @@ class Route
 
             if(method_exists($controller, $this->action))
             {
-				//var_dump($httpRequest);
-				$controller->{$this->action}(...$httpRequest->getParam()); //pour que le catch marche il faut mettre getParams() ici, mais le reste ne marche plus
+				$controller->{$this->action}(...$httpRequest->getParam());
             }
             else
             {
@@ -85,7 +82,6 @@ class Route
 
 				if(method_exists($controller, $this->action))
 				{
-					//var_dump($httpRequest);
 					$controller->{$this->action}(...$httpRequest->getParam());
 				}
 				else

@@ -9,14 +9,18 @@ class HttpRequest
 	private array $param;
 	private object $route;
 		
-	public function __construct($url = null, $method = null)
+	public function __construct($url = null, $method = null, $exceptions = NULL)
 	{
 		if(is_null($url)) { $this->url = $_SERVER['REQUEST_URI']; }
 		else { $this->url = $url; }
 		if(is_null($method)) { $this->method = $_SERVER['REQUEST_METHOD']; }
         else { $this->method = $method; }
-		$this->param = array();
-		//$this->params = array();
+		if($exceptions != NULL) {
+			$this->param[] = $exceptions;
+		} else {
+			$this->param = [];
+		}
+		
 	}
 
     public function getUrl(): string
@@ -59,11 +63,9 @@ class HttpRequest
 		}
 	}
 
-	public function setRoute($route): void
+	public function setRoute(object $route): void
 	{
 		$this->route = $route;
-		//$this->param = $route->getparam(); //modifié
-		//var_dump($this->route);
 	}
 
 	public function getRoute()

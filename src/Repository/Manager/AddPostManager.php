@@ -2,10 +2,10 @@
 
 namespace App\Repository\Manager;
 
-use App\Repository\DatabaseManager;
+use App\Repository\Manager;
 use App\Entity\Post;
 
-class AddPostManager extends DatabaseManager
+class AddPostManager extends Manager
 {
 	public function __construct($object)
 	{
@@ -17,7 +17,6 @@ class AddPostManager extends DatabaseManager
         //var_dump($post);
         //var_dump($this->database);
         $sth = $this->database->prepare('INSERT INTO post(title, heading, content, author, date_publication, date_last_update) VALUES (:title, :heading, :content, :author, :publication, :last_update)');
-        var_dump($sth);
             $array = array('title' => $post->getTitle(),
                            'heading' => $post->getHeading(),
                            'content' => $post->getContent(),

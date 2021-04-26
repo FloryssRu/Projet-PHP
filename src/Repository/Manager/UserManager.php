@@ -4,9 +4,9 @@
 
 namespace App\Repository\Manager;
 
-use App\Repository\DatabaseManager;
+use App\Repository\Manager;
 
-class UserManager extends DatabaseManager
+class UserManager extends Manager
 {
 	public function __construct($datasource)
 	{

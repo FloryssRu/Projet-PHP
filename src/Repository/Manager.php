@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Core\Exceptions\PropertyNotFoundException;
 
-class DatabaseManager
+class Manager
 {
 	private string $table;
 	private object $object;

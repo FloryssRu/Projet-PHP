@@ -24,7 +24,6 @@ class BaseController
 		{
 			extract($this->param);
 
-
 			$loader = new \Twig\Loader\FilesystemLoader(TEMPLATE_DIR . '//');
 			$twig = new \Twig\Environment($loader, ['debug' => true]);
 			echo $twig->render($filename, $array);
@@ -33,6 +32,23 @@ class BaseController
 		{
 			throw new Exceptions\ViewNotFoundException();
 		}
+	}
+
+	public function redirect(string $path) {
+		header("Location:/blogphp" . $path);
+		exit();
+	}
+
+	public function isSubmit(string $buttonSubmit)
+	{
+		if(isset($_POST[$buttonSubmit])) {
+			return $_POST[$buttonSubmit];
+		}
+	}
+
+	public function isValid()
+	{
+		return true;
 	}
 		
 	public function bindManager()
