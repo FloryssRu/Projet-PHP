@@ -49,16 +49,6 @@
 	"manager": []
 },
 {
-	"path" : "/blogphp/confirmation",
-	"controller" : "Confirmation",
-	"action" : "Confirm",
-	"method" : "GET",
-	"param" : [
-		"message"
-	],
-	"manager": []
-},
-{
 	"path" : "/blogphp/admin-posts",
 	"controller" : "AdminPosts",
 	"action" : "AdminPosts",

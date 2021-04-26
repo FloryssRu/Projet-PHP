@@ -3,8 +3,6 @@
 namespace App\Controller\admin;
 
 use App\Core\BaseController;
-use App\Entity\Post;
-use App\Repository\Manager\AddPostManager;
 
 class NewPostController extends BaseController
 {    

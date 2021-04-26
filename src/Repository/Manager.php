@@ -17,7 +17,6 @@ class Manager
 		$configFile = file_get_contents("../config/config.json");
 		$config = json_decode($configFile);
 		$datasource = $config->database;
-		//var_dump($datasource);
 		$this->database = Database::getInstance($datasource);
 	}
 		
@@ -25,7 +24,7 @@ class Manager
 	{
 		$req = $this->database->prepare("SELECT * FROM " . $this->table . " WHERE id = :id");
 		$req->execute(array('id' => $id));
-		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE,$this->object);
+		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $this->object);
 		return $req->fetch();
 	}
 		
@@ -33,7 +32,7 @@ class Manager
 	{
 		$req = $this->database->prepare("SELECT * FROM " . $this->table);
 		$req->execute();
-		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE,$this->object);
+		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
 		return $req->fetchAll();
 	}
 		

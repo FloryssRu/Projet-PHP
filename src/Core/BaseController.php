@@ -42,13 +42,26 @@ class BaseController
 	public function isSubmit(string $buttonSubmit)
 	{
 		if(isset($_POST[$buttonSubmit])) {
-			return $_POST[$buttonSubmit];
+			return true;
 		}
 	}
-
-	public function isValid()
+	
+	/**
+	 * Verify that all fileds are not empty and are valid
+	 *
+	 * @param  array $fields Array containing all the fields to check
+	 * @return boolean
+	 */
+	public function isValid(array $fields)
 	{
-		return true;
+		$isValid = true;
+		foreach($fields as $value) {
+			if($value == NULL || !isset($value) || $value == '') {
+				$isValid = false;
+			}
+		}
+		
+		return $isValid;
 	}
 		
 	public function bindManager()
