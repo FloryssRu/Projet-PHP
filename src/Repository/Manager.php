@@ -7,7 +7,7 @@ use App\Core\Exceptions\PropertyNotFoundException;
 class Manager
 {
 	private string $table;
-	private object $object;
+	private string $object;
 	protected object $database;
 		
 	public function __construct($table, $object)

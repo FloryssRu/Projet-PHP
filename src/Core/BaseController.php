@@ -38,7 +38,13 @@ class BaseController
 		header("Location:/blogphp" . $path);
 		exit();
 	}
-
+	
+	/**
+	 * Verify that a form has been submitted
+	 *
+	 * @param  string $buttonSubmit
+	 * @return boolean
+	 */
 	public function isSubmit(string $buttonSubmit)
 	{
 		if(isset($_POST[$buttonSubmit])) {

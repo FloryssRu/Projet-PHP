@@ -1,10 +1,23 @@
 {% extends "base.html.twig" %}
 {% block body %}
 
-<h1>Liste des posts à modifier</h1>
-<p>C'est adminpost</p>
+<h1>Liste des posts publiés</h1>
+<table>
+    <tr>
+        <th>Titre du post</th>
+        <th>Modifier</th>
+        <th>Supprimer</th>
+    </tr>
 
-{{ test }}
-{{ test2 }}
+    {% for post in allPosts %}
+        <tr>
+            <td>{{ post.title }}</td>
+            <td>Modifier</td>
+            <td>Supprimer</td>
+        </tr>
+    {% endfor %}
+    <!--boucle for : on affiche pour chaque post la même architecture avec des <td>-->
+
+</table>
 
 {% endblock %}
