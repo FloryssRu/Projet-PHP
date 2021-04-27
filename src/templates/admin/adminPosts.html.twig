@@ -1,23 +1,55 @@
 {% extends "base.html.twig" %}
+
+{% block title %}
+Gestion des posts
+{% endblock %}
+
+{% block css %}
+<link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+{% endblock %}
+
+
+
 {% block body %}
 
 <h1>Liste des posts publiés</h1>
-<table>
-    <tr>
-        <th>Titre du post</th>
-        <th>Modifier</th>
-        <th>Supprimer</th>
-    </tr>
-
-    {% for post in allPosts %}
+<table id="myTable">
+    <thead>
         <tr>
-            <td>{{ post.title }}</td>
-            <td>Modifier</td>
-            <td>Supprimer</td>
+            <th>Titre du post</th>
+            <th>Dernière modification</th>
+            <th>Modifier</th>
+            <th>Supprimer</th>
         </tr>
-    {% endfor %}
-    <!--boucle for : on affiche pour chaque post la même architecture avec des <td>-->
+    </thead>
+
+    <tbody>
+        {% for post in allPosts %}
+            <tr>
+                <td>{{ post.title }}</td>
+                <td>{{ post.date_last_update }}</td>
+                <td><a href="modifier-post?idPost={{ post.id }}">Modifier</a></td>
+                <td><a href="supprimer-post?idPost={{ post.id }}">Supprimer</a></td>
+            </tr>
+        {% endfor %}
+    </tbody>
 
 </table>
 
+{% endblock %}
+
+
+
+{% block js %}
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+    $(document).ready( function () {
+        $('#myTable').DataTable( {
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/French.json'
+            }
+        } );
+    } );
+</script>
 {% endblock %}

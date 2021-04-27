@@ -11,7 +11,6 @@ class AdminPostsController extends BaseController
     {
         $adminPostManager = new AdminPostsManager('Post');
         $getAllPosts = $adminPostManager->getAll();
-        var_dump($getAllPosts);
 
         return $this->render('admin/adminPosts.html.twig', [
             "allPosts" => $getAllPosts,

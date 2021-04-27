@@ -57,6 +57,26 @@
 	"manager": []
 },
 {
+	"path" : "/blogphp/modifier-post",
+	"controller" : "UpdatePost",
+	"action" : "UpdatePost",
+	"method" : "GET",
+	"param" : [
+		"idPost"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/supprimer-post",
+	"controller" : "DeletePost",
+	"action" : "DeletePost",
+	"method" : "GET",
+	"param" : [
+		"idPost"
+	],
+	"manager": []
+},
+{
 	"path" : "/blogphp/Error",
 	"controller" : "Error",
 	"action" : "Show",

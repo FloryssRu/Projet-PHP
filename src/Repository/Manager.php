@@ -7,7 +7,7 @@ use App\Core\Exceptions\PropertyNotFoundException;
 class Manager
 {
 	private string $table;
-	private string $object;
+	private $object;
 	protected object $database;
 		
 	public function __construct($table, $object)
@@ -20,7 +20,7 @@ class Manager
 		$this->database = Database::getInstance($datasource);
 	}
 		
-	public function getById($id): string
+	public function getById($id): array
 	{
 		$req = $this->database->prepare("SELECT * FROM " . $this->table . " WHERE id = :id");
 		$req->execute(array('id' => $id));
