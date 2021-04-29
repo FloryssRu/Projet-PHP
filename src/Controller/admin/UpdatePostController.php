@@ -3,24 +3,50 @@
 namespace App\Controller\admin;
 
 use App\Core\BaseController;
-use App\Repository\Manager\AdminPostsManager;
+use App\Core\Exceptions\FormNotValidException;
+use App\Repository\Manager\UpdatePostManager;
 
 class UpdatePostController extends BaseController
-{
-    public function updatePost()
+{    
+    /**
+     * Update a post which just was send with the editpost form
+     *
+     * @param  mixed $id
+     * @param  string $title
+     * @param  string $heading
+     * @param  string $content
+     * @param  string $author
+     * @return void
+     */
+    public function updatePost($id, string $title, string $heading, string $content, string $author)
     {
-        $adminPostManager = new AdminPostsManager('Post');
-        $getThisPost = $adminPostManager->getById($_GET['idPost']);
-        $title = $getThisPost['title'];
-        $content = $getThisPost['content'];
-        $heading = $getThisPost['heading'];
-        $author = $getThisPost['author'];
+        $isSubmit = $this->isSubmit('editPost');
+        $fields = [$title, $heading, $content, $author];
+        $isValid = $this->isValid($fields);
 
-        return $this->render('admin/updatePost.html.twig', [
-            'title' => $title,
-            'content' => $content,
-            'heading' => $heading,
-            'author' => $author
-        ]);
+        if($isSubmit == true && $isValid == true) {
+
+            $dateLastUpdate = date("Y-m-d H:i:s");
+            $updatePostManager = new UpdatePostManager('post');
+            $params = [
+                'title' => $title,
+                'heading' => $heading,
+                'content' => $content,
+                'author' => $author,
+                'date_last_update' => $dateLastUpdate
+            ];
+            
+            $updatePostManager->update($params, $id);
+
+            return $this->render('admin/confirmation.html.twig', [
+                    'message' => "Votre post a bien été modifié."
+                ]);
+
+        } else {
+
+            //je veux rediriger vers une erreur mais ça ne fait pas ce que je veux
+            throw new FormNotValidException();
+
+        }
     }
 }

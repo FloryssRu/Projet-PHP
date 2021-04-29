@@ -58,11 +58,25 @@
 },
 {
 	"path" : "/blogphp/modifier-post",
-	"controller" : "UpdatePost",
-	"action" : "UpdatePost",
+	"controller" : "EditPost",
+	"action" : "EditPost",
 	"method" : "GET",
 	"param" : [
 		"idPost"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/mise-a-jour-post",
+	"controller" : "UpdatePost",
+	"action" : "UpdatePost",
+	"method" : "POST",
+	"param" : [
+		"id",
+		"title",
+		"heading",
+		"content",
+		"author"
 	],
 	"manager": []
 },
@@ -82,6 +96,7 @@
 	"action" : "Show",
 	"method" : "GET",
 	"param" : [
+		"e"
 	],
 	"manager": []
 }]

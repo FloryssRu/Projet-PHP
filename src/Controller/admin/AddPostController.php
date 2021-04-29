@@ -25,9 +25,18 @@ class AddPostController extends BaseController
         if($isSubmit == true && $isValid == true) {
 
             $datePublication = $dateLastUpdate = date("Y-m-d H:i:s");
-            $post = new Post($title, $datePublication, $dateLastUpdate, $heading, $content, $author);
-            $addPostManager = new AddPostManager($post);
-            $addPostManager->savePost($post);
+            $addPostManager = new AddPostManager('post');
+
+            $params = [
+                'title' => $title,
+                'heading' => $heading,
+                'content' => $content,
+                'author' => $author,
+                'date_publication' =>$datePublication,
+                'date_last_update' => $dateLastUpdate
+            ];  
+
+            $addPostManager->insert($params);
 
             return $this->render('admin/confirmation.html.twig', [
                     'message' => "Votre nouveau post a bien été enregistré."

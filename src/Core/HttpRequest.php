@@ -71,13 +71,21 @@ class HttpRequest
 		{
 			case "GET":
 			case "DELETE":
+				foreach($this->route->getParam() as $param)
+				{
+					if(isset($_GET[$param]))
+					{
+						$this->param[] = $_GET[$param];
+					}
+				}
+				/*
 				if(preg_match("#" . $this->route->getPath() . "#", $this->url, $matches))
 				{
 					for($i=1; $i<count($matches)-1; $i++)
 					{
 						$this->param[] = $matches[$i];	
 					}
-				}
+				}*/
 			case "POST":
 			case "PUT":
 				foreach($this->route->getParam() as $param)

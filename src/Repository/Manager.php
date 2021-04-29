@@ -19,7 +19,13 @@ class Manager
 		$datasource = $config->database;
 		$this->database = Database::getInstance($datasource);
 	}
-		
+			
+	/**
+	 * Retrieves the row that matches the id
+	 *
+	 * @param  mixed $id
+	 * @return array
+	 */
 	public function getById($id): array
 	{
 		$req = $this->database->prepare("SELECT * FROM " . $this->table . " WHERE id = :id");
@@ -27,7 +33,12 @@ class Manager
 		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $this->object);
 		return $req->fetch();
 	}
-		
+			
+	/**
+	 * Retrieves all the row that are in the table
+	 *
+	 * @return array
+	 */
 	public function getAll(): array
 	{
 		$req = $this->database->prepare("SELECT * FROM " . $this->table);
@@ -35,7 +46,60 @@ class Manager
 		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
 		return $req->fetchAll();
 	}
-		
+	
+	/**
+	 * Insert a new line in a table
+	 *
+	 * @param  array $params Associative array that contains the field names as keys and the values to be inserted as values
+	 * @return void
+	 */
+	public function insert(array $params): void
+	{
+		foreach($params as $key => $value) {
+			$fieldNames[] = $key;
+			$valuesToUpdate[] = $value;
+		}
+
+		$sql = "INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (\"" . implode('", "', $valuesToUpdate) . "\")";
+		$req = $this->database->query($sql);
+		$req->closeCursor();
+	}
+	
+	/**
+	 * Update a line in the table targeted by its id
+	 *
+	 * @param  array $params Associative array that contains the field names as keys and the values to be inserted as values, for the fields to modify
+	 * @param  mixed $id
+	 * @return void
+	 */
+	public function update(array $params, $id): void
+	{
+		$sql = "UPDATE " . $this->table . ' SET ';
+
+		foreach($params as $key => $value) {
+			$values[] = $key . ' = "' . $value . '" ';
+		}
+
+		$sql .= implode(', ', $values);
+
+		$sql .= 'WHERE id = ' . $id;
+		$req = $this->database->query($sql);
+		$req->closeCursor();
+	}
+
+	/**
+	 * Delete a line targeted by its id
+	 *
+	 * @param  mixed $id
+	 * @return void
+	 */
+	public function delete($id)
+	{
+		$req = $this->database->query("DELETE FROM " . $this->table . " WHERE id=" . $id);
+		$req->closeCursor();
+	}
+
+	/*
 	public function insert($object, $params)
 	{		
 		$paramNumber = count($params);
@@ -76,17 +140,20 @@ class Manager
 		
 		$req->execute($boundParam);
 	}
-		
-	public function delete($object): bool
+
+	public function delete($object): void
 	{
-		if(property_exists($object,"id"))
+		if(property_exists($object, "id"))
 		{
 			$req = $this->database->prepare("DELETE FROM " . $this->table . " WHERE id=?");
-			return $req->execute(array($object->id));
+			$req->execute(array($object->id));
+			$req->closeCursor();
 		}
 		else
 		{
 			throw new PropertyNotFoundException($this->object, "id");
 		}
 	}
+	*/
+	
 }

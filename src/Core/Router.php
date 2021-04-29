@@ -16,8 +16,10 @@ class Router
     {
 
         $routeFound = array_filter($this->listRoute, function($route) use ($httpRequest){
-            
-            $route = preg_match("#^" . $route->path . "(\?[a-zA-Z]+=[0-1]+)?$#", $httpRequest->getUrl()) && $route->method == $httpRequest->getMethod();
+
+            $url = preg_replace("#(\?[a-zA-Z]+=[0-9]+)#", '', $httpRequest->getUrl());
+            $route = preg_match("#^" . $route->path . "$#", $url) && $route->method == $httpRequest->getMethod();
+            //$route = preg_match("#^" . $route->path . "(\?[a-zA-Z]+=[0-9]+)?$#", $httpRequest->getUrl()) && $route->method == $httpRequest->getMethod();
 
             return $route;
 

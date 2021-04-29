@@ -1,0 +1,23 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+Modifier un post
+{% endblock %}
+
+
+
+{% block body %}
+
+<h1>Modifier ce post</h1>
+
+<form action="mise-a-jour-post" method="post">
+    <label for="title">Titre</label><input type="text" name="title" id="title" value="{{ title }}" required>
+	<label for="heading">Chapô</label><textarea name="heading" id="heading" required>{{ heading }}</textarea>
+    <label for="content">Contenu de l'article</label><textarea name="content" id="content" required>{{ content }}</textarea>
+    <label for="author">Auteur</label><input type="text" name="author" id="author" value="{{ author }}" required>
+    <input type="hidden" name="id" value="{{ id }}">
+	<input type="submit" value="Modifier le post" name="editPost">
+</form>
+
+
+{% endblock %}
