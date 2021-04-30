@@ -49,13 +49,26 @@ class Comment
         return $isValidated;
     }
 
-    public function __construct()
+    public function __construct($content, $date, $isValidated)
     {
-        //je dois appeller toutes les fonctions set() ?
+        $data = array($content, $date, $isValidated);
+        $this->hydrate($data);
     }
 
-    private function hydrate()
+    /**
+     * Calls each set method for the attributes
+     * 
+     * @param array $data This is the description.
+     */
+    private function hydrate(array $data)
     {
-        //hydrate
+        foreach ($data as $key => $value)
+        {
+            $method = 'set' . ucfirst($key);
+            if (method_exists($this, $method))
+            {
+                $this->$method($value);
+            }
+        }
     }
 }

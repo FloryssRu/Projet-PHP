@@ -143,17 +143,8 @@ class Post
      */
     public function __construct($title, $datePublication, $dateLastUpdate, $heading, $content, $author)
     {
-        $this->title = $title;
-        $this->datePublication = $datePublication;
-        $this->dateLastUpdate = $dateLastUpdate;
-        $this->heading = $heading;
-        $this->content = $content;
-        $this->author = $author;
-
-        /* Problème avec la fonction hydrate()
         $data = array($title, $datePublication, $dateLastUpdate, $heading, $content, $author);
         $this->hydrate($data);
-        */
     }
 
     /**
@@ -161,7 +152,7 @@ class Post
      * 
      * @param array $data This is the description.
      */
-    public function hydrate(array $data)
+    private function hydrate(array $data)
     {
         foreach ($data as $key => $value)
         {
