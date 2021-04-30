@@ -5,14 +5,11 @@ namespace App\Entity;
 /**
  * File Post class
  *
- * Manages the blog posts
+ * Structure of a blog post
  *
  * @author  Floryss Rubechi <floryss.rubechi@gmail.com>
  *
  * @since 1.0
- *
- * @param int    $example  This is an example function/method parameter description.
- * @param string $example2 This is a second example.
  */
 
 class Post

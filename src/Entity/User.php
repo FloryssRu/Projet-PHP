@@ -21,7 +21,6 @@ class User
     {
         $this->pseudo = $pseudo;
     }
-    //est-ce que je dois vérifier ou le hacher de nouveau ?
 
     public function getPseudo(): string
     {
@@ -33,7 +32,6 @@ class User
     {
         $this->password = $passwordHash;
     }
-    //dois-je préciser que le password est haché ou pas ?
 
     public function getPassword(): string
     {

@@ -38,7 +38,6 @@ class HttpRequest
 		return $this->params;
 	}
 
-	/*
 	public function bindParam()
 	{
 		switch($this->method)
@@ -52,40 +51,6 @@ class HttpRequest
 						$this->param[] = $_GET[$param];
 					}
 				}
-			case "POST":
-			case "PUT":
-				foreach($this->route->getParam() as $param)
-				{
-					if(isset($_POST[$param]))
-					{
-						$this->param[] = $_POST[$param];
-					}
-				}
-		}
-	}
-	*/
-
-	public function bindParam()
-	{
-		switch($this->method)
-		{
-			case "GET":
-			case "DELETE":
-				foreach($this->route->getParam() as $param)
-				{
-					if(isset($_GET[$param]))
-					{
-						$this->param[] = $_GET[$param];
-					}
-				}
-				/*
-				if(preg_match("#" . $this->route->getPath() . "#", $this->url, $matches))
-				{
-					for($i=1; $i<count($matches)-1; $i++)
-					{
-						$this->param[] = $matches[$i];	
-					}
-				}*/
 			case "POST":
 			case "PUT":
 				foreach($this->route->getParam() as $param)

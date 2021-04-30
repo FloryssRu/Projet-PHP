@@ -19,7 +19,6 @@ class Router
 
             $url = preg_replace("#(\?[a-zA-Z]+=[0-9]+)#", '', $httpRequest->getUrl());
             $route = preg_match("#^" . $route->path . "$#", $url) && $route->method == $httpRequest->getMethod();
-            //$route = preg_match("#^" . $route->path . "(\?[a-zA-Z]+=[0-9]+)?$#", $httpRequest->getUrl()) && $route->method == $httpRequest->getMethod();
 
             return $route;
 

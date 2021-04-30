@@ -2,8 +2,6 @@
 
 namespace App\Repository;
 
-use App\Core\Exceptions\PropertyNotFoundException;
-
 class Manager
 {
 	private string $table;
@@ -98,62 +96,5 @@ class Manager
 		$req = $this->database->query("DELETE FROM " . $this->table . " WHERE id=" . $id);
 		$req->closeCursor();
 	}
-
-	/*
-	public function insert($object, $params)
-	{		
-		$paramNumber = count($params);
-		$valueArray = array_fill(1, $paramNumber, "?");
-		$valueString = implode($valueArray . ", ");
-		$sql = "INSERT INTO " . $this->table . "(" . implode($params . ", ") . ") VALUES(" . $valueString . ")";
-		$req = $this->database->prepare($sql);
-		$boundParam = array();
-		foreach($params as $paramName)
-		{
-			$boundParam[$paramName] = $object->$paramName;	
-		}
-		$req->execute($params);
-	}
-		
-	public function update($object, $params)
-	{
-		$sql = "UPDATE " . $this->_table . " SET ";
-		foreach($params as $paramName)
-		{
-			$sql = $sql . $paramName . " = ?, ";
-		}
-		$sql = $sql . " WHERE id = ? ";
-		$req = $this->database->prepare($sql);
-		$param[] = 'id';
-		$boundParam = array();
-		foreach($params as $paramName)
-		{
-			if(property_exists($object, $paramName))
-			{
-				$boundParam[$paramName] = $object->$paramName;	
-			}
-			else
-			{
-				throw new PropertyNotFoundException($this->object, $paramName);	
-			}
-		}
-		
-		$req->execute($boundParam);
-	}
-
-	public function delete($object): void
-	{
-		if(property_exists($object, "id"))
-		{
-			$req = $this->database->prepare("DELETE FROM " . $this->table . " WHERE id=?");
-			$req->execute(array($object->id));
-			$req->closeCursor();
-		}
-		else
-		{
-			throw new PropertyNotFoundException($this->object, "id");
-		}
-	}
-	*/
 	
 }
