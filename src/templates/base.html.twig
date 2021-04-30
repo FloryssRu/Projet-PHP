@@ -15,6 +15,29 @@
     </head>
     <body>
 
+        {% if success %}
+
+        <div class="flashMessage success" id="flashMessage">
+            {{ success }}
+        </div>
+
+        {% endif %}
+
+        {% if fail %}
+
+        <div class="flashMessage fail" id="flashMessage">
+            {{ fail }}
+        </div>
+
+        {% endif %}
+
+        <nav>
+            <ul>
+                <li><a href="/blogphp/nouveau-post">Ajouter un nouveau post</a></li>
+                <li><a href="/blogphp/admin-posts">Liste de tous les posts publiés</a></li>
+            </ul>
+        </nav>
+
         {% block body %}
         {% endblock %}
 

@@ -4,32 +4,11 @@
 	"action" : "Home",
 	"method" : "GET",
 	"param" : [],
-	"manager": [
-		
-	]
-},
-{
-	"path" : "/blogphp/Login",
-	"controller" : "Login",
-	"action" : "Login",
-	"method" : "GET",
-	"param" : [],
-	"manager": []
-},
-{
-	"path" : "/blogphp/Login",
-	"controller" : "Login",
-	"action" : "Authenticate",
-	"method" : "POST",
-	"param" : [
-		"login",
-		"password"
-	],
 	"manager": []
 },
 {
 	"path" : "/blogphp/nouveau-post",
-	"controller" : "NewPost",
+	"controller" : "Post",
 	"action" : "NewPost",
 	"method" : "GET",
 	"param" : [],
@@ -37,7 +16,7 @@
 },
 {
 	"path" : "/blogphp/ajout-post",
-	"controller" : "AddPost",
+	"controller" : "Post",
 	"action" : "AddPost",
 	"method" : "POST",
 	"param" : [
@@ -50,7 +29,7 @@
 },
 {
 	"path" : "/blogphp/admin-posts",
-	"controller" : "AdminPosts",
+	"controller" : "Post",
 	"action" : "AdminPosts",
 	"method" : "GET",
 	"param" : [],
@@ -58,7 +37,7 @@
 },
 {
 	"path" : "/blogphp/modifier-post",
-	"controller" : "EditPost",
+	"controller" : "Post",
 	"action" : "EditPost",
 	"method" : "GET",
 	"param" : [
@@ -68,7 +47,7 @@
 },
 {
 	"path" : "/blogphp/mise-a-jour-post",
-	"controller" : "UpdatePost",
+	"controller" : "Post",
 	"action" : "UpdatePost",
 	"method" : "POST",
 	"param" : [
@@ -82,7 +61,7 @@
 },
 {
 	"path" : "/blogphp/supprimer-post",
-	"controller" : "DeletePost",
+	"controller" : "Post",
 	"action" : "DeletePost",
 	"method" : "GET",
 	"param" : [

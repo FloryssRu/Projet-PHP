@@ -11,13 +11,12 @@ Modifier un post
 <h1>Modifier ce post</h1>
 
 <form action="mise-a-jour-post" method="post">
-    <label for="title">Titre</label><input type="text" name="title" id="title" value="{{ title }}" required>
-	<label for="heading">Chapô</label><textarea name="heading" id="heading" required>{{ heading }}</textarea>
-    <label for="content">Contenu de l'article</label><textarea name="content" id="content" required>{{ content }}</textarea>
-    <label for="author">Auteur</label><input type="text" name="author" id="author" value="{{ author }}" required>
-    <input type="hidden" name="id" value="{{ id }}">
+    <label for="title">Titre</label><input type="text" name="title" id="title" value="{{ getThisPost.title }}" required>
+	<label for="heading">Chapô</label><textarea name="heading" id="heading" required>{{ getThisPost.heading }}</textarea>
+    <label for="content">Contenu de l'article</label><textarea name="content" id="content" required>{{ getThisPost.content }}</textarea>
+    <label for="author">Auteur</label><input type="text" name="author" id="author" value="{{ getThisPost.author }}" required>
+    <input type="hidden" name="id" value="{{ getThisPost.id }}">
 	<input type="submit" value="Modifier le post" name="editPost">
 </form>
-
 
 {% endblock %}

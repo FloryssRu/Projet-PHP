@@ -9,7 +9,7 @@ class User
     private string $pseudo;
     private string $password;
     private string $email;
-    private int $admin;
+    private bool $admin;
 
     public function getId(): int
     {
@@ -52,12 +52,12 @@ class User
         return $email;
     }
 
-    public function setAdmin(int $admin): void
+    public function setAdmin(bool $admin): void
     {
         $this->admin = $admin;
     }
 
-    public function getAdmin(): int
+    public function getAdmin(): bool
     {
         $admin = $this->admin;
         return $admin;
