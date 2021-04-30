@@ -70,6 +70,26 @@
 	"manager": []
 },
 {
+	"path" : "/blogphp/admin-commentaires",
+	"controller" : "Comment",
+	"action" : "AdminComment",
+	"method" : "GET",
+	"param" : [
+		"commentsNotValidated"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/valider-commentaire",
+	"controller" : "Comment",
+	"action" : "ValidComment",
+	"method" : "GET",
+	"param" : [
+		"idComment"
+	],
+	"manager": []
+},
+{
 	"path" : "/blogphp/Error",
 	"controller" : "Error",
 	"action" : "Show",

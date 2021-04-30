@@ -15,31 +15,30 @@
     </head>
     <body>
 
-        {% if success %}
-
-        <div class="flashMessage success" id="flashMessage">
-            {{ success }}
-        </div>
-
-        {% endif %}
-
-        {% if fail %}
-
-        <div class="flashMessage fail" id="flashMessage">
-            {{ fail }}
-        </div>
-
-        {% endif %}
+    
 
         <nav>
             <ul>
-                <li><a href="/blogphp/nouveau-post">Ajouter un nouveau post</a></li>
-                <li><a href="/blogphp/admin-posts">Liste de tous les posts publiés</a></li>
+                <li><a href="/blogphp/accueil">Accueil</a></li>
             </ul>
         </nav>
 
         {% block body %}
         {% endblock %}
+
+        <footer>
+            <nav>
+                <!--tous les liens ici-->
+                <!--si le client est admin on affiche un bouton pour passer à la partie admin-->
+                {% if admin %}
+
+                <div class="button">
+                    <p><a href="/blogphp/admin-posts">Partie Admin</a></p>
+                </div>
+
+                {% endif %}
+            </nav>
+        </footer>
 
         {% block js %}
         {% endblock %}

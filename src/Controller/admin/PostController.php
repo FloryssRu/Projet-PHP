@@ -95,7 +95,6 @@ class PostController extends BaseController
                 "allPosts" => $getAllPosts
             ]);
         }
-
         
     }
     
