@@ -18,5 +18,13 @@ class CommentManager extends Manager
 		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
 		return $req->fetchAll();
     }
+
+	public function getCommentsByIdPost(int $idPost)
+	{
+		$req = $this->database->prepare("SELECT * FROM " . $this->table . " WHERE id_post = " . $idPost . " AND is_validated = 1 ORDER BY date DESC");
+		$req->execute();
+		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
+		return $req->fetchAll();
+	}
     
 }

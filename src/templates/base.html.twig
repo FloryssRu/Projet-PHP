@@ -15,11 +15,26 @@
     </head>
     <body>
 
+        {% if success %}
+
+        <div class="flashMessage success" id="flashMessage">
+            {{ success }}
+        </div>
+
+        {% endif %}
+
+        {% if fail %}
+
+        <div class="flashMessage fail" id="flashMessage">
+            {{ fail }}
+        </div>
+
+        {% endif %}
     
 
         <nav>
             <ul>
-                <li><a href="/blogphp/accueil">Accueil</a></li>
+                <li><a href="/blogphp/">Accueil</a></li>
             </ul>
         </nav>
 

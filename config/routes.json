@@ -90,6 +90,38 @@
 	"manager": []
 },
 {
+	"path" : "/blogphp/post",
+	"controller" : "OpenPart",
+	"action" : "ShowPost",
+	"method" : "GET",
+	"param" : [
+		"idPost",
+		"comments"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/liste-posts",
+	"controller" : "OpenPart",
+	"action" : "ShowList",
+	"method" : "GET",
+	"param" : [
+		"listPosts"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/nouveau-commentaire",
+	"controller" : "OpenPart",
+	"action" : "NewComment",
+	"method" : "POST",
+	"param" : [
+		"content",
+		"idPost"
+	],
+	"manager": []
+},
+{
 	"path" : "/blogphp/Error",
 	"controller" : "Error",
 	"action" : "Show",

@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+{% block title %}
+{{ post.title }}
+{% endblock %}
+
+{% block body %}
+
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.heading }}</p>
+    <p>{{ post.content }}</p>
+    <p>{{ post.author }}</p>
+    <p>{{ post.date_last_update }}</p>
+    <form action="nouveau-commentaire" method="post">
+        <h2>Laissez un commentaire !</h2>
+        <p><label for="content">Commentaire : </label><textarea id="content" name="content"></textarea></p>
+        <input type="hidden" value="{{ post.id }}" name="idPost">
+        <input type="submit" value="Envoyer le commentaire" name="newComment">
+    </form>
+
+    <h2>Commentaires publiés</h2>
+    {% for comment in comments %}
+        <h3>{{ comment.pseudo }}, {{ comment.date }}</h3>
+        <p>{{ comment.content }}</p>
+    {% endfor %}
+
+{% endblock %}
