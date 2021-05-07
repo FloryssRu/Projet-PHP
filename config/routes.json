@@ -122,6 +122,55 @@
 	"manager": []
 },
 {
+	"path" : "/blogphp/connexion",
+	"controller" : "Authenticate",
+	"action" : "SignUpForm",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
+	"path" : "/blogphp/traitement-connexion",
+	"controller" : "Authenticate",
+	"action" : "SignUp",
+	"method" : "POST",
+	"param" : [
+		"pseudo",
+		"password"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/inscription",
+	"controller" : "Authenticate",
+	"action" : "SignInForm",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
+	"path" : "/blogphp/traitement-inscription",
+	"controller" : "Authenticate",
+	"action" : "SignIn",
+	"method" : "POST",
+	"param" : [
+		"pseudo",
+		"password",
+		"passwordValid",
+		"email",
+		"mentionsAccepted"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/déconnexion",
+	"controller" : "Authenticate",
+	"action" : "SignOut",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
 	"path" : "/blogphp/Error",
 	"controller" : "Error",
 	"action" : "Show",

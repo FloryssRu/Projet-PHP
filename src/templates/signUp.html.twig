@@ -1,0 +1,29 @@
+{% extends "baseVisitor.html.twig" %}
+
+
+{% block title %}
+Se connecter
+{% endblock %}
+
+{% block body %}
+
+    {% if fail %}
+
+    <div class="flashMessage fail" id="flashMessage">
+        {{ fail }}
+    </div>
+
+    {% endif %}
+
+    <h1>Connectez-vous</h1>
+
+    <form action="traitement-connexion" method="post">
+        <p><label for="pseudo">Pseudo : </label><input type="text" id="pseudo" name="pseudo" required></p>
+        <p><label for="password">Mot de passe : </label><input type="password" id="password" name="password" required></p>
+        <input type="submit" name="signIn" value="Se connecter">
+    </form>
+
+    <p><a href="">J'ai oublié mon pseudo</a></p>
+    <p><a href="">J'ai oublié mon mot de passe</a></p>
+
+{% endblock %}

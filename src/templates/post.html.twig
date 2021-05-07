@@ -1,4 +1,6 @@
 {% extends "base.html.twig" %}
+
+
 {% block title %}
 {{ post.title }}
 {% endblock %}
@@ -10,12 +12,18 @@
     <p>{{ post.content }}</p>
     <p>{{ post.author }}</p>
     <p>{{ post.date_last_update }}</p>
-    <form action="nouveau-commentaire" method="post">
-        <h2>Laissez un commentaire !</h2>
-        <p><label for="content">Commentaire : </label><textarea id="content" name="content"></textarea></p>
-        <input type="hidden" value="{{ post.id }}" name="idPost">
-        <input type="submit" value="Envoyer le commentaire" name="newComment">
-    </form>
+    {% if userConnected %}
+        <form action="nouveau-commentaire" method="post">
+            <h2>Laissez un commentaire !</h2>
+            <p><label for="content">Commentaire : </label><textarea id="content" name="content"></textarea></p>
+            <input type="hidden" value="{{ post.id }}" name="idPost">
+            <input type="submit" value="Envoyer le commentaire" name="newComment">
+        </form>
+    {% else %}
+        <h2>Connectez ou inscrivez-vous pour laisser un commentaire</h2>
+        <p><a href="connexion">Se connecter</a></p>
+        <p><a href="inscription">S'inscrire</a></p>
+    {% endif %}
 
     <h2>Commentaires publiés</h2>
     {% for comment in comments %}

@@ -18,6 +18,13 @@ class OpenPartController extends BaseController
         $arrayComments = $commentManager->getCommentsByIdPost($idPost);
 
         $session = new PHPSession;
+        if($session->get('idUser') !== NULL)
+        {
+            $userConnected = true;
+        } else
+        {
+            $userConnected = false;
+        }
 
         if($session->get('success') != NULL)
         {
@@ -26,6 +33,7 @@ class OpenPartController extends BaseController
             return $this->render('post.html.twig', [
                 "post" => $post,
                 "comments" => $arrayComments,
+                "userConnected" => $userConnected,
                 'success' => $success
             ]);
 
@@ -36,13 +44,15 @@ class OpenPartController extends BaseController
             return $this->render('post.html.twig', [
                 "post" => $post,
                 "comments" => $arrayComments,
+                "userConnected" => $userConnected,
                 'fail' => $fail
             ]);
         } else
         {
             return $this->render('post.html.twig', [
                 "post" => $post,
-                "comments" => $arrayComments
+                "comments" => $arrayComments,
+                "userConnected" => $userConnected
             ]);
         }
 
@@ -66,11 +76,13 @@ class OpenPartController extends BaseController
 
         if($this->isSubmit('newComment') && $this->isValid($fields)) {
 
-            //$userManager = new UserManager('user');
-            $pseudo = 'pseudo'; //____________________________________________
+            $session = new PHPSession;
+            
+            $userManager = new UserManager('user');
+            $pseudo = $userManager->getPseudoByIdUser($session->get('idUser'));
+            //problème ici pour récupérer le pseudo
             $date = date("Y-m-d H:i:s");
             $isValidated = 0;
-
             $commentManager = new CommentManager('comment');
 
             $params = [
@@ -82,7 +94,7 @@ class OpenPartController extends BaseController
             ];  
 
             $commentManager->insert($params);
-            $session = new PHPSession;
+            
             $session->set('success', 'Votre commentaire a été envoyé pour validation.');
 
             return $this->showPost($idPost);

@@ -57,7 +57,6 @@ class Manager
 			$fieldNames[] = $key;
 			$valuesToUpdate[] = $value;
 		}
-
 		$sql = "INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (\"" . implode('", "', $valuesToUpdate) . "\")";
 		$req = $this->database->query($sql);
 		$req->closeCursor();
