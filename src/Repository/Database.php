@@ -2,19 +2,21 @@
 
 namespace App\Repository;
 
-class Database
+use PDO;
+
+class Database extends PDO
 {
 	private object $database;
 	private static object $instance;
 	
-	private function __construct($datasource)
+	private function __construct(object $datasource)
 	{
-		$this->_bdd = new \PDO('mysql:dbname=' . $datasource->database->dbname . ';host=' . $datasource->host,
-							  					 $datasource->database->user,
-												 $datasource->database->password);
+		$this->database = new PDO('mysql:dbname=' . $datasource->dbname . ';host=' . $datasource->host,
+							  					 $datasource->user,
+												 $datasource->password);
 	}
 
-	public static function getInstance($datasource): object
+	public static function getInstance($datasource)
 	{
 		if(empty(self::$instance))
 		{

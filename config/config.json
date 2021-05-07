@@ -1,0 +1,9 @@
+{
+    "database":  {
+        "name": "La base de données",
+        "dbname": "blogphp",
+        "host": "localhost",
+        "user": "root",
+        "password": ""
+}
+}

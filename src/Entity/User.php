@@ -9,7 +9,7 @@ class User
     private string $pseudo;
     private string $password;
     private string $email;
-    private int $admin;
+    private bool $admin;
 
     public function getId(): int
     {
@@ -21,7 +21,6 @@ class User
     {
         $this->pseudo = $pseudo;
     }
-    //est-ce que je dois vérifier ou le hacher de nouveau ?
 
     public function getPseudo(): string
     {
@@ -33,7 +32,6 @@ class User
     {
         $this->password = $passwordHash;
     }
-    //dois-je préciser que le password est haché ou pas ?
 
     public function getPassword(): string
     {
@@ -52,24 +50,37 @@ class User
         return $email;
     }
 
-    public function setAdmin(int $admin): void
+    public function setAdmin(bool $admin): void
     {
         $this->admin = $admin;
     }
 
-    public function getAdmin(): int
+    public function getAdmin(): bool
     {
         $admin = $this->admin;
         return $admin;
     }
 
-    public function __construct()
+    public function __construct($pseudo, $password, $email, $admin)
     {
-        //je dois appeller toutes les fonctions set() ?
+        $data = array($pseudo, $password, $email, $admin);
+        $this->hydrate($data);
     }
 
-    private function hydrate()
+    /**
+     * Calls each set method for the attributes
+     * 
+     * @param array $data This is the description.
+     */
+    private function hydrate(array $data)
     {
-        //hydrate
+        foreach ($data as $key => $value)
+        {
+            $method = 'set' . ucfirst($key);
+            if (method_exists($this, $method))
+            {
+                $this->$method($value);
+            }
+        }
     }
 }

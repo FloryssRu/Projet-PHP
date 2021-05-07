@@ -21,7 +21,6 @@ class Route
 		$this->action = $route->action;
 		$this->method = $route->method;
 		$this->param = $route->param;
-		//$this->params = $route->param;
 		$this->manager = $route->manager;
 	}
 		
@@ -57,10 +56,9 @@ class Route
 
 	public function run($httpRequest)
 	{
-		//var_dump($httpRequest);
+
 		$controller = null;
 		$controllerName = 'App\Controller\\' . $this->controller . 'Controller';
-		//var_dump(class_exists($controllerName));
 		
         if(class_exists($controllerName))
         {
@@ -68,8 +66,7 @@ class Route
 
             if(method_exists($controller, $this->action))
             {
-				//var_dump($httpRequest);
-				$controller->{$this->action}(...$httpRequest->getparam());
+				$controller->{$this->action}(...$httpRequest->getParam());
             }
             else
             {
@@ -78,7 +75,24 @@ class Route
         }
         else
         {
-            throw new ControllerNotFoundException;
+            $controllerName = 'App\Controller\admin\\' . $this->controller . 'Controller';
+			if(class_exists($controllerName))
+			{
+				$controller = new $controllerName($httpRequest);
+
+				if(method_exists($controller, $this->action))
+				{
+					$controller->{$this->action}(...$httpRequest->getParam());
+				}
+				else
+				{
+					throw new ActionNotFoundException;
+				}
+			}
+			else
+			{
+				throw new ControllerNotFoundException;
+			}
         }
 	}
 }

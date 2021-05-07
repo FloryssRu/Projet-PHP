@@ -2,10 +2,6 @@
 require '../vendor/autoload.php';
 
 
-
-
-session_start();
-
 define("CONF_DIR", realpath(dirname(__DIR__)) . "/config");
 define("TEMPLATE_DIR", realpath(dirname(__DIR__)) . "/src/templates");
 
@@ -19,14 +15,12 @@ try
 	$httpRequest = new HttpRequest;
 	$router = new Router();
 	$httpRequest->setRoute($router->run($httpRequest));
-	//var_dump($router->run($httpRequest)); //bon
     $httpRequest->run();
 
 }
 catch(Exception $e)
 {
-	echo 'Problème attrapé';
-	$httpRequest = new HttpRequest("/blogphp/Error", "GET");
+	$httpRequest = new HttpRequest("/blogphp/Error", "GET", $e);
 	$router = new Router();
 	$httpRequest->setRoute($router->run($httpRequest));
 	$httpRequest->addParam($e);

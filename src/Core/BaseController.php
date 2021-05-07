@@ -24,15 +24,50 @@ class BaseController
 		{
 			extract($this->param);
 
-
 			$loader = new \Twig\Loader\FilesystemLoader(TEMPLATE_DIR . '//');
 			$twig = new \Twig\Environment($loader, ['debug' => true]);
 			echo $twig->render($filename, $array);
 
 		} else
 		{
-			throw new Exceptions\ViewNotFoundException();	
+			throw new Exceptions\ViewNotFoundException();
 		}
+	}
+
+	public function redirect(string $path) {
+		header("Location:/blogphp" . $path);
+		exit();
+	}
+	
+	/**
+	 * Verify that a form has been submitted
+	 *
+	 * @param  string $buttonSubmit
+	 * @return boolean
+	 */
+	public function isSubmit(string $buttonSubmit)
+	{
+		if(isset($_POST[$buttonSubmit])) {
+			return true;
+		}
+	}
+	
+	/**
+	 * Verify that all fileds are not empty and are valid
+	 *
+	 * @param  array $fields Array containing all the fields to check
+	 * @return boolean
+	 */
+	public function isValid(array $fields)
+	{
+		$isValid = true;
+		foreach($fields as $value) {
+			if($value == NULL || !isset($value) || $value == '') {
+				$isValid = false;
+			}
+		}
+		
+		return $isValid;
 	}
 		
 	public function bindManager()

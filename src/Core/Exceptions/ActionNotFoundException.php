@@ -4,7 +4,7 @@ namespace App\Core\Exceptions;
 
 class ActionNotFoundException extends \Exception
 {
-    public function __constrcut()
+    public function __construct()
     {
         echo '<p>Problem with Action</p>';
     }

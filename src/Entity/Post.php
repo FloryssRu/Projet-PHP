@@ -5,14 +5,11 @@ namespace App\Entity;
 /**
  * File Post class
  *
- * Manages the blog posts
+ * Structure of a blog post
  *
  * @author  Floryss Rubechi <floryss.rubechi@gmail.com>
  *
  * @since 1.0
- *
- * @param int    $example  This is an example function/method parameter description.
- * @param string $example2 This is a second example.
  */
 
 class Post
@@ -24,6 +21,7 @@ class Post
     private string $dateLastUpdate;
     private string $heading;
     private string $content;
+    private string $author;
     
 
     public function getId(): int
@@ -117,20 +115,32 @@ class Post
         return $content;
     }
 
+    public function setAuthor(string $author): void
+    {
+        $this->author = $author;
+    }
+
+    public function getAuthor(): string
+    {
+        $author = $this->author;
+        return $author;
+    }
+
     
     /**
      * __construct
      *
-     * @param  string $title
-     * @param  string $datePublication
-     * @param  string $dateLastUpdate
-     * @param  string $heading
-     * @param  string $content
+     * @param  string $title The title
+     * @param  string $datePublication The date of the first publication
+     * @param  string $dateLastUpdate The date of the lasted update
+     * @param  string $heading The heading
+     * @param  string $content The content
+     * @param  string $author The author who has written this post
      * @return void
      */
-    public function __construct($title, $datePublication, $dateLastUpdate, $heading, $content)
+    public function __construct($title, $datePublication, $dateLastUpdate, $heading, $content, $author)
     {
-        $data = array($title, $datePublication, $dateLastUpdate, $heading, $content);
+        $data = array($title, $datePublication, $dateLastUpdate, $heading, $content, $author);
         $this->hydrate($data);
     }
 
@@ -139,11 +149,11 @@ class Post
      * 
      * @param array $data This is the description.
      */
-    public function hydrate(array $data)
+    private function hydrate(array $data)
     {
         foreach ($data as $key => $value)
         {
-            $method = 'set'.ucfirst($key);
+            $method = 'set' . ucfirst($key);
             if (method_exists($this, $method))
             {
                 $this->$method($value);
