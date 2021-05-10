@@ -1,0 +1,18 @@
+{% extends "base.html.twig" %}
+{% block title %}
+Liste des Posts
+{% endblock %}
+
+{% block body %}
+
+<h1>Liste des posts publiés</h1>
+{% for post in listPosts %}
+    <div class="postInList">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.date_last_update }}</p>
+        <p>{{ post.heading }}</p>
+        <p><a href="post?idPost={{ post.id }}">Lire ce post</a></p>
+    </div>
+{% endfor %}
+
+{% endblock %}

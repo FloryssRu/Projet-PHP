@@ -4,8 +4,8 @@ namespace App\Repository;
 
 class Manager
 {
-	private string $table;
-	private $object;
+	protected string $table;
+	protected $object;
 	protected object $database;
 		
 	public function __construct($table, $object)

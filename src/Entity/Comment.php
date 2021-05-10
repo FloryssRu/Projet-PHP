@@ -6,6 +6,7 @@ class Comment
 {
 
     private int $id;
+    private string $pseudo;
     private string $content;
     private string $date;
     private bool $isValidated;
@@ -14,6 +15,16 @@ class Comment
     {
         $id = $this->id;
         return $id;
+    }
+
+    public function setPseudo(string $pseudo): void
+    {
+        $this->pseudo = $pseudo;
+    }
+
+    public function getPseudo(): string
+    {
+        return $this->pseudo;
     }
 
     public function setContent(string $content): void
@@ -49,9 +60,9 @@ class Comment
         return $isValidated;
     }
 
-    public function __construct($content, $date, $isValidated)
+    public function __construct($pseudo, $content, $date, $isValidated)
     {
-        $data = array($content, $date, $isValidated);
+        $data = array($pseudo, $content, $date, $isValidated);
         $this->hydrate($data);
     }
 

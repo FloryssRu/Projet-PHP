@@ -12,24 +12,24 @@ Gestion des posts
 
 {% block body %}
 
-<h1>Liste des posts publiés</h1>
+<h1>Liste des commentaires à valider</h1>
 <table id="myTable">
     <thead>
         <tr>
-            <th>Titre du post</th>
-            <th>Dernière modification</th>
-            <th>Modifier</th>
-            <th>Supprimer</th>
+            <th>Pseudo</th>
+            <th>Commentaire</th>
+            <th>Date</th>
+            <th>Valider</th>
         </tr>
     </thead>
 
     <tbody>
-        {% for post in allPosts %}
+        {% for comment in commentsNotValidated %}
             <tr>
-                <td>{{ post.title }}</td>
-                <td>{{ post.date_last_update }}</td>
-                <td><a href="modifier-post?idPost={{ post.id }}">Modifier</a></td>
-                <td><a href="supprimer-post?idPost={{ post.id }}" onclick="return confirm('Etes vous sûr de supprimer ce post ?')">Supprimer</a></td>
+                <td>{{ comment.pseudo }}</td>
+                <td>{{ comment.content }}</td>
+                <td>{{ comment.date }}</td>
+                <td><a href="valider-commentaire?idComment={{ comment.id }}" onclick="return confirm('Etes vous sûr de valider ce commentaire ?')">Valider</a></td>
             </tr>
         {% endfor %}
     </tbody>

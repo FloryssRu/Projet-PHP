@@ -26,11 +26,9 @@ class PostController extends BaseController
      */
     public function addPost(string $title, string $heading, string $content, string $author)
     {
-        $isSubmit = $this->isSubmit('newPost');
         $fields = [$title, $heading, $content, $author];
-        $isValid = $this->isValid($fields);
 
-        if($isSubmit == true && $isValid == true) {
+        if($this->isSubmit('newPost') && $this->isValid($fields)) {
 
             $datePublication = $dateLastUpdate = date("Y-m-d H:i:s");
             $addPostManager = new PostManager('post');
@@ -95,7 +93,6 @@ class PostController extends BaseController
                 "allPosts" => $getAllPosts
             ]);
         }
-
         
     }
     
