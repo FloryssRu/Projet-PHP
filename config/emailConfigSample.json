@@ -1,0 +1,5 @@
+{
+    "emailOrigin": "emailorigin@example.com",
+    "password": "password",
+    "smtp": "smtp.example.com"
+}

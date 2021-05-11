@@ -3,6 +3,7 @@
 namespace App\Controller\admin;
 
 use App\Core\BaseController;
+use App\Entity\Post;
 use App\Repository\Manager\PostManager;
 use App\Services\PHPSession;
 
@@ -130,6 +131,10 @@ class PostController extends BaseController
 
             $dateLastUpdate = date("Y-m-d H:i:s");
             $updatePostManager = new PostManager('post');
+            /*
+            $datePublication = $updatePostManager->getById($id)['date_publication'];
+            $post = new Post($title, $datePublication, $dateLastUpdate, $heading, $content, $author);
+            */
             $params = [
                 'title' => $title,
                 'heading' => $heading,

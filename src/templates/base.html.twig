@@ -31,6 +31,8 @@
 
         {% endif %}
     
+        
+        {% if session.pseudo %}
         <header>
             <nav>
                 <ul>
@@ -41,9 +43,21 @@
             </nav>
         </header>
 
+        {% else %}
+        <nav>
+            <ul>
+                <li><a href="/blogphp/">Accueil</a></li>
+                <li><a href="/blogphp/liste-posts">Liste des posts</a></li>
+                <li><a href="/blogphp/inscription">S'inscrire</a></li>
+                <li><a href="/blogphp/connexion">Se connecter</a></li>
+            </ul>
+        </nav>
+        {% endif %}
+
         {% block body %}
         {% endblock %}
 
+        {% if session.pseudo %}
         <footer>
             <nav>
                 
@@ -62,6 +76,19 @@
                 {% endif %}
             </nav>
         </footer>
+
+        {% else %}
+        <footer>
+            <nav>
+                <ul>
+                    <li><a href="/blogphp/">Accueil</a></li>
+                    <li><a href="/blogphp/liste-posts">Liste des posts</a></li>
+                    <li><a href="/blogphp/inscription">S'inscrire</a></li>
+                    <li><a href="/blogphp/connexion">Se connecter</a></li>
+                </ul>
+            </nav>
+        </footer>
+        {% endif %}
 
         {% block js %}
         {% endblock %}

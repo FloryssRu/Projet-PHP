@@ -55,11 +55,9 @@ class Manager
 	{
 		foreach($params as $key => $value) {
 			$fieldNames[] = $key;
-			$valuesToUpdate[] = $value;
+			$valuesToInsert[] = $value;
 		}
-		$sql = "INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (\"" . implode('", "', $valuesToUpdate) . "\")";
-		$req = $this->database->query($sql);
-		$req->closeCursor();
+		$req = $this->database->query("INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (\"" . implode('", "', $valuesToInsert) . "\")");
 	}
 	
 	/**

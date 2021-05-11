@@ -46,5 +46,34 @@ class UserManager extends Manager
 		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
 		return $req->fetchAll();
 	}
+
+	public function getEmail(string $email)
+	{
+		$req = $this->database->query("SELECT email FROM " . $this->table . " WHERE email = " . $email);
+		if($req == false)
+		{
+			return true;
+		} else
+		{
+			return false;
+		}
+	}
+
+	public function getUser(string $uuid)
+	{
+		$req = $this->database->query("SELECT id FROM " . $this->table . " WHERE uuid = '" . $uuid . "'");
+		if($req != false)
+		{
+			$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
+			$arrayResults = $req->fetch();
+			return $arrayResults['id'];
+		}
+		return $req;
+	}
+
+	public function updateUuid($idUser)
+	{
+		$req = $this->database->query("UPDATE " . $this->table . " SET uuid = NULL WHERE id = " . $idUser);
+	}
     
 }

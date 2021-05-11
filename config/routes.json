@@ -171,6 +171,16 @@
 	"manager": []
 },
 {
+	"path" : "/blogphp/validation-email",
+	"controller" : "Authenticate",
+	"action" : "ValidEmail",
+	"method" : "GET",
+	"param" : [
+		"uuid"
+	],
+	"manager": []
+},
+{
 	"path" : "/blogphp/Error",
 	"controller" : "Error",
 	"action" : "Show",
