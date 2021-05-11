@@ -17,7 +17,7 @@ class Router
 
         $routeFound = array_filter($this->listRoute, function($route) use ($httpRequest){
 
-            $url = preg_replace("#(\?[a-zA-Z]+=[0-9]*[a-zA-Z]*)#", '', $httpRequest->getUrl());
+            $url = preg_replace("#(\?[a-zA-Z]+=[0-9a-zA-Z/-]+)#", '', $httpRequest->getUrl()); //ajouter la possibilité d'avoir des tirets, de mélanger lettres et chiffres
             $route = preg_match("#^" . $route->path . "$#", $url) && $route->method == $httpRequest->getMethod();
 
             return $route;

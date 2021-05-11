@@ -7,8 +7,6 @@ use App\Repository\Manager\UserManager;
 use App\Services\PHPSession;
 use Ramsey\Uuid\Uuid;
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
 
 
 class AuthenticateController extends BaseController
@@ -90,7 +88,6 @@ class AuthenticateController extends BaseController
             $mail = new PHPMailer();
             $emailConfig = json_decode(file_get_contents('../config/emailConfig.json'));
             $mail->isSendmail();
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
             $mail->Host = $emailConfig->smtp;
             $mail->Port = 465;
             $mail->SMTPSecure = 'tls';   
@@ -166,7 +163,6 @@ class AuthenticateController extends BaseController
     {
         $userManager = new UserManager('user');
         $idUser = $userManager->getUser($uuid);
-        var_dump($idUser);
         if($idUser != false)
         {
             $userManager->updateUuid($idUser);
