@@ -10,11 +10,16 @@ class UserManager extends Manager
 	{
         parent::__construct("user", $object);
 	}
-
-    public function getPseudoByIdUser($idUser)
+    
+    /**
+     * Get pseudo of a user with his id
+     *
+     * @param  int $idUser
+     * @return mixed
+     */
+    public function getPseudoByIdUser(int $idUser)
     {
-        $req = $this->database->prepare("SELECT * FROM " . $this->table . " WHERE id = " . $idUser);
-		$req->execute();
+        $req = $this->database->query("SELECT * FROM " . $this->table . " WHERE id = " . $idUser);
 		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
 		return $req->fetchAll();
     }
@@ -27,53 +32,85 @@ class UserManager extends Manager
 	 * @return mixed idUser if a match has been found
 	 */
 	public function findOneUserBy(string $pseudo, string $password)
-	{		
-		$arrayLogins = $this->getLogins();
-		$numberOfUsers = count($arrayLogins) - 1;
-		for($i = 0; $i <= $numberOfUsers; $i++)
-		{
-			//problème avec password_verify qui dit que c'est pas bon
-			if($arrayLogins[$i]['pseudo'] == $pseudo && password_verify($password, $arrayLogins[$i]['password']))
-			{
-				return $arrayLogins[$i]['id'];
-			}
-		}
-	}
-
-	private function getLogins()
 	{
-		$req = $this->database->query("SELECT id, pseudo, password FROM " . $this->table);
+		$req = $this->database->query("SELECT id FROM " . $this->table . " WHERE pseudo = '" . $pseudo . "'");
 		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
-		return $req->fetchAll();
+		$idUser = $req->fetch()['id'];
+
+		$req = $this->database->query("SELECT password FROM " . $this->table . " WHERE id = '" . $idUser . "'");
+		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
+		$passwordHashed = $req->fetch()['password'];
+
+		if(password_verify($password, $passwordHashed))
+		{
+			return $pseudo;
+		}
+		
 	}
 
-	public function getEmail(string $email)
+	
+	/**
+	 * Test if an email is in the database. Return false if it's not, else true.
+	 *
+	 * @param  string $email Email to test
+	 * @return bool
+	 */
+	public function getEmail(string $email): bool
 	{
 		$req = $this->database->query("SELECT email FROM " . $this->table . " WHERE email = " . $email);
 		if($req == false)
 		{
-			return true;
+			return false;
 		} else
 		{
-			return false;
+			return true;
 		}
 	}
-
-	public function getUser(string $uuid)
+	
+	/**
+	 * Find a user id from a uuid
+	 *
+	 * @param  string $uuid
+	 * @return mixed
+	 */
+	public function getidByUuid(string $uuid)
 	{
 		$req = $this->database->query("SELECT id FROM " . $this->table . " WHERE uuid = '" . $uuid . "'");
-		if($req != false)
+		
+		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
+		$arrayResults = $req->fetch();
+		if($arrayResults)
 		{
-			$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
-			$arrayResults = $req->fetch();
 			return $arrayResults['id'];
 		}
-		return $req;
 	}
-
-	public function updateUuid($idUser)
+	
+	/**
+	 * Used to find the user's id from their email address. (password reset)
+	 *
+	 * @param  string $email
+	 * @return mixed
+	 */
+	public function getIdByEmail(string $email)
 	{
-		$req = $this->database->query("UPDATE " . $this->table . " SET uuid = NULL WHERE id = " . $idUser);
+		$req = $this->database->query("SELECT id FROM " . $this->table . " WHERE email = '" . $email . "'");
+		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
+		$idUser = $req->fetch();
+		if($req != false)
+		{
+			return $idUser;
+		}
+	}
+	
+	/**
+	 * Delete the uuid of a user
+	 *
+	 * @param  int $idUser
+	 * @return void
+	 */
+	public function updateUuid(int $idUser): void
+	{
+		$this->database->query("UPDATE " . $this->table . " SET uuid = NULL WHERE id = " . $idUser);
 	}
     
 }

@@ -181,6 +181,46 @@
 	"manager": []
 },
 {
+	"path" : "/blogphp/mot-de-passe-oublie",
+	"controller" : "Authenticate",
+	"action" : "EmailToResetPassword",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
+	"path" : "/blogphp/mot-de-passe-oublie",
+	"controller" : "Authenticate",
+	"action" : "SendEmailResetPassword",
+	"method" : "POST",
+	"param" : [
+		"email"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/reinitialisation-mot-de-passe",
+	"controller" : "Authenticate",
+	"action" : "changePasswordForm",
+	"method" : "GET",
+	"param" : [
+		"uuid"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/reinitialisation-mot-de-passe",
+	"controller" : "Authenticate",
+	"action" : "resetPassword",
+	"method" : "POST",
+	"param" : [
+		"password",
+		"validPassword",
+		"uuid"
+	],
+	"manager": []
+},
+{
 	"path" : "/blogphp/Error",
 	"controller" : "Error",
 	"action" : "Show",

@@ -34,24 +34,13 @@
         
         {% if session.pseudo %}
         <header>
-            <nav>
-                <ul>
-                    <li><a href="/blogphp/">Accueil</a></li>
-                    <li><a href="/blogphp/liste-posts">Liste des posts</a></li>
-                    <li><a href="/blogphp/déconnexion">Se déconnecter</a></li>
-                </ul>
-            </nav>
+            {% include 'navUserConnected.html.twig' %}
         </header>
 
         {% else %}
-        <nav>
-            <ul>
-                <li><a href="/blogphp/">Accueil</a></li>
-                <li><a href="/blogphp/liste-posts">Liste des posts</a></li>
-                <li><a href="/blogphp/inscription">S'inscrire</a></li>
-                <li><a href="/blogphp/connexion">Se connecter</a></li>
-            </ul>
-        </nav>
+        <header>
+            {% include 'navVisitor.html.twig' %}
+        </header>
         {% endif %}
 
         {% block body %}
@@ -59,34 +48,21 @@
 
         {% if session.pseudo %}
         <footer>
-            <nav>
-                
-                <ul>
-                    <li><a href="/blogphp/">Accueil</a></li>
-                    <li><a href="/blogphp/liste-posts">Liste des posts</a></li>
-                    <li><a href="/blogphp/déconnexion">Se déconnecter</a></li>
-                </ul>
+            {% include 'navUserConnected.html.twig' %}
         
-                {% if idUser %}
+            {% if idUser %}
 
                 <div class="button">
                     <p><a href="/blogphp/admin-posts">Partie Admin</a></p>
                 </div>
 
-                {% endif %}
-            </nav>
+            {% endif %}
+            
         </footer>
 
         {% else %}
         <footer>
-            <nav>
-                <ul>
-                    <li><a href="/blogphp/">Accueil</a></li>
-                    <li><a href="/blogphp/liste-posts">Liste des posts</a></li>
-                    <li><a href="/blogphp/inscription">S'inscrire</a></li>
-                    <li><a href="/blogphp/connexion">Se connecter</a></li>
-                </ul>
-            </nav>
+            {% include 'navVisitor.html.twig' %}
         </footer>
         {% endif %}
 
