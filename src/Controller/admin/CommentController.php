@@ -3,6 +3,7 @@
 namespace App\Controller\admin;
 
 use App\Core\BaseController;
+use App\Entity\Comment;
 use App\Repository\Manager\CommentManager;
 use App\Services\PHPSession;
 
@@ -10,7 +11,7 @@ class CommentController extends BaseController
 {
         
     /**
-     * Render a list with all comments which have isValidated on 0
+     * Render a list with all comments and link to validate or unvalidate for each
      *
      * @return void
      */
@@ -33,8 +34,9 @@ class CommentController extends BaseController
     public function validComment($id)
     {
         $commentManager = new CommentManager('Comment');
-        $params = ['is_validated' => 1];
-        $commentManager->update($params, $id);
+        $commentData = $commentManager->getById($id);
+        $comment = new Comment($commentData['pseudo'], $commentData['content'], $commentData['date'], 1, $commentData['idPost']);
+        $commentManager->update($comment, $id);
         $session = new PHPSession;
         $session->set('success', 'Le commentaire a été validé.');
         $commentsNotValidated = $commentManager->getCommentNotValidated();
@@ -58,9 +60,7 @@ class CommentController extends BaseController
             ]);
         } else
         {
-            return $this->render('admin/adminComments.html.twig', [
-                "commentsNotValidated" => $commentsNotValidated
-            ]);
+            return $this->redirect('/admin-commentaires');
         }
         
     }

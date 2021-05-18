@@ -12,7 +12,7 @@
     <p>{{ post.content }}</p>
     <p>{{ post.author }}</p>
     <p>{{ post.date_last_update }}</p>
-    {% if userConnected %}
+    {% if session.pseudo %}
         <form action="nouveau-commentaire" method="post">
             <h2>Laissez un commentaire !</h2>
             <p><label for="content">Commentaire : </label><textarea id="content" name="content"></textarea></p>

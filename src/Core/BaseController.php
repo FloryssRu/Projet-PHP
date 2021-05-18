@@ -2,6 +2,9 @@
 
 namespace App\Core;
 
+use Twig\Loader\FilesystemLoader;
+use Twig\Environment;
+
 class BaseController
 {
 	private $httpRequest;
@@ -24,8 +27,9 @@ class BaseController
 		{
 			extract($this->param);
 
-			$loader = new \Twig\Loader\FilesystemLoader(TEMPLATE_DIR . '//');
-			$twig = new \Twig\Environment($loader, ['debug' => true]);
+			$loader = new FilesystemLoader(TEMPLATE_DIR . '//');
+			$twig = new Environment($loader, ['debug' => true]);
+			$twig->addGlobal('session', $_SESSION);
 			echo $twig->render($filename, $array);
 
 		} else

@@ -32,29 +32,21 @@ class PostController extends BaseController
         if($this->isSubmit('newPost') && $this->isValid($fields)) {
 
             $datePublication = $dateLastUpdate = date("Y-m-d H:i:s");
-            $addPostManager = new PostManager('post');
+            $postManager = new PostManager('post');
 
-            $params = [
-                'title' => $title,
-                'heading' => $heading,
-                'content' => $content,
-                'author' => $author,
-                'date_publication' =>$datePublication,
-                'date_last_update' => $dateLastUpdate
-            ];  
-
-            $addPostManager->insert($params);
+            $post = new Post($title, $datePublication, $dateLastUpdate, $heading, $content, $author);
+            $postManager->insert($post);
             $session = new PHPSession;
             $session->set('success', 'Votre nouveau post a bien été enregistré.');
 
-            return $this->adminPosts();
+            return $this->redirect('/admin-posts');
 
         } else {
 
             $session = new PHPSession;
             $session->set('fail', 'Votre nouveau post n\'a pas été enregistré, une erreur dans le formulaire a été détectée.');
 
-            return $this->adminPosts();
+            return $this->redirect('/admin-posts');
 
         }
     }
@@ -130,31 +122,22 @@ class PostController extends BaseController
         if($this->isSubmit('editPost') && $this->isValid($fields)) {
 
             $dateLastUpdate = date("Y-m-d H:i:s");
-            $updatePostManager = new PostManager('post');
-            /*
-            $datePublication = $updatePostManager->getById($id)['date_publication'];
-            $post = new Post($title, $datePublication, $dateLastUpdate, $heading, $content, $author);
-            */
-            $params = [
-                'title' => $title,
-                'heading' => $heading,
-                'content' => $content,
-                'author' => $author,
-                'date_last_update' => $dateLastUpdate
-            ];
+            $postManager = new PostManager('post');
+            $postData = $postManager->getById($id);
+            $post = new Post($title, $postData['date_publication'], $dateLastUpdate, $heading, $content, $author);
             
-            $updatePostManager->update($params, $id);
+            $postManager->update($post, $id);
             $session = new PHPSession;
             $session->set('success', 'Votre post a bien été modifié.');
 
-            return $this->adminPosts();
+            return $this->redirect('/admin-posts');
 
         } else {
 
             $session = new PHPSession;
             $session->set('fail', 'Votre post n\'a pas été modifié, une erreur dans le formulaire a été détectée.');
 
-            return $this->adminPosts();
+            return $this->redirect('/admin-posts');
 
         }
     }

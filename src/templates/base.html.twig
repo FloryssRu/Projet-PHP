@@ -50,7 +50,7 @@
         <footer>
             {% include 'navUserConnected.html.twig' %}
         
-            {% if idUser %}
+            {% if session.admin %}
 
                 <div class="button">
                     <p><a href="/blogphp/admin-posts">Partie Admin</a></p>

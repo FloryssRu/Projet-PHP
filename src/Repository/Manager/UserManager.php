@@ -43,7 +43,7 @@ class UserManager extends Manager
 
 		if(password_verify($password, $passwordHashed))
 		{
-			return $pseudo;
+			return $idUser;
 		}
 		
 	}
@@ -86,7 +86,7 @@ class UserManager extends Manager
 	}
 	
 	/**
-	 * Used to find the user's id from their email address. (password reset)
+	 * Find the user's id from their email address. (password reset)
 	 *
 	 * @param  string $email
 	 * @return mixed
@@ -103,14 +103,21 @@ class UserManager extends Manager
 	}
 	
 	/**
-	 * Delete the uuid of a user
+	 * Return if a user is an admin (true if yes, false if no)
 	 *
-	 * @param  int $idUser
-	 * @return void
+	 * @param  mixed $idUser
+	 * @return bool
 	 */
-	public function updateUuid(int $idUser): void
+	public function isAdminById($idUser): bool
 	{
-		$this->database->query("UPDATE " . $this->table . " SET uuid = NULL WHERE id = " . $idUser);
+		$req = $this->database->query("SELECT admin FROM " . $this->table . " WHERE id = '" . $idUser . "'");
+		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
+		$isAdmin = $req->fetch()['admin'];
+		if($isAdmin == 1)
+		{
+			return true;
+		} 
+		return false;
 	}
     
 }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Core\BaseController;
+use App\Entity\Comment;
 use App\Services\PHPSession;
 use App\Repository\Manager\PostManager;
 use App\Repository\Manager\CommentManager;
@@ -77,23 +78,13 @@ class OpenPartController extends BaseController
         if($this->isSubmit('newComment') && $this->isValid($fields)) {
 
             $session = new PHPSession;
-            
-            $userManager = new UserManager('user');
-            $pseudo = $userManager->getPseudoByIdUser($session->get('idUser'));
-            //problème ici pour récupérer le pseudo
+            $pseudo = $session->get('pseudo');
             $date = date("Y-m-d H:i:s");
             $isValidated = 0;
             $commentManager = new CommentManager('comment');
 
-            $params = [
-                'pseudo' => $pseudo,
-                'content' => $content,
-                'date' => $date,
-                'is_validated' => $isValidated,
-                'id_post' => $idPost
-            ];  
-
-            $commentManager->insert($params);
+            $comment = new Comment($pseudo, $content, $date, $isValidated, $idPost);
+            $commentManager->insert($comment);
             
             $session->set('success', 'Votre commentaire a été envoyé pour validation.');
 

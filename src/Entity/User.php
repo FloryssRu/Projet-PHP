@@ -2,6 +2,16 @@
 
 namespace App\Entity;
 
+/**
+ * File User class
+ *
+ * Structure of an user informations
+ *
+ * @author  Floryss Rubechi <floryss.rubechi@gmail.com>
+ *
+ * @since 1.0
+ */
+
 class User
 {
 
@@ -10,11 +20,12 @@ class User
     private string $password;
     private string $email;
     private bool $admin;
+    private bool $emailValidated;
+    private string $uuid;
 
     public function getId(): int
     {
-        $id = $this->id;
-        return $id;
+        return $this->id;
     }
 
     public function setPseudo(string $pseudo): void
@@ -24,8 +35,7 @@ class User
 
     public function getPseudo(): string
     {
-        $pseudo = $this->pseudo;
-        return $pseudo;
+        return $this->pseudo;
     }
 
     public function setPassword(string $passwordHash): void
@@ -35,8 +45,7 @@ class User
 
     public function getPassword(): string
     {
-        $password = $this->password;
-        return $password;
+        return $this->password;
     }
 
     public function setEmail(string $email): void
@@ -46,8 +55,7 @@ class User
 
     public function getEmail(): string
     {
-        $email = $this->email;
-        return $email;
+        return $this->email;
     }
 
     public function setAdmin(bool $admin): void
@@ -57,20 +65,39 @@ class User
 
     public function getAdmin(): bool
     {
-        $admin = $this->admin;
-        return $admin;
+        return $this->admin;
     }
 
-    public function __construct($pseudo, $password, $email, $admin)
+    public function setEmailValidated(bool $emailValidated): void
     {
-        $data = array($pseudo, $password, $email, $admin);
+        $this->emailValidated = $emailValidated;
+    }
+
+    public function getEmailValidated(): bool
+    {
+        return $this->emailValidated;
+    }
+
+    public function setUuid(string $uuid): void
+    {
+        $this->uuid = $uuid;
+    }
+
+    public function getUuid(): string
+    {
+        return $this->uuid;
+    }
+
+    public function __construct($pseudo, $password, $email, $admin, $emailValidated, $uuid)
+    {
+        $data = array($pseudo, $password, $email, $admin, $emailValidated, $uuid);
         $this->hydrate($data);
     }
 
     /**
      * Calls each set method for the attributes
      * 
-     * @param array $data This is the description.
+     * @param array $data All the attributs to hydrate
      */
     private function hydrate(array $data)
     {

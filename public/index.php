@@ -8,6 +8,7 @@ define("TEMPLATE_DIR", realpath(dirname(__DIR__)) . "/src/templates");
 use App\Core\HttpRequest;
 use App\Core\Router;
 
+session_start();
 
 try
 {
