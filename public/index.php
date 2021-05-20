@@ -17,6 +17,8 @@ try
 	$router = new Router();
 	$httpRequest->setRoute($router->run($httpRequest));
     $httpRequest->run();
+	unset($_SESSION['success']);
+	unset($_SESSION['fail']);
 
 }
 catch(Exception $e)

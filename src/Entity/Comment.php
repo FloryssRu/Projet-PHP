@@ -79,7 +79,13 @@ class Comment
 
     public function __construct($pseudo, $content, $date, $isValidated, $idPost)
     {
-        $data = array($pseudo, $content, $date, $isValidated, $idPost);
+        $data = [
+            'pseudo' => $pseudo,
+            'content' => $content,
+            'date' => $date,
+            'isValidated' => $isValidated,
+            'idPost' => $idPost
+        ];
         $this->hydrate($data);
     }
 

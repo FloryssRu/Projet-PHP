@@ -85,7 +85,13 @@ class Contact
 
     public function __construct($firstName, $lastName, $email, $title, $content)
     {
-        $data = array($firstName, $lastName, $email, $title, $content);
+        $data = [
+            'firstName' => $firstName,
+            'lastName' => $lastName,
+            'email' => $email,
+            'title' => $title,
+            'content' => $content
+        ];
         $this->hydrate($data);
     }
 

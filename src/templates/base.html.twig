@@ -15,18 +15,18 @@
     </head>
     <body>
 
-        {% if success %}
+        {% if session.success %}
 
         <div class="flashMessage success" id="flashMessage">
-            {{ success }}
+            {{ session.success }}
         </div>
 
         {% endif %}
 
-        {% if fail %}
+        {% if session.fail %}
 
         <div class="flashMessage fail" id="flashMessage">
-            {{ fail }}
+            {{ session.fail }}
         </div>
 
         {% endif %}

@@ -5,10 +5,10 @@ namespace App\Controller;
 use App\Core\BaseController;
 use App\Entity\User;
 use App\Repository\Manager\UserManager;
+use App\Services\HandlerEmails;
 use App\Services\HandlerSignIn;
 use App\Services\PHPSession;
 use Ramsey\Uuid\Uuid;
-use PHPMailer\PHPMailer\PHPMailer;
 
 
 class AuthenticateController extends BaseController
@@ -84,7 +84,10 @@ class AuthenticateController extends BaseController
 
     public function signOut()
     {
-        session_destroy();
+        unset($_SESSION['pseudo']);
+        unset($_SESSION['admin']);
+        $session = new PHPSession();
+        $session->set('success', 'Vous avez bien été déconnecté.');
         return $this->redirect('/');
     }
     
@@ -117,7 +120,7 @@ class AuthenticateController extends BaseController
      */
     public function emailToResetPassword()
 	{
-		return $this->redirect('/mot-de-passe-oublie');
+		return $this->render('emailToResetPassword.html.twig', []);
 	}
     
     /**
@@ -134,28 +137,16 @@ class AuthenticateController extends BaseController
             $uuid = $uuid->toString();
 
             $userManager = new UserManager('user');
-            $emailUnknown = $userManager->getEmail($email);
+            $emailOccupied = $userManager->getEmail($email);
             $idUser = $userManager->getIdByEmail($email)['id'];            
 
-            if($emailUnknown == false && $idUser != NULL)
+            if($emailOccupied != false && $idUser != NULL)
             {
-                $mail = new PHPMailer();
-                $emailConfig = json_decode(file_get_contents('../config/emailConfig.json'));
-                $mail->isSendmail();
-                $mail->Host = $emailConfig->smtp;
-                $mail->Port = 465;
-                $mail->SMTPSecure = 'tls';   
-                $mail->SMTPAuth = true;
-                $mail->Username = $emailConfig->emailOrigin;
-                $mail->Password = $emailConfig->password;
-                $mail->setFrom($emailConfig->emailOrigin);
-                $mail->addAddress($email);
-                $mail->CharSet="utf-8"; 
-                $mail->Subject = 'Réinitialisation de votre mot de passe - Blog de Floryss Rubechi';
-                $mail->msgHTML('<p>Réinitialisation de votre mot de passe</p>
-                    <p>Pour changer votre mot de passe, veuillez cliquer sur le lien ci-dessous</p>
-                    <p><a href="http://localhost/blogphp/reinitialisation-mot-de-passe?uuid=' . $uuid . '">Changer mon mot de passe !</a></p>
-                    <p>Si vous n\'êtes pas à l\'origine de cette demande, veuillez ignorer cet email.</p>');
+                $handlerEmails = new HandlerEmails;
+                $mail = $handlerEmails->sendEmail($email, 'Réinitialisation de votre mot de passe - Blog de Floryss Rubechi', '<p>Réinitialisation de votre mot de passe</p>
+                <p>Pour changer votre mot de passe, veuillez cliquer sur le lien ci-dessous</p>
+                <p><a href="http://localhost/blogphp/reinitialisation-mot-de-passe?uuid=' . $uuid . '">Changer mon mot de passe !</a></p>
+                <p>Si vous n\'êtes pas à l\'origine de cette demande, veuillez ignorer cet email.</p>');
 
                 if ($mail->send())
                 {
@@ -199,7 +190,9 @@ class AuthenticateController extends BaseController
 	{
         $session = new PHPSession;
         $session->set('uuid', $uuid);
-		return $this->redirect('/reinitialisation-mot-de-passe');
+		return $this->render('changePasswordForm.html.twig', [
+            'uuid' => $uuid
+        ]);
 	}
     
     /**

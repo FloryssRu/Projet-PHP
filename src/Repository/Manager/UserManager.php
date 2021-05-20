@@ -57,8 +57,30 @@ class UserManager extends Manager
 	 */
 	public function getEmail(string $email): bool
 	{
-		$req = $this->database->query("SELECT email FROM " . $this->table . " WHERE email = " . $email);
-		if($req == false)
+		$req = $this->database->query("SELECT email FROM " . $this->table . " WHERE email = \"" . $email . "\"");
+		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
+		$arrayResults = $req->fetch();
+		if($arrayResults == false)
+		{
+			return false;
+		} else
+		{
+			return true;
+		}
+	}
+
+	/**
+	 * Test if a pseudo is in the database. Return false if it's not, else true.
+	 *
+	 * @param  string $email Email to test
+	 * @return bool
+	 */
+	public function getPseudo(string $pseudo): bool
+	{
+		$req = $this->database->query("SELECT pseudo FROM " . $this->table . " WHERE pseudo = \"" . $pseudo . "\"");
+		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
+		$arrayResults = $req->fetch();
+		if($arrayResults == false)
 		{
 			return false;
 		} else

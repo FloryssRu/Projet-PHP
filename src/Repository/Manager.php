@@ -53,13 +53,15 @@ class Manager
 	 */
 	public function insert(object $object): void
 	{
-		foreach($object as $key => $value) {
+		$arrayData = $object->getAttributes($object);
+
+		foreach($arrayData as $key => $value) {
 			$key = preg_replace('/(?=[A-Z])/', '_', $key);
 			$key = strtolower($key);
 			$fieldNames[] = $key;
 			$valuesToInsert[] = $value;
 		}
-		$req = $this->database->query("INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (\"" . implode('", "', $valuesToInsert) . "\")");
+		$this->database->query("INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (\"" . implode('", "', $valuesToInsert) . "\")");
 	}
 	
 	/**
@@ -73,7 +75,9 @@ class Manager
 	{
 		$sql = "UPDATE " . $this->table . ' SET ';
 
-		foreach($object as $key => $value) {
+		$arrayData = $object->getAttributes($object);
+
+		foreach($arrayData as $key => $value) {
 			$key = preg_replace('/(?=[A-Z])/', '_', $key);
 			$key = strtolower($key);
 			$values[] = $key . ' = "' . $value . '" ';

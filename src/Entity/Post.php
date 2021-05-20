@@ -128,7 +128,14 @@ class Post
 
     public function __construct($title, $datePublication, $dateLastUpdate, $heading, $content, $author)
     {
-        $data = array($title, $datePublication, $dateLastUpdate, $heading, $content, $author);
+        $data = [
+            'title' => $title,
+            'datePublication' => $datePublication,
+            'dateLastUpdate' => $dateLastUpdate,
+            'heading' => $heading,
+            'content' => $content,
+            'author' => $author
+        ];
         $this->hydrate($data);
     }
 

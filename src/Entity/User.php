@@ -21,7 +21,7 @@ class User
     private string $email;
     private bool $admin;
     private bool $emailValidated;
-    private string $uuid;
+    private $uuid;
 
     public function getId(): int
     {
@@ -78,7 +78,7 @@ class User
         return $this->emailValidated;
     }
 
-    public function setUuid(string $uuid): void
+    public function setUuid($uuid): void
     {
         $this->uuid = $uuid;
     }
@@ -90,7 +90,14 @@ class User
 
     public function __construct($pseudo, $password, $email, $admin, $emailValidated, $uuid)
     {
-        $data = array($pseudo, $password, $email, $admin, $emailValidated, $uuid);
+        $data = [
+            'pseudo' => $pseudo,
+            'password' => $password,
+            'email' => $email,
+            'admin' => $admin,
+            'emailValidated' => $emailValidated,
+            'uuid' => $uuid
+        ];
         $this->hydrate($data);
     }
 
@@ -109,5 +116,14 @@ class User
                 $this->$method($value);
             }
         }
+    }
+
+    public function getAttributes(object $object)
+    {
+        foreach($object as $attribute => $value)
+        {
+            $array[$attribute] = $value;
+        }
+        return $array;
     }
 }
