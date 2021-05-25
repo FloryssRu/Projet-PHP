@@ -3,13 +3,9 @@
 namespace App\Services;
 
 use App\Controller\AuthenticateController;
-use App\Entity\User;
-use App\Repository\Manager\UserManager;
-use App\Services\PHPSession;
 use PHPMailer\PHPMailer\PHPMailer;
-use Ramsey\Uuid\Nonstandard\Uuid;
 
-class HandlerEmails extends AuthenticateController
+class BaseEmails extends AuthenticateController
 {
     public function __construct()
     {

@@ -1,4 +1,4 @@
-{% extends "admin/baseAdmin.html.twig" %}
+{% extends "base.html.twig" %}
 
 {% block title %}
 Nouveau Post
@@ -14,6 +14,7 @@ Nouveau Post
 	<label for="heading">Chapô</label><textarea name="heading" id="heading" required></textarea>
     <label for="content">Contenu de l'article</label><textarea name="content" id="content" required></textarea>
     <label for="author">Auteur</label><input type="text" name="author" id="author" required>
+    <input type="hidden" name="token" value="{{ session.token }}">
 	<input type="submit" value="Ajouter le post" name="newPost">
 </form>
 

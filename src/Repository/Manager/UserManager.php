@@ -141,5 +141,10 @@ class UserManager extends Manager
 		} 
 		return false;
 	}
+
+	public function setUuidNull(int $idUser)
+	{
+		$this->database->query("UPDATE user SET uuid = NULL WHERE id = " . $idUser);
+	}
     
 }

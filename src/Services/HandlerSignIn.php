@@ -50,8 +50,8 @@ class HandlerSignIn extends AuthenticateController
             $userManager = new UserManager('user');
             $user = new User($data['pseudo'], $password, $data['email'], false, 0, $uuid);
 
-            $handlerEmails = new HandlerEmails;
-            $mail = $handlerEmails->sendEmail($data['email'], 'Valider votre email - Blog de Floryss Rubechi', '<p>Vous vous êtes inscrit sur le Blog de Floryss Rubechi.</p>
+            $baseEmails = new BaseEmails;
+            $mail = $baseEmails->sendEmail($data['email'], 'Valider votre email - Blog de Floryss Rubechi', '<p>Vous vous êtes inscrit sur le Blog de Floryss Rubechi.</p>
             <p>Pour valider votre adresse email et terminer votre inscritpion, veuillez cliquer sur le lien ci-dessous</p>
             <p><a href="http://localhost/blogphp/validation-email?uuid=' . $uuid . '">Valider mon email !</a></p>');
 

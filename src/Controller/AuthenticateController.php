@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Core\BaseController;
 use App\Entity\User;
 use App\Repository\Manager\UserManager;
-use App\Services\HandlerEmails;
+use App\Services\BaseEmails;
 use App\Services\HandlerSignIn;
 use App\Services\PHPSession;
 use Ramsey\Uuid\Uuid;
@@ -105,6 +105,7 @@ class AuthenticateController extends BaseController
             $userData = $userManager->getById($idUser);
             $user = new User($userData['pseudo'], $userData['password'], $userData['email'], $userData['admin'], 1, NULL);
             $userManager->update($user, $idUser);
+            $userManager->setUuidNull($idUser);
             $session = new PHPSession;
             $session->set('success', 'Votre email a bien été confirmé.');
             return $this->redirect('/');
@@ -142,8 +143,8 @@ class AuthenticateController extends BaseController
 
             if($emailOccupied != false && $idUser != NULL)
             {
-                $handlerEmails = new HandlerEmails;
-                $mail = $handlerEmails->sendEmail($email, 'Réinitialisation de votre mot de passe - Blog de Floryss Rubechi', '<p>Réinitialisation de votre mot de passe</p>
+                $baseEmails = new BaseEmails;
+                $mail = $baseEmails->sendEmail($email, 'Réinitialisation de votre mot de passe - Blog de Floryss Rubechi', '<p>Réinitialisation de votre mot de passe</p>
                 <p>Pour changer votre mot de passe, veuillez cliquer sur le lien ci-dessous</p>
                 <p><a href="http://localhost/blogphp/reinitialisation-mot-de-passe?uuid=' . $uuid . '">Changer mon mot de passe !</a></p>
                 <p>Si vous n\'êtes pas à l\'origine de cette demande, veuillez ignorer cet email.</p>');
@@ -190,6 +191,9 @@ class AuthenticateController extends BaseController
 	{
         $session = new PHPSession;
         $session->set('uuid', $uuid);
+        $token = Uuid::uuid4();
+        $token = $token->toString();
+        $session->set('token', $token);
 		return $this->render('changePasswordForm.html.twig', [
             'uuid' => $uuid
         ]);
@@ -202,10 +206,11 @@ class AuthenticateController extends BaseController
      * @param  string $validPassword
      * @param  string $uuid
      */
-    public function resetPassword(string $password, string $validPassword, string $uuid)
+    public function resetPassword(string $password, string $validPassword, string $uuid, string $token)
     {
+        $session = new PHPSession;
         $fields = [$uuid, $password, $validPassword];
-        if($this->isValid($fields) && $this->isSubmit('resetPassword') && $uuid != NULL && $password == $validPassword)
+        if($this->isValid($fields) && $this->isSubmit('resetPassword') && $uuid != NULL && $password == $validPassword && $token = $session->get('token'))
         {
             $userManager = new UserManager('user');
             $idUser = $userManager->getIdByUuid($uuid);
@@ -217,6 +222,7 @@ class AuthenticateController extends BaseController
                 $userData = $userManager->getById($idUser);
                 $user = new User($userData['pseudo'], $password, $userData['email'], $userData['admin'], $userData['email_validated'], NULL);
                 $userManager->update($user, $idUser);
+                $userManager->setUuidNull($idUser);
                 $session = new PHPSession;
                 $session->set('success', "Votre mot de passe a bien été changé.");
                 return $this->redirect('/connexion');
