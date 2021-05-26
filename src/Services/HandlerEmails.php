@@ -3,14 +3,15 @@
 namespace App\Services;
 
 use App\Controller\AuthenticateController;
-use App\Entity\User;
-use App\Repository\Manager\UserManager;
-use App\Services\PHPSession;
 use PHPMailer\PHPMailer\PHPMailer;
-use Ramsey\Uuid\Nonstandard\Uuid;
 
 class HandlerEmails extends AuthenticateController
-{
+{    
+    /**
+     * Is empty because the mother class has a construct function and we don't want to use it for this class.
+     *
+     * @return void
+     */
     public function __construct()
     {
 

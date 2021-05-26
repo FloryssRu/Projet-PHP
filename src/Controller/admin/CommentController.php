@@ -15,12 +15,12 @@ class CommentController extends BaseController
      *
      * @return void
      */
-    public function adminComment()
+    public function adminComment(): void
     {
         $commentManager = new CommentManager('Comment');
         $commentsNotValidated = $commentManager->getCommentNotValidated();
 
-        return $this->render('admin/adminComments.html.twig', [
+        $this->render('admin/adminComments.html.twig', [
                 "commentsNotValidated" => $commentsNotValidated
             ]);
 
@@ -45,7 +45,7 @@ class CommentController extends BaseController
         {
             $success = $session->get('success');
             $session->delete('success');
-            return $this->render('admin/adminComments.html.twig', [
+            $this->render('admin/adminComments.html.twig', [
                 "commentsNotValidated" => $commentsNotValidated,
                 'success' => $success
             ]);
@@ -54,13 +54,13 @@ class CommentController extends BaseController
         {
             $fail = $session->get('fail');
             $session->delete('fail');
-            return $this->render('admin/adminComments.html.twig', [
+            $this->render('admin/adminComments.html.twig', [
                 "commentsNotValidated" => $commentsNotValidated,
                 'fail' => $fail
             ]);
         } else
         {
-            return $this->redirect('/admin-commentaires');
+            $this->redirect('/admin-commentaires');
         }
         
     }
