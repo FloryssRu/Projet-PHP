@@ -14,8 +14,8 @@ use Ramsey\Uuid\Uuid;
 class AuthenticateController extends BaseController
 {
     private $PATH_TO_SIGNUP_PAGE = "/connexion";
-    private $PATH_TO_FORGOTTEN_PASSWORD = "/mot-de-passe-oublie";
-    private $PATH_TO_PASSWORD_RESET = "/reinitialisation-mot-de-passe?uuid=";
+    private $PATH_TO_FORGOTTEN_PSWD = "/mot-de-passe-oublie";
+    private $PATH_TO_PSWD_RESET = "/reinitialisation-mot-de-passe?uuid=";
 
     public function signUpForm(): void
     {
@@ -169,21 +169,21 @@ class AuthenticateController extends BaseController
                 {
                     $session = new PHPSession;
                     $session->set('fail', "L'email de réinitialisation de mot de passe n'a pas pu être envoyé. Veuillez réécrire votre adresse email.");
-                    $this->redirect($this->PATH_TO_FORGOTTEN_PASSWORD);
+                    $this->redirect($this->PATH_TO_FORGOTTEN_PSWD);
                 }
 
             } else
             {
                 $session = new PHPSession;
                 $session->set('fail', "L'email de réinitialisation de mot de passe n'a pas pu être envoyé. Veuillez réécrire votre adresse email.");
-                $this->redirect($this->PATH_TO_FORGOTTEN_PASSWORD);
+                $this->redirect($this->PATH_TO_FORGOTTEN_PSWD);
             }
             
         } else
         {
             $session = new PHPSession;
             $session->set('fail', "Veuillez renseigner un email valide.");
-            $this->redirect($this->PATH_TO_FORGOTTEN_PASSWORD);
+            $this->redirect($this->PATH_TO_FORGOTTEN_PSWD);
         }
 
     }
@@ -219,7 +219,7 @@ class AuthenticateController extends BaseController
             $userManager = new UserManager('user');
             $idUser = $userManager->getIdByUuid($uuid);
             if($idUser == NULL) {
-                $this->redirect($this->PATH_TO_PASSWORD_RESET . $uuid);
+                $this->redirect($this->PATH_TO_PSWD_RESET . $uuid);
             } else
             {
                 $password = password_hash($password, PASSWORD_DEFAULT);
@@ -235,12 +235,12 @@ class AuthenticateController extends BaseController
         {
             $session = new PHPSession;
             $session->set('fail', "Les mots de passe entrés ne sont pas identiques.");
-            $this->redirect($this->PATH_TO_PASSWORD_RESET . $session->get('uuid'));
+            $this->redirect($this->PATH_TO_PSWD_RESET . $session->get('uuid'));
         } else
         {
             $session = new PHPSession;
             $session->set('fail', "Votre réinitialisation de mot de passe a rencontré un problème. Veuillez recommencer.");
-            $this->redirect($this->PATH_TO_PASSWORD_RESET . $session->get('uuid'));
+            $this->redirect($this->PATH_TO_PSWD_RESET . $session->get('uuid'));
         }
     }
 
