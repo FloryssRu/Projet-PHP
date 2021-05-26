@@ -11,6 +11,7 @@ class PostController extends BaseController
 {
 
     private $PATH_TO_ADMIN_POSTS = '/admin-posts';
+    private $ADMIN_POSTS_TEMPLATE = 'admin/adminPosts.html.twig';
     
     /**
      * Form to create a new Post
@@ -69,7 +70,7 @@ class PostController extends BaseController
         {
             $success = $session->get('success');
             $session->delete('success');
-            $this->render('admin/adminPosts.html.twig', [
+            $this->render($this->ADMIN_POSTS_TEMPLATE, [
                 "allPosts" => $getAllPosts,
                 'success' => $success
             ]);
@@ -78,13 +79,13 @@ class PostController extends BaseController
         {
             $fail = $session->get('fail');
             $session->delete('fail');
-            $this->render('admin/adminPosts.html.twig', [
+            $this->render($this->ADMIN_POSTS_TEMPLATE, [
                 "allPosts" => $getAllPosts,
                 'fail' => $fail
             ]);
         } else
         {
-            $this->render('admin/adminPosts.html.twig', [
+            $this->render($this->ADMIN_POSTS_TEMPLATE, [
                 "allPosts" => $getAllPosts
             ]);
         }

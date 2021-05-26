@@ -9,6 +9,8 @@ use App\Services\PHPSession;
 
 class CommentController extends BaseController
 {
+
+    private $ADMIN_COMMENTS_TEMPLATE = 'admin/adminComments.html.twig';
         
     /**
      * Render a list with all comments and link to validate or unvalidate for each
@@ -20,7 +22,7 @@ class CommentController extends BaseController
         $commentManager = new CommentManager('Comment');
         $commentsNotValidated = $commentManager->getCommentNotValidated();
 
-        $this->render('admin/adminComments.html.twig', [
+        $this->render($this->ADMIN_COMMENTS_TEMPLATE, [
                 "commentsNotValidated" => $commentsNotValidated
             ]);
 
@@ -45,7 +47,7 @@ class CommentController extends BaseController
         {
             $success = $session->get('success');
             $session->delete('success');
-            $this->render('admin/adminComments.html.twig', [
+            $this->render($this->ADMIN_COMMENTS_TEMPLATE, [
                 "commentsNotValidated" => $commentsNotValidated,
                 'success' => $success
             ]);
@@ -54,7 +56,7 @@ class CommentController extends BaseController
         {
             $fail = $session->get('fail');
             $session->delete('fail');
-            $this->render('admin/adminComments.html.twig', [
+            $this->render($this->ADMIN_COMMENTS_TEMPLATE, [
                 "commentsNotValidated" => $commentsNotValidated,
                 'fail' => $fail
             ]);

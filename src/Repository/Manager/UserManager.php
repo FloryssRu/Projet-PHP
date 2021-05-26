@@ -62,8 +62,7 @@ class UserManager extends Manager
 	{
 		$req = $this->database->query("SELECT email FROM " . $this->table . " WHERE email = \"" . $email . "\"");
 		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
-		$arrayResults = $req->fetch();
-		return $arrayResults;
+		return $req->fetch();
 	}
 
 	/**
@@ -76,8 +75,7 @@ class UserManager extends Manager
 	{
 		$req = $this->database->query("SELECT pseudo FROM " . $this->table . " WHERE pseudo = \"" . $pseudo . "\"");
 		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
-		$arrayResults = $req->fetch();
-		return $arrayResults;
+		return $req->fetch();
 	}
 	
 	/**
