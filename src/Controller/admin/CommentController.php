@@ -22,24 +22,20 @@ class CommentController extends BaseController
         $adminProtectionPart->redirectNotAdmin();
         $commentManager = new CommentManager('Comment');
         $commentsNotValidated = $commentManager->getCommentNotValidated();
+        $commentsValidated = $commentManager->getCommentValidated();
 
         return $this->render('admin/adminComments.html.twig', [
-                "commentsNotValidated" => $commentsNotValidated
+                "commentsNotValidated" => $commentsNotValidated,
+                "commentsValidated" => $commentsValidated
             ]);
 
     }
     
     /**
      * Change the isValidated attribute to 1 (valide this comment)
-     *
-     * @return void
      */
-    public function validComment($id = NULL)
+    public function validComment($id)
     {
-        if($id == NULL)
-        {
-            return $this->redirect('/erreur-403');
-        }
         $adminProtectionPart = new AdminProtectionPart();
         $adminProtectionPart->redirectNotAdmin();
         $commentManager = new CommentManager('Comment');
@@ -50,30 +46,24 @@ class CommentController extends BaseController
         $session->set('success', 'Le commentaire a été validé.');
 
         return $this->redirect('/admin-commentaires');
-
-        /*$commentsNotValidated = $commentManager->getCommentNotValidated();
-        if($session->get('success') != NULL)
-        {
-            $success = $session->get('success');
-            $session->delete('success');
-            return $this->render('admin/adminComments.html.twig', [
-                "commentsNotValidated" => $commentsNotValidated,
-                'success' => $success
-            ]);
-
-        } elseif ($session->get('fail') != NULL)
-        {
-            $fail = $session->get('fail');
-            $session->delete('fail');
-            return $this->render('admin/adminComments.html.twig', [
-                "commentsNotValidated" => $commentsNotValidated,
-                'fail' => $fail
-            ]);
-        } else
-        {
-            return $this->redirect('/admin-commentaires');
-        }*/
         
+    }
+    
+    /**
+     * Change the isValidated attribute to 0 (invalide this comment)
+     */
+    public function invalidComment($id)
+    {
+        $adminProtectionPart = new AdminProtectionPart();
+        $adminProtectionPart->redirectNotAdmin();
+        $commentManager = new CommentManager('Comment');
+        $commentData = $commentManager->getById($id);
+        $comment = new Comment($commentData['pseudo'], $commentData['content'], $commentData['date'], 0, $commentData['id_post']);
+        $commentManager->update($comment, $id);
+        $session = new PHPSession;
+        $session->set('success', 'Le commentaire a été invalidé.');
+
+        return $this->redirect('/admin-commentaires');
     }
     
 }

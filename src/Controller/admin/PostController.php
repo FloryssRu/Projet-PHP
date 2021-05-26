@@ -145,12 +145,10 @@ class PostController extends BaseController
      * @param  mixed $id
      * @param  string $token
      */
-    public function deletePost($id = NULL, string $token = NULL)
+    public function deletePost($id, string $token)
     {
-        if($id == NULL || $token == NULL)
-        {
-            $this->redirect('/erreur-403');
-        }
+        $adminProtectionPart = new AdminProtectionPart();
+        $adminProtectionPart->redirectNotAdmin();
         $session = new PHPSession;
         if($token == $session->get('token'))
         {
