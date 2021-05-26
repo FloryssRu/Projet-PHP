@@ -17,7 +17,7 @@ class Router
 
         $routeFound = array_filter($this->listRoute, function($route) use ($httpRequest){
 
-            $url = preg_replace("#(\?[a-zA-Z]+=[0-9a-zA-Z\-]+)#", '', $httpRequest->getUrl());
+            $url = preg_replace("#\?[a-zA-Z]+=[0-9a-zA-Z\-]+(&[a-zA-Z]+=[0-9a-zA-Z\-]+)?#", '', $httpRequest->getUrl());
             $route = preg_match("#^" . $route->path . "$#", $url) && $route->method == $httpRequest->getMethod();
 
             return $route;

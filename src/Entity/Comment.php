@@ -105,4 +105,13 @@ class Comment
             }
         }
     }
+
+    public function getAttributes(object $object)
+    {
+        foreach($object as $attribute => $value)
+        {
+            $array[$attribute] = $value;
+        }
+        return $array;
+    }
 }

@@ -17,53 +17,56 @@
 
         {% if session.success %}
 
-        <div class="flashMessage success" id="flashMessage">
-            {{ session.success }}
-        </div>
+            <div class="flashMessage success" id="flashMessage">
+                {{ session.success }}
+            </div>
 
         {% endif %}
 
         {% if session.fail %}
 
-        <div class="flashMessage fail" id="flashMessage">
-            {{ session.fail }}
-        </div>
+            <div class="flashMessage fail" id="flashMessage">
+                {{ session.fail }}
+            </div>
 
         {% endif %}
     
         
         {% if session.pseudo %}
-        <header>
-            {% include 'navUserConnected.html.twig' %}
-        </header>
+            <header>
+                {% if session.admin %}
+                    {% include 'navAdmin.html.twig' %}
+                {% else %}
+                    {% include 'navUserConnected.html.twig' %}
+                {% endif %}
+            </header>
 
         {% else %}
-        <header>
-            {% include 'navVisitor.html.twig' %}
-        </header>
+            <header>
+                {% include 'navVisitor.html.twig' %}
+            </header>
         {% endif %}
 
         {% block body %}
         {% endblock %}
 
         {% if session.pseudo %}
-        <footer>
-            {% include 'navUserConnected.html.twig' %}
-        
-            {% if session.admin %}
-
-                <div class="button">
-                    <p><a href="/blogphp/admin-posts">Partie Admin</a></p>
-                </div>
-
-            {% endif %}
-            
-        </footer>
+            <footer>
+                {% if session.admin %}
+                    {% include 'navAdmin.html.twig' %}
+                    <div class="button">
+                        <p><a href="/blogphp/admin-posts">Partie Admin</a></p>
+                    </div>
+                {% else %}
+                    {% include 'navUserConnected.html.twig' %}
+                {% endif %}
+                
+            </footer>
 
         {% else %}
-        <footer>
-            {% include 'navVisitor.html.twig' %}
-        </footer>
+            <footer>
+                {% include 'navVisitor.html.twig' %}
+            </footer>
         {% endif %}
 
         {% block js %}

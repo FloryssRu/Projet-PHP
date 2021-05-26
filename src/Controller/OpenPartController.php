@@ -7,7 +7,6 @@ use App\Entity\Comment;
 use App\Services\PHPSession;
 use App\Repository\Manager\PostManager;
 use App\Repository\Manager\CommentManager;
-use App\Repository\Manager\UserManager;
 
 class OpenPartController extends BaseController
 {
@@ -27,35 +26,11 @@ class OpenPartController extends BaseController
             $userConnected = false;
         }
 
-        if($session->get('success') != NULL)
-        {
-            $success = $session->get('success');
-            $session->delete('success');
-            return $this->render('post.html.twig', [
-                "post" => $post,
-                "comments" => $arrayComments,
-                "userConnected" => $userConnected,
-                'success' => $success
-            ]);
-
-        } elseif ($session->get('fail') != NULL)
-        {
-            $fail = $session->get('fail');
-            $session->delete('fail');
-            return $this->render('post.html.twig', [
-                "post" => $post,
-                "comments" => $arrayComments,
-                "userConnected" => $userConnected,
-                'fail' => $fail
-            ]);
-        } else
-        {
-            return $this->render('post.html.twig', [
-                "post" => $post,
-                "comments" => $arrayComments,
-                "userConnected" => $userConnected
-            ]);
-        }
+        return $this->render('post.html.twig', [
+            "post" => $post,
+            "comments" => $arrayComments,
+            "userConnected" => $userConnected
+        ]);
 
     }
 
@@ -95,5 +70,10 @@ class OpenPartController extends BaseController
 
             return $this->showPost($idPost);
         }
+    }
+
+    public function error403()
+    {
+        return $this->render('403.html.twig', []);
     }
 }
