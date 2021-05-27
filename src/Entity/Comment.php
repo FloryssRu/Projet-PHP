@@ -2,6 +2,16 @@
 
 namespace App\Entity;
 
+/**
+ * File Comment class
+ *
+ * Structure of a comment
+ *
+ * @author  Floryss Rubechi <floryss.rubechi@gmail.com>
+ *
+ * @since 1.0
+ */
+
 class Comment
 {
 
@@ -10,11 +20,11 @@ class Comment
     private string $content;
     private string $date;
     private bool $isValidated;
+    private int $idPost;
 
     public function getId(): int
     {
-        $id = $this->id;
-        return $id;
+        return $this->id;
     }
 
     public function setPseudo(string $pseudo): void
@@ -34,8 +44,7 @@ class Comment
 
     public function getContent(): string
     {
-        $content = $this->content;
-        return $content;
+        return $this->content;
     }
 
     public function setDate(string $date): void
@@ -45,8 +54,7 @@ class Comment
 
     public function getDate(): string
     {
-        $date = $this->date;
-        return $date;
+        return $this->date;
     }
 
     public function setIsValidated(bool $isValidated): void
@@ -56,20 +64,35 @@ class Comment
 
     public function getIsValidated(): bool
     {
-        $isValidated = $this->isValidated;
-        return $isValidated;
+        return $this->isValidated;
     }
 
-    public function __construct($pseudo, $content, $date, $isValidated)
+    public function setIdPost(int $idPost): void
     {
-        $data = array($pseudo, $content, $date, $isValidated);
+        $this->idPost = $idPost;
+    }
+
+    public function getIdPost(): int
+    {
+        return $this->idPost;
+    }
+
+    public function __construct($pseudo, $content, $date, $isValidated, $idPost)
+    {
+        $data = [
+            'pseudo' => $pseudo,
+            'content' => $content,
+            'date' => $date,
+            'isValidated' => $isValidated,
+            'idPost' => $idPost
+        ];
         $this->hydrate($data);
     }
 
     /**
      * Calls each set method for the attributes
      * 
-     * @param array $data This is the description.
+     * @param array $data All the attributes to hydrate
      */
     private function hydrate(array $data)
     {

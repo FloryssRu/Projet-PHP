@@ -48,33 +48,38 @@ class Manager
 	/**
 	 * Insert a new line in a table
 	 *
-	 * @param  array $params Associative array that contains the field names as keys and the values to be inserted as values
+	 * @param  object $params Associative array that contains the field names as keys and the values to be inserted as values
 	 * @return void
 	 */
-	public function insert(array $params): void
+	public function insert(object $object): void
 	{
-		foreach($params as $key => $value) {
-			$fieldNames[] = $key;
-			$valuesToUpdate[] = $value;
-		}
+		$arrayData = $object->getAttributes($object);
 
-		$sql = "INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (\"" . implode('", "', $valuesToUpdate) . "\")";
-		$req = $this->database->query($sql);
-		$req->closeCursor();
+		foreach($arrayData as $key => $value) {
+			$key = preg_replace('/(?=[A-Z])/', '_', $key);
+			$key = strtolower($key);
+			$fieldNames[] = $key;
+			$valuesToInsert[] = $value;
+		}
+		$this->database->query("INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (\"" . implode('", "', $valuesToInsert) . "\")");
 	}
 	
 	/**
 	 * Update a line in the table targeted by its id
 	 *
-	 * @param  array $params Associative array that contains the field names as keys and the values to be inserted as values, for the fields to modify
+	 * @param  object $object Object that contains the updated values
 	 * @param  mixed $id
 	 * @return void
 	 */
-	public function update(array $params, $id): void
+	public function update(object $object, $id): void
 	{
 		$sql = "UPDATE " . $this->table . ' SET ';
 
-		foreach($params as $key => $value) {
+		$arrayData = $object->getAttributes($object);
+
+		foreach($arrayData as $key => $value) {
+			$key = preg_replace('/(?=[A-Z])/', '_', $key);
+			$key = strtolower($key);
 			$values[] = $key . ' = "' . $value . '" ';
 		}
 

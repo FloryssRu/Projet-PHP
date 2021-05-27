@@ -122,6 +122,105 @@
 	"manager": []
 },
 {
+	"path" : "/blogphp/connexion",
+	"controller" : "Authenticate",
+	"action" : "SignUpForm",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
+	"path" : "/blogphp/traitement-connexion",
+	"controller" : "Authenticate",
+	"action" : "SignUp",
+	"method" : "POST",
+	"param" : [
+		"pseudo",
+		"password"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/inscription",
+	"controller" : "Authenticate",
+	"action" : "SignInForm",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
+	"path" : "/blogphp/traitement-inscription",
+	"controller" : "Authenticate",
+	"action" : "SignIn",
+	"method" : "POST",
+	"param" : [
+		"pseudo",
+		"password",
+		"passwordValid",
+		"email",
+		"mentionsAccepted"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/deconnexion",
+	"controller" : "Authenticate",
+	"action" : "SignOut",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
+	"path" : "/blogphp/validation-email",
+	"controller" : "Authenticate",
+	"action" : "ValidEmail",
+	"method" : "GET",
+	"param" : [
+		"uuid"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/mot-de-passe-oublie",
+	"controller" : "Authenticate",
+	"action" : "EmailToResetPassword",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
+	"path" : "/blogphp/mot-de-passe-oublie",
+	"controller" : "Authenticate",
+	"action" : "SendEmailResetPassword",
+	"method" : "POST",
+	"param" : [
+		"email"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/reinitialisation-mot-de-passe",
+	"controller" : "Authenticate",
+	"action" : "changePasswordForm",
+	"method" : "GET",
+	"param" : [
+		"uuid"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/reinitialisation-mot-de-passe",
+	"controller" : "Authenticate",
+	"action" : "resetPassword",
+	"method" : "POST",
+	"param" : [
+		"password",
+		"validPassword",
+		"uuid"
+	],
+	"manager": []
+},
+{
 	"path" : "/blogphp/Error",
 	"controller" : "Error",
 	"action" : "Show",

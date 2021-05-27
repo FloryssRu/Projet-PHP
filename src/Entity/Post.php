@@ -126,28 +126,23 @@ class Post
         return $author;
     }
 
-    
-    /**
-     * __construct
-     *
-     * @param  string $title The title
-     * @param  string $datePublication The date of the first publication
-     * @param  string $dateLastUpdate The date of the lasted update
-     * @param  string $heading The heading
-     * @param  string $content The content
-     * @param  string $author The author who has written this post
-     * @return void
-     */
     public function __construct($title, $datePublication, $dateLastUpdate, $heading, $content, $author)
     {
-        $data = array($title, $datePublication, $dateLastUpdate, $heading, $content, $author);
+        $data = [
+            'title' => $title,
+            'datePublication' => $datePublication,
+            'dateLastUpdate' => $dateLastUpdate,
+            'heading' => $heading,
+            'content' => $content,
+            'author' => $author
+        ];
         $this->hydrate($data);
     }
 
     /**
      * Calls each set method for the attributes
      * 
-     * @param array $data This is the description.
+     * @param array $data All the attributes to hydrate
      */
     private function hydrate(array $data)
     {

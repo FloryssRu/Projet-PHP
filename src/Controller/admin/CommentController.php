@@ -3,23 +3,26 @@
 namespace App\Controller\admin;
 
 use App\Core\BaseController;
+use App\Entity\Comment;
 use App\Repository\Manager\CommentManager;
 use App\Services\PHPSession;
 
 class CommentController extends BaseController
 {
+
+    private $ADMIN_COMMENTS_TEMPLATE = 'admin/adminComments.html.twig';
         
     /**
-     * Render a list with all comments which have isValidated on 0
+     * Render a list with all comments and link to validate or unvalidate for each
      *
      * @return void
      */
-    public function adminComment()
+    public function adminComment(): void
     {
         $commentManager = new CommentManager('Comment');
         $commentsNotValidated = $commentManager->getCommentNotValidated();
 
-        return $this->render('admin/adminComments.html.twig', [
+        $this->render($this->ADMIN_COMMENTS_TEMPLATE, [
                 "commentsNotValidated" => $commentsNotValidated
             ]);
 
@@ -33,8 +36,9 @@ class CommentController extends BaseController
     public function validComment($id)
     {
         $commentManager = new CommentManager('Comment');
-        $params = ['is_validated' => 1];
-        $commentManager->update($params, $id);
+        $commentData = $commentManager->getById($id);
+        $comment = new Comment($commentData['pseudo'], $commentData['content'], $commentData['date'], 1, $commentData['idPost']);
+        $commentManager->update($comment, $id);
         $session = new PHPSession;
         $session->set('success', 'Le commentaire a été validé.');
         $commentsNotValidated = $commentManager->getCommentNotValidated();
@@ -43,7 +47,7 @@ class CommentController extends BaseController
         {
             $success = $session->get('success');
             $session->delete('success');
-            return $this->render('admin/adminComments.html.twig', [
+            $this->render($this->ADMIN_COMMENTS_TEMPLATE, [
                 "commentsNotValidated" => $commentsNotValidated,
                 'success' => $success
             ]);
@@ -52,15 +56,13 @@ class CommentController extends BaseController
         {
             $fail = $session->get('fail');
             $session->delete('fail');
-            return $this->render('admin/adminComments.html.twig', [
+            $this->render($this->ADMIN_COMMENTS_TEMPLATE, [
                 "commentsNotValidated" => $commentsNotValidated,
                 'fail' => $fail
             ]);
         } else
         {
-            return $this->render('admin/adminComments.html.twig', [
-                "commentsNotValidated" => $commentsNotValidated
-            ]);
+            $this->redirect('/admin-commentaires');
         }
         
     }

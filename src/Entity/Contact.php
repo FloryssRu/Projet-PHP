@@ -2,6 +2,16 @@
 
 namespace App\Entity;
 
+/**
+ * File Contact class
+ *
+ * Structure of a contact form
+ *
+ * @author  Floryss Rubechi <floryss.rubechi@gmail.com>
+ *
+ * @since 1.0
+ */
+
 class Contact
 {
 
@@ -75,14 +85,20 @@ class Contact
 
     public function __construct($firstName, $lastName, $email, $title, $content)
     {
-        $data = array($firstName, $lastName, $email, $title, $content);
+        $data = [
+            'firstName' => $firstName,
+            'lastName' => $lastName,
+            'email' => $email,
+            'title' => $title,
+            'content' => $content
+        ];
         $this->hydrate($data);
     }
 
     /**
      * Calls each set method for the attributes
      * 
-     * @param array $data This is the description.
+     * @param array $data All the attributes to hydrate
      */
     private function hydrate(array $data)
     {

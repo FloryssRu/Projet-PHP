@@ -3,20 +3,24 @@
 namespace App\Controller\admin;
 
 use App\Core\BaseController;
+use App\Entity\Post;
 use App\Repository\Manager\PostManager;
 use App\Services\PHPSession;
 
 class PostController extends BaseController
 {
+
+    private $PATH_TO_ADMIN_POSTS = '/admin-posts';
+    private $ADMIN_POSTS_TEMPLATE = 'admin/adminPosts.html.twig';
     
     /**
      * Form to create a new Post
      *
      * @return void
      */
-    public function newPost()
+    public function newPost(): void
     {
-        return $this->render('admin/newPost.html.twig', []);
+        $this->render('admin/newPost.html.twig', []);
     }
     
     /**
@@ -24,36 +28,28 @@ class PostController extends BaseController
      *
      * @return void
      */
-    public function addPost(string $title, string $heading, string $content, string $author)
+    public function addPost(string $title, string $heading, string $content, string $author): void
     {
         $fields = [$title, $heading, $content, $author];
 
         if($this->isSubmit('newPost') && $this->isValid($fields)) {
 
             $datePublication = $dateLastUpdate = date("Y-m-d H:i:s");
-            $addPostManager = new PostManager('post');
+            $postManager = new PostManager('post');
 
-            $params = [
-                'title' => $title,
-                'heading' => $heading,
-                'content' => $content,
-                'author' => $author,
-                'date_publication' =>$datePublication,
-                'date_last_update' => $dateLastUpdate
-            ];  
-
-            $addPostManager->insert($params);
+            $post = new Post($title, $datePublication, $dateLastUpdate, $heading, $content, $author);
+            $postManager->insert($post);
             $session = new PHPSession;
             $session->set('success', 'Votre nouveau post a bien été enregistré.');
 
-            return $this->adminPosts();
+            $this->redirect($this->PATH_TO_ADMIN_POSTS);
 
         } else {
 
             $session = new PHPSession;
             $session->set('fail', 'Votre nouveau post n\'a pas été enregistré, une erreur dans le formulaire a été détectée.');
 
-            return $this->adminPosts();
+            $this->redirect($this->PATH_TO_ADMIN_POSTS);
 
         }
     }
@@ -63,7 +59,7 @@ class PostController extends BaseController
      *
      * @return void
      */
-    public function adminPosts()
+    public function adminPosts(): void
     {
         $adminPostManager = new PostManager('Post');
         $getAllPosts = $adminPostManager->getAll();
@@ -74,7 +70,7 @@ class PostController extends BaseController
         {
             $success = $session->get('success');
             $session->delete('success');
-            return $this->render('admin/adminPosts.html.twig', [
+            $this->render($this->ADMIN_POSTS_TEMPLATE, [
                 "allPosts" => $getAllPosts,
                 'success' => $success
             ]);
@@ -83,13 +79,13 @@ class PostController extends BaseController
         {
             $fail = $session->get('fail');
             $session->delete('fail');
-            return $this->render('admin/adminPosts.html.twig', [
+            $this->render($this->ADMIN_POSTS_TEMPLATE, [
                 "allPosts" => $getAllPosts,
                 'fail' => $fail
             ]);
         } else
         {
-            return $this->render('admin/adminPosts.html.twig', [
+            $this->render($this->ADMIN_POSTS_TEMPLATE, [
                 "allPosts" => $getAllPosts
             ]);
         }
@@ -101,12 +97,12 @@ class PostController extends BaseController
      *
      * @return void
      */
-    public function editPost()
+    public function editPost(): void
     {
         $adminPostManager = new PostManager('Post');
         $getThisPost = $adminPostManager->getById($_GET['idPost']);
 
-        return $this->render('admin/editPost.html.twig', [
+        $this->render('admin/editPost.html.twig', [
             'getThisPost' => $getThisPost
         ]);
     }
@@ -121,7 +117,7 @@ class PostController extends BaseController
      * @param  string $author
      * @return void
      */
-    public function updatePost($id, string $title, string $heading, string $content, string $author)
+    public function updatePost($id, string $title, string $heading, string $content, string $author): void
     {
 
         $fields = [$title, $heading, $content, $author];
@@ -129,27 +125,22 @@ class PostController extends BaseController
         if($this->isSubmit('editPost') && $this->isValid($fields)) {
 
             $dateLastUpdate = date("Y-m-d H:i:s");
-            $updatePostManager = new PostManager('post');
-            $params = [
-                'title' => $title,
-                'heading' => $heading,
-                'content' => $content,
-                'author' => $author,
-                'date_last_update' => $dateLastUpdate
-            ];
+            $postManager = new PostManager('post');
+            $postData = $postManager->getById($id);
+            $post = new Post($title, $postData['date_publication'], $dateLastUpdate, $heading, $content, $author);
             
-            $updatePostManager->update($params, $id);
+            $postManager->update($post, $id);
             $session = new PHPSession;
             $session->set('success', 'Votre post a bien été modifié.');
 
-            return $this->adminPosts();
+            $this->redirect($this->PATH_TO_ADMIN_POSTS);
 
         } else {
 
             $session = new PHPSession;
             $session->set('fail', 'Votre post n\'a pas été modifié, une erreur dans le formulaire a été détectée.');
 
-            return $this->adminPosts();
+            $this->redirect($this->PATH_TO_ADMIN_POSTS);
 
         }
     }
@@ -164,7 +155,7 @@ class PostController extends BaseController
      * @param  string $author
      * @return void
      */
-    public function deletePost($id)
+    public function deletePost($id): void
     {
         $deletePostManager = new PostManager('post');
         echo $deletePostManager->delete($id);
@@ -172,6 +163,6 @@ class PostController extends BaseController
         $session = new PHPSession;
         $session->set('success', 'Votre post a bien été supprimé.');
 
-        return $this->adminPosts();
+        $this->adminPosts();
     }
 }
