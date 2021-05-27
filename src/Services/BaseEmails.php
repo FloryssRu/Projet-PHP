@@ -6,7 +6,12 @@ use App\Controller\AuthenticateController;
 use PHPMailer\PHPMailer\PHPMailer;
 
 class BaseEmails extends AuthenticateController
-{
+{    
+    /**
+     * Is empty because the mother class has a construct function and we don't want to use it for this class.
+     *
+     * @return void
+     */
     public function __construct()
     {
 

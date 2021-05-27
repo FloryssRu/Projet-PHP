@@ -11,11 +11,16 @@ use Ramsey\Uuid\Uuid;
 
 class PostController extends BaseController
 {
+
+    private $PATH_TO_ADMIN_POSTS = '/admin-posts';
+    private $ADMIN_POSTS_TEMPLATE = 'admin/adminPosts.html.twig';
     
     /**
      * Form to create a new Post
+     * 
+     * @return void
      */
-    public function newPost()
+    public function newPost(): void
     {
         $adminProtectionPart = new AdminProtectionPart();
         $adminProtectionPart->redirectNotAdmin();
@@ -23,13 +28,20 @@ class PostController extends BaseController
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
-        return $this->render('admin/newPost.html.twig', []);
+        $this->render('admin/newPost.html.twig', []);
     }
     
     /**
      * Add a new post to the database
+     * 
+     * @param $title
+     * @param $heading
+     * @param $content
+     * @param $author
+     * @param $token
+     * @return void
      */
-    public function addPost(string $title, string $heading, string $content, string $author, string $token)
+    public function addPost(string $title, string $heading, string $content, string $author, string $token): void
     {
         $adminProtectionPart = new AdminProtectionPart();
         $adminProtectionPart->redirectNotAdmin();
@@ -48,21 +60,23 @@ class PostController extends BaseController
             
             $session->set('success', 'Votre nouveau post a bien été enregistré.');
 
-            return $this->redirect('/admin-posts');
+            $this->redirect($this->PATH_TO_ADMIN_POSTS);
 
         } else {
 
             $session->set('fail', 'Votre nouveau post n\'a pas été enregistré, une erreur dans le formulaire a été détectée.');
 
-            return $this->redirect('/admin-posts');
+            $this->redirect($this->PATH_TO_ADMIN_POSTS);
 
         }
     }
     
     /**
      * retrieves all published posts and forwards them to the page
+     * 
+     * @return void
      */
-    public function adminPosts()
+    public function adminPosts(): void
     {
         $adminProtectionPart = new AdminProtectionPart();
         $adminProtectionPart->redirectNotAdmin();
@@ -73,16 +87,19 @@ class PostController extends BaseController
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
 
-        return $this->render('admin/adminPosts.html.twig', [
+        $this->render($this->ADMIN_POSTS_TEMPLATE, [
             "allPosts" => $getAllPosts
         ]);
+        
         
     }
     
     /**
      * retrieves the posts to modify and complete the field of the edit page
+     * 
+     * @return void
      */
-    public function editPost()
+    public function editPost(): void
     {
         $adminProtectionPart = new AdminProtectionPart();
         $adminProtectionPart->redirectNotAdmin();
@@ -93,7 +110,7 @@ class PostController extends BaseController
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
 
-        return $this->render('admin/editPost.html.twig', [
+        $this->render('admin/editPost.html.twig', [
             'getThisPost' => $getThisPost
         ]);
     }
@@ -107,8 +124,9 @@ class PostController extends BaseController
      * @param  string $content
      * @param  string $author
      * @param  string $token
+     * @return void
      */
-    public function updatePost($id, string $title, string $heading, string $content, string $author, string $token)
+    public function updatePost($id, string $title, string $heading, string $content, string $author, string $token): void
     {
         $adminProtectionPart = new AdminProtectionPart();
         $adminProtectionPart->redirectNotAdmin();
@@ -127,14 +145,14 @@ class PostController extends BaseController
             $session = new PHPSession;
             $session->set('success', 'Votre post a bien été modifié.');
 
-            return $this->redirect('/admin-posts');
+            $this->redirect($this->PATH_TO_ADMIN_POSTS);
 
         } else {
 
             $session = new PHPSession;
             $session->set('fail', 'Votre post n\'a pas été modifié, une erreur dans le formulaire a été détectée.');
 
-            return $this->redirect('/admin-posts');
+            $this->redirect($this->PATH_TO_ADMIN_POSTS);
 
         }
     }
@@ -144,8 +162,9 @@ class PostController extends BaseController
      *
      * @param  mixed $id
      * @param  string $token
+     * @return void
      */
-    public function deletePost($id, string $token)
+    public function deletePost($id = NULL, string $token = NULL): void
     {
         $adminProtectionPart = new AdminProtectionPart();
         $adminProtectionPart->redirectNotAdmin();
@@ -156,15 +175,15 @@ class PostController extends BaseController
             $adminProtectionPart = new AdminProtectionPart();
             $adminProtectionPart->redirectNotAdmin();
             $deletePostManager = new PostManager('post');
-            echo $deletePostManager->delete($id);
+            $deletePostManager->delete($id);
 
             $session = new PHPSession;
             $session->set('success', 'Votre post a bien été supprimé.');
 
-            return $this->redirect('/admin-posts');
+            $this->redirect('/admin-posts');
         } else
         {
-            return $this->redirect('/');
+            $this->redirect('/');
         }
         
     }

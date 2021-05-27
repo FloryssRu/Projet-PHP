@@ -10,13 +10,15 @@ use App\Services\PHPSession;
 
 class CommentController extends BaseController
 {
+
+    private $ADMIN_COMMENTS_TEMPLATE = 'admin/adminComments.html.twig';
         
     /**
      * Render a list with all comments and link to validate or unvalidate for each
      *
      * @return void
      */
-    public function adminComment()
+    public function adminComment(): void
     {
         $adminProtectionPart = new AdminProtectionPart();
         $adminProtectionPart->redirectNotAdmin();
@@ -24,18 +26,22 @@ class CommentController extends BaseController
         $commentsNotValidated = $commentManager->getCommentNotValidated();
         $commentsValidated = $commentManager->getCommentValidated();
 
-        return $this->render('admin/adminComments.html.twig', [
-                "commentsNotValidated" => $commentsNotValidated,
-                "commentsValidated" => $commentsValidated
-            ]);
+        $this->render('admin/adminComments.html.twig', [
+            "commentsNotValidated" => $commentsNotValidated,
+            "commentsValidated" => $commentsValidated
+        ]);
 
     }
     
     /**
      * Change the isValidated attribute to 1 (valide this comment)
      */
-    public function validComment($id)
+    public function validComment($id = NULL): void
     {
+        if($id == NULL)
+        {
+            $this->redirect('/erreur-403');
+        }
         $adminProtectionPart = new AdminProtectionPart();
         $adminProtectionPart->redirectNotAdmin();
         $commentManager = new CommentManager('Comment');
@@ -45,7 +51,7 @@ class CommentController extends BaseController
         $session = new PHPSession;
         $session->set('success', 'Le commentaire a été validé.');
 
-        return $this->redirect('/admin-commentaires');
+        $this->redirect('/admin-commentaires');
         
     }
     

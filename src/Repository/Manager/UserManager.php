@@ -6,6 +6,9 @@ use App\Repository\Manager;
 
 class UserManager extends Manager
 {
+
+	private $SELECT_ID_FROM = "SELECT id FROM ";
+
 	public function __construct($object)
 	{
         parent::__construct("user", $object);
@@ -33,7 +36,7 @@ class UserManager extends Manager
 	 */
 	public function findOneUserBy(string $pseudo, string $password)
 	{
-		$req = $this->database->query("SELECT id FROM " . $this->table . " WHERE pseudo = '" . $pseudo . "'");
+		$req = $this->database->query($this->SELECT_ID_FROM . $this->table . " WHERE pseudo = '" . $pseudo . "'");
 		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
 		$idUser = $req->fetch()['id'];
 
@@ -53,20 +56,13 @@ class UserManager extends Manager
 	 * Test if an email is in the database. Return false if it's not, else true.
 	 *
 	 * @param  string $email Email to test
-	 * @return bool
+	 * @return mixed
 	 */
-	public function getEmail(string $email): bool
+	public function getEmail(string $email)
 	{
 		$req = $this->database->query("SELECT email FROM " . $this->table . " WHERE email = \"" . $email . "\"");
 		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
-		$arrayResults = $req->fetch();
-		if($arrayResults == false)
-		{
-			return false;
-		} else
-		{
-			return true;
-		}
+		return $req->fetch();
 	}
 
 	/**
@@ -79,14 +75,7 @@ class UserManager extends Manager
 	{
 		$req = $this->database->query("SELECT pseudo FROM " . $this->table . " WHERE pseudo = \"" . $pseudo . "\"");
 		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
-		$arrayResults = $req->fetch();
-		if($arrayResults == false)
-		{
-			return false;
-		} else
-		{
-			return true;
-		}
+		return $req->fetch();
 	}
 	
 	/**
@@ -97,7 +86,7 @@ class UserManager extends Manager
 	 */
 	public function getidByUuid(string $uuid)
 	{
-		$req = $this->database->query("SELECT id FROM " . $this->table . " WHERE uuid = '" . $uuid . "'");
+		$req = $this->database->query($this->SELECT_ID_FROM . $this->table . " WHERE uuid = '" . $uuid . "'");
 		
 		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
 		$arrayResults = $req->fetch();
@@ -115,10 +104,10 @@ class UserManager extends Manager
 	 */
 	public function getIdByEmail(string $email)
 	{
-		$req = $this->database->query("SELECT id FROM " . $this->table . " WHERE email = '" . $email . "'");
+		$req = $this->database->query($this->SELECT_ID_FROM . $this->table . " WHERE email = '" . $email . "'");
 		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
 		$idUser = $req->fetch();
-		if($req != false)
+		if(!is_bool($req))
 		{
 			return $idUser;
 		}
