@@ -10,7 +10,7 @@ class PHPSession
      *
      * @return void
      */
-    private function startSession()
+    private function startSession(): void
     {
         if(session_status() == PHP_SESSION_NONE)
         {
@@ -24,7 +24,6 @@ class PHPSession
      *
      * @param  mixed $key
      * @param  mixed $default
-     * @return void
      */
     public function get(string $key, $default = NULL)
     {
@@ -43,7 +42,7 @@ class PHPSession
      * @param  mixed $value
      * @return void
      */
-    public function set(string $key, $value)
+    public function set(string $key, $value): void
     {
         $this->startSession();
         $_SESSION[$key] = $value;
@@ -55,9 +54,10 @@ class PHPSession
      * @param  mixed $key
      * @return void
      */
-    public function delete(string $key)
+    public function delete(string $key): void
     {
         $this->startSession();
         unset($_SESSION[$key]);
     }
+
 }

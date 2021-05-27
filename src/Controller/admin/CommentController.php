@@ -26,8 +26,8 @@ class CommentController extends BaseController
         $commentsNotValidated = $commentManager->getCommentNotValidated();
 
         $this->render($this->ADMIN_COMMENTS_TEMPLATE, [
-                "commentsNotValidated" => $commentsNotValidated
-            ]);
+            "commentsNotValidated" => $commentsNotValidated
+        ]);
 
     }
     
@@ -36,7 +36,7 @@ class CommentController extends BaseController
      *
      * @return void
      */
-    public function validComment($id = NULL)
+    public function validComment($id = NULL): void
     {
         if($id == NULL)
         {

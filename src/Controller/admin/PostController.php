@@ -17,6 +17,8 @@ class PostController extends BaseController
     
     /**
      * Form to create a new Post
+     * 
+     * @return void
      */
     public function newPost(): void
     {
@@ -31,6 +33,13 @@ class PostController extends BaseController
     
     /**
      * Add a new post to the database
+     * 
+     * @param $title
+     * @param $heading
+     * @param $content
+     * @param $author
+     * @param $token
+     * @return void
      */
     public function addPost(string $title, string $heading, string $content, string $author, string $token): void
     {
@@ -64,6 +73,8 @@ class PostController extends BaseController
     
     /**
      * retrieves all published posts and forwards them to the page
+     * 
+     * @return void
      */
     public function adminPosts(): void
     {
@@ -85,6 +96,8 @@ class PostController extends BaseController
     
     /**
      * retrieves the posts to modify and complete the field of the edit page
+     * 
+     * @return void
      */
     public function editPost(): void
     {
@@ -111,6 +124,7 @@ class PostController extends BaseController
      * @param  string $content
      * @param  string $author
      * @param  string $token
+     * @return void
      */
     public function updatePost($id, string $title, string $heading, string $content, string $author, string $token): void
     {
@@ -148,8 +162,9 @@ class PostController extends BaseController
      *
      * @param  mixed $id
      * @param  string $token
+     * @return void
      */
-    public function deletePost($id = NULL, string $token = NULL)
+    public function deletePost($id = NULL, string $token = NULL): void
     {
         if($id == NULL || $token == NULL)
         {
@@ -162,7 +177,7 @@ class PostController extends BaseController
             $adminProtectionPart = new AdminProtectionPart();
             $adminProtectionPart->redirectNotAdmin();
             $deletePostManager = new PostManager('post');
-            echo $deletePostManager->delete($id);
+            $deletePostManager->delete($id);
 
             $session = new PHPSession;
             $session->set('success', 'Votre post a bien été supprimé.');

@@ -10,7 +10,7 @@ use App\Repository\Manager\CommentManager;
 
 class OpenPartController extends BaseController
 {
-	public function showPost($idPost)
+	public function showPost($idPost): void
     {
         $postManager = new PostManager('post');
         $post = $postManager->getById($idPost);
@@ -26,7 +26,7 @@ class OpenPartController extends BaseController
             $userConnected = false;
         }
 
-        return $this->render('post.html.twig', [
+        $this->render('post.html.twig', [
             "post" => $post,
             "comments" => $arrayComments,
             "userConnected" => $userConnected
@@ -34,19 +34,17 @@ class OpenPartController extends BaseController
 
     }
 
-    public function showList()
+    public function showList(): void
     {
         $postManager = new PostManager('post');
         $listPosts = $postManager->getAll();
-        
-        //ici modifier le format des dates (problèmes de ciblage)
 
-        return $this->render('listPosts.html.twig', [
-                'listPosts' => $listPosts
-            ]);
+        $this->render('listPosts.html.twig', [
+            'listPosts' => $listPosts
+        ]);
     }
 
-    public function newComment(string $content, int $idPost)
+    public function newComment(string $content, int $idPost): void
     {
         $fields = [$content];
 
@@ -63,17 +61,17 @@ class OpenPartController extends BaseController
             
             $session->set('success', 'Votre commentaire a été envoyé pour validation.');
 
-            return $this->showPost($idPost);
+            $this->showPost($idPost);
         } else {
             $session = new PHPSession;
             $session->set('fail', 'Votre commentaire a rencontré un problème.');
 
-            return $this->showPost($idPost);
+            $this->showPost($idPost);
         }
     }
 
-    public function error403()
+    public function error403(): void
     {
-        return $this->render('403.html.twig', []);
+        $this->render('403.html.twig', []);
     }
 }

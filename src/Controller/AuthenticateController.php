@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Core\BaseController;
 use App\Entity\User;
 use App\Repository\Manager\UserManager;
-use App\Services\BaseEmails;
+use App\Services\HandlerResetPassword;
 use App\Services\HandlerSignIn;
 use App\Services\PHPSession;
 use Ramsey\Uuid\Uuid;
@@ -13,8 +13,8 @@ use Ramsey\Uuid\Uuid;
 
 class AuthenticateController extends BaseController
 {
-    private $PATH_TO_SIGNUP_PAGE = "/connexion";
-    private $PATH_TO_FORGOTTEN_PSWD = "/mot-de-passe-oublie";
+    protected $PATH_TO_SIGNUP_PAGE = "/connexion";
+    protected $PATH_TO_FORGOTTEN_PSWD = "/mot-de-passe-oublie";
     private $PATH_TO_PSWD_RESET = "/reinitialisation-mot-de-passe?uuid=";
 
     public function signUpForm(): void
@@ -139,54 +139,8 @@ class AuthenticateController extends BaseController
      */
     public function sendEmailResetPassword(string $email): void
     {
-        $fields = [$email];
-        if($this->isValid($fields) && $this->isSubmit('emailResetPassword'))
-        {
-            $uuid = Uuid::uuid4();
-            $uuid = $uuid->toString();
-
-            $userManager = new UserManager('user');
-            $emailOccupied = $userManager->getEmail($email);
-            $idUser = $userManager->getIdByEmail($email)['id']; //returne faux si l'email n'a pas de propriétaire et je ne sais pas quoi sinon   
-
-            if($emailOccupied && $idUser != NULL)
-            {
-                $baseEmails = new BaseEmails;
-                $mail = $baseEmails->sendEmail($email, 'Réinitialisation de votre mot de passe - Blog de Floryss Rubechi', '<p>Réinitialisation de votre mot de passe</p>
-                <p>Pour changer votre mot de passe, veuillez cliquer sur le lien ci-dessous</p>
-                <p><a href="http://localhost/blogphp/reinitialisation-mot-de-passe?uuid=' . $uuid . '">Changer mon mot de passe !</a></p>
-                <p>Si vous n\'êtes pas à l\'origine de cette demande, veuillez ignorer cet email.</p>');
-
-                if ($mail->send())
-                {
-                    $userData = $userManager->getById($idUser);
-                    $user = new User($userData['pseudo'], $userData['password'], $userData['email'], $userData['admin'], $userData['email_validated'], $uuid);
-                    $userManager->update($user, $idUser);
-                    $session = new PHPSession;
-                    $session->set('success', "Un mail de réinitialisation de mot de passe vous a été envoyé.");
-                    $this->redirect($this->PATH_TO_SIGNUP_PAGE);
-                    
-                } else
-                {
-                    $session = new PHPSession;
-                    $session->set('fail', "L'email de réinitialisation de mot de passe n'a pas pu être envoyé. Veuillez réécrire votre adresse email.");
-                    $this->redirect($this->PATH_TO_FORGOTTEN_PSWD);
-                }
-
-            } else
-            {
-                $session = new PHPSession;
-                $session->set('fail', "L'email de réinitialisation de mot de passe n'a pas pu être envoyé. Veuillez réécrire votre adresse email.");
-                $this->redirect($this->PATH_TO_FORGOTTEN_PSWD);
-            }
-            
-        } else
-        {
-            $session = new PHPSession;
-            $session->set('fail', "Veuillez renseigner un email valide.");
-            $this->redirect($this->PATH_TO_FORGOTTEN_PSWD);
-        }
-
+        $handlerResetPassword = new HandlerResetPassword;
+        $handlerResetPassword->handlerEmailResetPassword($email);
     }
 	
 	/**
@@ -219,7 +173,7 @@ class AuthenticateController extends BaseController
     {
         $session = new PHPSession;
         $fields = [$uuid, $password, $validPassword];
-        if($this->isValid($fields) && $this->isSubmit('resetPassword') && $uuid != NULL && $password == $validPassword && $token = $session->get('token'))
+        if($this->isValid($fields) && $this->isSubmit('resetPassword') && $uuid != NULL && $password == $validPassword && $token == $session->get('token'))
         {
             $userManager = new UserManager('user');
             $idUser = $userManager->getIdByUuid($uuid);
