@@ -12,13 +12,13 @@ session_start();
 
 try
 {
-
 	$httpRequest = new HttpRequest;
 	$router = new Router();
 	$httpRequest->setRoute($router->run($httpRequest));
     $httpRequest->run();
 	unset($_SESSION['success']);
 	unset($_SESSION['fail']);
+	var_dump('fff');
 
 }
 catch(Exception $e)

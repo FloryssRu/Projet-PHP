@@ -6,6 +6,7 @@ use App\Core\BaseController;
 use App\Entity\Post;
 use App\Repository\Manager\PostManager;
 use App\Services\AdminProtectionPart;
+use App\Services\DateFormat;
 use App\Services\PHPSession;
 use Ramsey\Uuid\Uuid;
 
@@ -82,6 +83,10 @@ class PostController extends BaseController
         $adminProtectionPart->redirectNotAdmin();
         $adminPostManager = new PostManager('Post');
         $getAllPosts = $adminPostManager->getAll();
+
+        $dateFormat = new DateFormat;
+        $getAllPosts = $dateFormat->formatListPosts($getAllPosts);
+
         $session = new PHPSession;
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();

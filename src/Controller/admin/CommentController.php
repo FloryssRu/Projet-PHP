@@ -6,6 +6,7 @@ use App\Core\BaseController;
 use App\Entity\Comment;
 use App\Repository\Manager\CommentManager;
 use App\Services\AdminProtectionPart;
+use App\Services\DateFormat;
 use App\Services\PHPSession;
 
 class CommentController extends BaseController
@@ -26,7 +27,11 @@ class CommentController extends BaseController
         $commentsNotValidated = $commentManager->getCommentNotValidated();
         $commentsValidated = $commentManager->getCommentValidated();
 
-        $this->render('admin/adminComments.html.twig', [
+        $dateFormat = new DateFormat;
+        $commentsNotValidated = $dateFormat->formatListComments($commentsNotValidated);
+        $commentsValidated = $dateFormat->formatListComments($commentsValidated);
+
+        $this->render($this->ADMIN_COMMENTS_TEMPLATE, [
             "commentsNotValidated" => $commentsNotValidated,
             "commentsValidated" => $commentsValidated
         ]);
@@ -35,6 +40,8 @@ class CommentController extends BaseController
     
     /**
      * Change the isValidated attribute to 1 (valide this comment)
+     * 
+     * @return void
      */
     public function validComment($id = NULL): void
     {

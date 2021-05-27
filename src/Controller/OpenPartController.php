@@ -7,6 +7,7 @@ use App\Entity\Comment;
 use App\Services\PHPSession;
 use App\Repository\Manager\PostManager;
 use App\Repository\Manager\CommentManager;
+use App\Services\DateFormat;
 
 class OpenPartController extends BaseController
 {
@@ -14,6 +15,8 @@ class OpenPartController extends BaseController
     {
         $postManager = new PostManager('post');
         $post = $postManager->getById($idPost);
+        $dateFormat = new DateFormat;
+        $post['date_last_update'] = $dateFormat->formatToDisplay($post['date_last_update']);
         $commentManager = new CommentManager('comment');
         $arrayComments = $commentManager->getCommentsByIdPost($idPost);
 
@@ -38,6 +41,8 @@ class OpenPartController extends BaseController
     {
         $postManager = new PostManager('post');
         $listPosts = $postManager->getAll();
+        $dateFormat = new DateFormat;
+        $listPosts = $dateFormat->formatListPosts($listPosts);
 
         $this->render('listPosts.html.twig', [
             'listPosts' => $listPosts
