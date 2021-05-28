@@ -13,9 +13,9 @@ use Ramsey\Uuid\Uuid;
 
 class AuthenticateController extends BaseController
 {
-    protected $PATH_TO_SIGNUP_PAGE = "/connexion";
-    protected $PATH_TO_FORGOTTEN_PSWD = "/mot-de-passe-oublie";
-    private $PATH_TO_PSWD_RESET = "/reinitialisation-mot-de-passe?uuid=";
+    protected const PATH_TO_SIGNUP_PAGE = "/connexion";
+    protected const PATH_TO_FORGOTTEN_PSWD = "/mot-de-passe-oublie";
+    protected const PATH_TO_PSWD_RESET = "/reinitialisation-mot-de-passe?uuid=";
 
     public function signUpForm(): void
     {
