@@ -6,7 +6,7 @@ use App\Core\BaseController;
 
 class ErrorController extends BaseController
 {
-	public function Show($exception) 
+	public function Show($exception): void
 	{
 		$this->addParam("exception", $exception);
 		$this->render("error.html.twig", [

@@ -23,7 +23,8 @@
 		"title",
 		"heading",
 		"content",
-		"author"
+		"author",
+		"token"
 	],
 	"manager": []
 },
@@ -55,7 +56,8 @@
 		"title",
 		"heading",
 		"content",
-		"author"
+		"author",
+		"token"
 	],
 	"manager": []
 },
@@ -65,7 +67,8 @@
 	"action" : "DeletePost",
 	"method" : "GET",
 	"param" : [
-		"idPost"
+		"idPost",
+		"token"
 	],
 	"manager": []
 },
@@ -216,8 +219,17 @@
 	"param" : [
 		"password",
 		"validPassword",
-		"uuid"
+		"uuid",
+		"token"
 	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/erreur-403",
+	"controller" : "OpenPart",
+	"action" : "error403",
+	"method" : "GET",
+	"param" : [],
 	"manager": []
 },
 {

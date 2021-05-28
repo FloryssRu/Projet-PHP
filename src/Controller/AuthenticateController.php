@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Core\BaseController;
 use App\Entity\User;
 use App\Repository\Manager\UserManager;
-use App\Services\HandlerEmails;
+use App\Services\HandlerResetPassword;
 use App\Services\HandlerSignIn;
 use App\Services\PHPSession;
 use Ramsey\Uuid\Uuid;
@@ -13,9 +13,9 @@ use Ramsey\Uuid\Uuid;
 
 class AuthenticateController extends BaseController
 {
-    private $PATH_TO_SIGNUP_PAGE = "/connexion";
-    private $PATH_TO_FORGOTTEN_PSWD = "/mot-de-passe-oublie";
-    private $PATH_TO_PSWD_RESET = "/reinitialisation-mot-de-passe?uuid=";
+    protected const PATH_TO_SIGNUP_PAGE = "/connexion";
+    protected const PATH_TO_FORGOTTEN_PSWD = "/mot-de-passe-oublie";
+    protected const PATH_TO_PSWD_RESET = "/reinitialisation-mot-de-passe?uuid=";
 
     public function signUpForm(): void
     {
@@ -110,6 +110,7 @@ class AuthenticateController extends BaseController
             $userData = $userManager->getById($idUser);
             $user = new User($userData['pseudo'], $userData['password'], $userData['email'], $userData['admin'], 1, NULL);
             $userManager->update($user, $idUser);
+            $userManager->setUuidNull($idUser);
             $session = new PHPSession;
             $session->set('success', 'Votre email a bien été confirmé.');
             $this->redirect('/');
@@ -138,54 +139,8 @@ class AuthenticateController extends BaseController
      */
     public function sendEmailResetPassword(string $email): void
     {
-        $fields = [$email];
-        if($this->isValid($fields) && $this->isSubmit('emailResetPassword'))
-        {
-            $uuid = Uuid::uuid4();
-            $uuid = $uuid->toString();
-
-            $userManager = new UserManager('user');
-            $emailOccupied = $userManager->getEmail($email);
-            $idUser = $userManager->getIdByEmail($email)['id']; //returne faux si l'email n'a pas de propriétaire et je ne sais pas quoi sinon   
-
-            if($emailOccupied && $idUser != NULL)
-            {
-                $handlerEmails = new HandlerEmails;
-                $mail = $handlerEmails->sendEmail($email, 'Réinitialisation de votre mot de passe - Blog de Floryss Rubechi', '<p>Réinitialisation de votre mot de passe</p>
-                <p>Pour changer votre mot de passe, veuillez cliquer sur le lien ci-dessous</p>
-                <p><a href="http://localhost/blogphp/reinitialisation-mot-de-passe?uuid=' . $uuid . '">Changer mon mot de passe !</a></p>
-                <p>Si vous n\'êtes pas à l\'origine de cette demande, veuillez ignorer cet email.</p>');
-
-                if ($mail->send())
-                {
-                    $userData = $userManager->getById($idUser);
-                    $user = new User($userData['pseudo'], $userData['password'], $userData['email'], $userData['admin'], $userData['email_validated'], $uuid);
-                    $userManager->update($user, $idUser);
-                    $session = new PHPSession;
-                    $session->set('success', "Un mail de réinitialisation de mot de passe vous a été envoyé.");
-                    $this->redirect($this->PATH_TO_SIGNUP_PAGE);
-                    
-                } else
-                {
-                    $session = new PHPSession;
-                    $session->set('fail', "L'email de réinitialisation de mot de passe n'a pas pu être envoyé. Veuillez réécrire votre adresse email.");
-                    $this->redirect($this->PATH_TO_FORGOTTEN_PSWD);
-                }
-
-            } else
-            {
-                $session = new PHPSession;
-                $session->set('fail', "L'email de réinitialisation de mot de passe n'a pas pu être envoyé. Veuillez réécrire votre adresse email.");
-                $this->redirect($this->PATH_TO_FORGOTTEN_PSWD);
-            }
-            
-        } else
-        {
-            $session = new PHPSession;
-            $session->set('fail', "Veuillez renseigner un email valide.");
-            $this->redirect($this->PATH_TO_FORGOTTEN_PSWD);
-        }
-
+        $handlerResetPassword = new HandlerResetPassword;
+        $handlerResetPassword->handlerEmailResetPassword($email);
     }
 	
 	/**
@@ -198,6 +153,9 @@ class AuthenticateController extends BaseController
 	{
         $session = new PHPSession;
         $session->set('uuid', $uuid);
+        $token = Uuid::uuid4();
+        $token = $token->toString();
+        $session->set('token', $token);
 		$this->render('changePasswordForm.html.twig', [
             'uuid' => $uuid
         ]);
@@ -211,10 +169,11 @@ class AuthenticateController extends BaseController
      * @param  string $uuid
      * @return void
      */
-    public function resetPassword(string $password, string $validPassword, string $uuid): void
+    public function resetPassword(string $password, string $validPassword, string $uuid, string $token): void
     {
+        $session = new PHPSession;
         $fields = [$uuid, $password, $validPassword];
-        if($this->isValid($fields) && $this->isSubmit('resetPassword') && $uuid != NULL && $password == $validPassword)
+        if($this->isValid($fields) && $this->isSubmit('resetPassword') && $uuid != NULL && $password == $validPassword && $token == $session->get('token'))
         {
             $userManager = new UserManager('user');
             $idUser = $userManager->getIdByUuid($uuid);
@@ -226,6 +185,7 @@ class AuthenticateController extends BaseController
                 $userData = $userManager->getById($idUser);
                 $user = new User($userData['pseudo'], $password, $userData['email'], $userData['admin'], $userData['email_validated'], NULL);
                 $userManager->update($user, $idUser);
+                $userManager->setUuidNull($idUser);
                 $session = new PHPSession;
                 $session->set('success', "Votre mot de passe a bien été changé.");
                 $this->redirect($this->PATH_TO_SIGNUP_PAGE);

@@ -1,4 +1,4 @@
-{% extends "admin/baseAdmin.html.twig" %}
+{% extends "base.html.twig" %}
 
 {% block title %}
 Gestion des posts
@@ -29,7 +29,7 @@ Gestion des posts
                 <td>{{ post.title }}</td>
                 <td>{{ post.date_last_update }}</td>
                 <td><a href="modifier-post?idPost={{ post.id }}">Modifier</a></td>
-                <td><a href="supprimer-post?idPost={{ post.id }}" onclick="return confirm('Etes vous sûr de supprimer ce post ?')">Supprimer</a></td>
+                <td><a href="supprimer-post?idPost={{ post.id }}&token={{ session.token }}" onclick="return confirm('Etes vous sûr de supprimer ce post ?')">Supprimer</a></td>
             </tr>
         {% endfor %}
     </tbody>

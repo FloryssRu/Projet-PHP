@@ -7,11 +7,10 @@ use App\Entity\Comment;
 use App\Services\PHPSession;
 use App\Repository\Manager\PostManager;
 use App\Repository\Manager\CommentManager;
-use App\Repository\Manager\UserManager;
 
 class OpenPartController extends BaseController
 {
-	public function showPost($idPost)
+	public function showPost($idPost): void
     {
         $postManager = new PostManager('post');
         $post = $postManager->getById($idPost);
@@ -27,51 +26,25 @@ class OpenPartController extends BaseController
             $userConnected = false;
         }
 
-        if($session->get('success') != NULL)
-        {
-            $success = $session->get('success');
-            $session->delete('success');
-            return $this->render('post.html.twig', [
-                "post" => $post,
-                "comments" => $arrayComments,
-                "userConnected" => $userConnected,
-                'success' => $success
-            ]);
-
-        } elseif ($session->get('fail') != NULL)
-        {
-            $fail = $session->get('fail');
-            $session->delete('fail');
-            return $this->render('post.html.twig', [
-                "post" => $post,
-                "comments" => $arrayComments,
-                "userConnected" => $userConnected,
-                'fail' => $fail
-            ]);
-        } else
-        {
-            return $this->render('post.html.twig', [
-                "post" => $post,
-                "comments" => $arrayComments,
-                "userConnected" => $userConnected
-            ]);
-        }
+        $this->render('post.html.twig', [
+            "post" => $post,
+            "comments" => $arrayComments,
+            "userConnected" => $userConnected
+        ]);
 
     }
 
-    public function showList()
+    public function showList(): void
     {
         $postManager = new PostManager('post');
         $listPosts = $postManager->getAll();
-        
-        //ici modifier le format des dates (problèmes de ciblage)
 
-        return $this->render('listPosts.html.twig', [
-                'listPosts' => $listPosts
-            ]);
+        $this->render('listPosts.html.twig', [
+            'listPosts' => $listPosts
+        ]);
     }
 
-    public function newComment(string $content, int $idPost)
+    public function newComment(string $content, int $idPost): void
     {
         $fields = [$content];
 
@@ -88,12 +61,17 @@ class OpenPartController extends BaseController
             
             $session->set('success', 'Votre commentaire a été envoyé pour validation.');
 
-            return $this->showPost($idPost);
+            $this->showPost($idPost);
         } else {
             $session = new PHPSession;
             $session->set('fail', 'Votre commentaire a rencontré un problème.');
 
-            return $this->showPost($idPost);
+            $this->showPost($idPost);
         }
+    }
+
+    public function error403(): void
+    {
+        $this->render('403.html.twig', []);
     }
 }
