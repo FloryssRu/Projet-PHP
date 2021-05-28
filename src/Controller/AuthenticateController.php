@@ -15,7 +15,7 @@ class AuthenticateController extends BaseController
 {
     protected $PATH_TO_SIGNUP_PAGE = "/connexion";
     protected $PATH_TO_FORGOTTEN_PSWD = "/mot-de-passe-oublie";
-    private $PATH_TO_PSWD_RESET = "/reinitialisation-mot-de-passe?uuid=";
+    protected $PATH_TO_PSWD_RESET = "/reinitialisation-mot-de-passe?uuid=";
 
     public function signUpForm(): void
     {
@@ -171,37 +171,8 @@ class AuthenticateController extends BaseController
      */
     public function resetPassword(string $password, string $validPassword, string $uuid, string $token): void
     {
-        $session = new PHPSession;
-        $fields = [$uuid, $password, $validPassword];
-        if($this->isValid($fields) && $this->isSubmit('resetPassword') && $uuid != NULL && $password == $validPassword && $token == $session->get('token'))
-        {
-            $userManager = new UserManager('user');
-            $idUser = $userManager->getIdByUuid($uuid);
-            if($idUser == NULL) {
-                $this->redirect($this->PATH_TO_PSWD_RESET . $uuid);
-            } else
-            {
-                $password = password_hash($password, PASSWORD_DEFAULT);
-                $userData = $userManager->getById($idUser);
-                $user = new User($userData['pseudo'], $password, $userData['email'], $userData['admin'], $userData['email_validated'], NULL);
-                $userManager->update($user, $idUser);
-                $userManager->setUuidNull($idUser);
-                $session = new PHPSession;
-                $session->set('success', "Votre mot de passe a bien été changé.");
-                $this->redirect($this->PATH_TO_SIGNUP_PAGE);
-            }
-        
-        } elseif($password != $validPassword)
-        {
-            $session = new PHPSession;
-            $session->set('fail', "Les mots de passe entrés ne sont pas identiques.");
-            $this->redirect($this->PATH_TO_PSWD_RESET . $session->get('uuid'));
-        } else
-        {
-            $session = new PHPSession;
-            $session->set('fail', "Votre réinitialisation de mot de passe a rencontré un problème. Veuillez recommencer.");
-            $this->redirect($this->PATH_TO_PSWD_RESET . $session->get('uuid'));
-        }
+        $handlerResetPassword = new HandlerResetPassword;
+        $handlerResetPassword->handlerResetPassword($password, $validPassword, $uuid, $token);
     }
 
 }

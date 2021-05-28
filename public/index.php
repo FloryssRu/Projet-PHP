@@ -18,7 +18,6 @@ try
     $httpRequest->run();
 	unset($_SESSION['success']);
 	unset($_SESSION['fail']);
-	var_dump('fff');
 
 }
 catch(Exception $e)

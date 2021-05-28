@@ -21,8 +21,11 @@ class CommentController extends BaseController
      */
     public function adminComment(): void
     {
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
+        $session = new PHPSession;
+		if($session->get('admin') == NULL || !$session->get('admin'))
+        {
+            $this->redirect('/erreur-403');
+        }
         $commentManager = new CommentManager('Comment');
         $commentsNotValidated = $commentManager->getCommentNotValidated();
         $commentsValidated = $commentManager->getCommentValidated();
@@ -45,17 +48,15 @@ class CommentController extends BaseController
      */
     public function validComment($id = NULL): void
     {
-        if($id == NULL)
+        $session = new PHPSession;
+        if($id == NULL || $session->get('admin') == NULL || !$session->get('admin'))
         {
             $this->redirect('/erreur-403');
         }
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
         $commentManager = new CommentManager('Comment');
         $commentData = $commentManager->getById($id);
         $comment = new Comment($commentData['pseudo'], $commentData['content'], $commentData['date'], 1, $commentData['id_post']);
         $commentManager->update($comment, $id);
-        $session = new PHPSession;
         $session->set('success', 'Le commentaire a été validé.');
 
         $this->redirect('/admin-commentaires');
@@ -67,13 +68,15 @@ class CommentController extends BaseController
      */
     public function invalidComment($id)
     {
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
+        $session = new PHPSession;
+		if($session->get('admin') == NULL || !$session->get('admin'))
+        {
+            $this->redirect('/erreur-403');
+        }
         $commentManager = new CommentManager('Comment');
         $commentData = $commentManager->getById($id);
         $comment = new Comment($commentData['pseudo'], $commentData['content'], $commentData['date'], 0, $commentData['id_post']);
         $commentManager->update($comment, $id);
-        $session = new PHPSession;
         $session->set('success', 'Le commentaire a été invalidé.');
 
         return $this->redirect('/admin-commentaires');

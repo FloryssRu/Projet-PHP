@@ -30,9 +30,9 @@ Liste des utilisateurs
                 <td>{{ user.email }}</td>
                 <td>{{ user.adminToShow }}</td>
                 {% if user.admin %}
-                    <td><a href="retirer-admin?idUser={{ user.id }}&token={{ token }}" onclick="return confirm('Etes vous sûr de passer cet admin en simple utilisateur ?')">Retirer des admins</a></td>
+                    <td><a href="changer-statut?idUser={{ user.id }}&token={{ token }}&becomeAdmin=1" onclick="return confirm('Etes vous sûr de passer cet admin en simple utilisateur ?')">Retirer des admins</a></td>
                 {% else %}
-                    <td><a href="passer-admin?idUser={{ user.id }}&token={{ token }}" onclick="return confirm('Etes vous sûr de passer cet utilisateur en admin ?')">Passer en admin</a></td>
+                    <td><a href="changer-statut?idUser={{ user.id }}&token={{ token }}&becomeAdmin=0" onclick="return confirm('Etes vous sûr de passer cet utilisateur en admin ?')">Passer en admin</a></td>
                 {% endif %}
             </tr>
         {% endfor %}

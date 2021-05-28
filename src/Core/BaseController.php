@@ -36,7 +36,6 @@ class BaseController
 			$content = $view->render($array);
 			$response = new Response($content);
 			return $response->send();
-			//echo $twig->render($filename, $array);
 
 		} else
 		{

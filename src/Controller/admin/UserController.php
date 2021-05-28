@@ -14,69 +14,61 @@ class UserController extends BaseController
 {
     public function listUsers()
     {
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
+        $session = new PHPSession;
+		if($session->get('admin') == NULL || !$session->get('admin'))
+        {
+            $this->redirect('/erreur-403');
+        }
         $userManager = new UserManager('user');
         $users = $userManager->getAll();
         $translateUsersAdminStatus = new TranslateUsersAdminStatus;
         $users = $translateUsersAdminStatus->translate($users);
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
-        $session = new PHPSession;
         $session->set('token', $uuid);
         $this->render('admin/usersList.html.twig', [
             'users' => $users,
             'token' => $uuid
         ]);
     }
-    
+
     /**
-     * Change the statut of the user with id = iduser in admin
+     * Change the statut of the user with id = iduser in admin or simple user
      *
-     * @param  mixed $idUser
+     * @param  int $idUser
+     * @param  string $token
+     * @param  int $becomeAdmin     Is 0 if the user will become an admin, and 1 if the user become a simple user
      * @return void
      */
-    public function createAdmin(int $idUser, string $token)
+    public function changeUserStatut(int $idUser, string $token, int $becomeAdmin)
     {
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
         $session = new PHPSession;
+		if($session->get('admin') == NULL || !$session->get('admin'))
+        {
+            return $this->redirect('/erreur-403');
+        }
         if($token == $session->get('token'))
         {
             $userManager = new UserManager('user');
             $userAttributes = $userManager->getById($idUser);
-            $user = new User($userAttributes['pseudo'], $userAttributes['password'], $userAttributes['email'], 1, $userAttributes['email_validated'], $userAttributes['uuid']);
+            if($becomeAdmin == 0)
+            {
+                $admin = true;
+                $session->set('success', "L'utilisateur est passé en statut administrateur.");
+            } else
+            {
+                $admin = false;
+                $session->set('success', "L'utilisateur est passé en statut simple utilisateur.");
+            }
+            $user = new User($userAttributes['pseudo'], $userAttributes['password'], $userAttributes['email'], $admin, $userAttributes['email_validated'], $userAttributes['uuid']);
             $userManager->update($user, $idUser);
-            $session->set('success', "L'utilisateur est bien passé en statut administrateur.");
+            
+            
         } else
         {
             $session->set('fail', "La transmission d'information a échoué.");
         }
         return $this->redirect('/liste-utilisateurs');
     }
-    
-    /**
-     * Change the statut of the user with id = iduser in simple user
-     *
-     * @param  mixed $idUser
-     * @return void
-     */
-    public function deleteAdmin(int $idUser, string $token)
-    {
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
-        $session = new PHPSession;
-        if($token == $session->get('token'))
-        {
-            $userManager = new UserManager('user');
-            $userAttributes = $userManager->getById($idUser);
-            $user = new User($userAttributes['pseudo'], $userAttributes['password'], $userAttributes['email'], 0, $userAttributes['email_validated'], $userAttributes['uuid']);
-            $userManager->update($user, $idUser);
-            $session->set('success', "L'utilisateur est bien passé en statut simple utilisateur.");
-        } else
-        {
-            $session->set('fail', "La transmission d'information a échoué.");
-        }
-        return $this->redirect('/liste-utilisateurs');
-    }
+
 }

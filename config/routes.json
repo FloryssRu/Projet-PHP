@@ -111,24 +111,14 @@
 	"manager": []
 },
 {
-	"path" : "/blogphp/passer-admin",
+	"path" : "/blogphp/changer-statut",
 	"controller" : "User",
-	"action" : "createAdmin",
+	"action" : "changeUserStatut",
 	"method" : "GET",
 	"param" : [
 		"idUser",
-		"token"
-	],
-	"manager": []
-},
-{
-	"path" : "/blogphp/retirer-admin",
-	"controller" : "User",
-	"action" : "deleteAdmin",
-	"method" : "GET",
-	"param" : [
-		"idUser",
-		"token"
+		"token",
+		"becomeAdmin"
 	],
 	"manager": []
 },

@@ -23,9 +23,11 @@ class PostController extends BaseController
      */
     public function newPost(): void
     {
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
         $session = new PHPSession;
+		if($session->get('admin') == NULL || !$session->get('admin'))
+        {
+            $this->redirect('/erreur-403');
+        }
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
@@ -44,10 +46,12 @@ class PostController extends BaseController
      */
     public function addPost(string $title, string $heading, string $content, string $author, string $token): void
     {
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
-        $fields = [$title, $heading, $content, $author];
         $session = new PHPSession;
+		if($session->get('admin') == NULL || !$session->get('admin'))
+        {
+            $this->redirect('/erreur-403');
+        }
+        $fields = [$title, $heading, $content, $author];
 
         if($this->isSubmit('newPost') && $this->isValid($fields) && $token == $session->get('token')) {
 
@@ -79,15 +83,17 @@ class PostController extends BaseController
      */
     public function adminPosts(): void
     {
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
+        $session = new PHPSession;
+		if($session->get('admin') == NULL || !$session->get('admin'))
+        {
+            $this->redirect('/erreur-403');
+        }
         $adminPostManager = new PostManager('Post');
         $getAllPosts = $adminPostManager->getAll();
 
         $dateFormat = new DateFormat;
         $getAllPosts = $dateFormat->formatListPosts($getAllPosts);
 
-        $session = new PHPSession;
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
@@ -106,11 +112,13 @@ class PostController extends BaseController
      */
     public function editPost(): void
     {
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
+        $session = new PHPSession;
+		if($session->get('admin') == NULL || !$session->get('admin'))
+        {
+            $this->redirect('/erreur-403');
+        }
         $adminPostManager = new PostManager('Post');
         $getThisPost = $adminPostManager->getById($_GET['idPost']);
-        $session = new PHPSession;
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
@@ -133,10 +141,12 @@ class PostController extends BaseController
      */
     public function updatePost($id, string $title, string $heading, string $content, string $author, string $token): void
     {
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
-        $fields = [$title, $heading, $content, $author];
         $session = new PHPSession;
+		if($session->get('admin') == NULL || !$session->get('admin'))
+        {
+            $this->redirect('/erreur-403');
+        }
+        $fields = [$title, $heading, $content, $author];
 
         if($this->isSubmit('editPost') && $this->isValid($fields) && $token == $session->get('token')) {
 
@@ -147,16 +157,12 @@ class PostController extends BaseController
             $post = new Post($title, $postData['date_publication'], $dateLastUpdate, $heading, $content, $author);
             
             $postManager->update($post, $id);
-            $session = new PHPSession;
             $session->set('success', 'Votre post a bien été modifié.');
-
             $this->redirect($this->PATH_TO_ADMIN_POSTS);
 
         } else {
 
-            $session = new PHPSession;
             $session->set('fail', 'Votre post n\'a pas été modifié, une erreur dans le formulaire a été détectée.');
-
             $this->redirect($this->PATH_TO_ADMIN_POSTS);
 
         }
@@ -171,18 +177,17 @@ class PostController extends BaseController
      */
     public function deletePost($id = NULL, string $token = NULL): void
     {
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
         $session = new PHPSession;
+		if($session->get('admin') == NULL || !$session->get('admin'))
+        {
+            $this->redirect('/erreur-403');
+        }
         if($token == $session->get('token'))
         {
             $session->delete('token');
-            $adminProtectionPart = new AdminProtectionPart();
-            $adminProtectionPart->redirectNotAdmin();
             $deletePostManager = new PostManager('post');
             $deletePostManager->delete($id);
 
-            $session = new PHPSession;
             $session->set('success', 'Votre post a bien été supprimé.');
 
             $this->redirect('/admin-posts');
