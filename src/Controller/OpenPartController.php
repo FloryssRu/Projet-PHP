@@ -16,7 +16,14 @@ class OpenPartController extends BaseController
         $postManager = new PostManager('post');
         $post = $postManager->getById($idPost);
         $dateFormat = new DateFormat;
-        $post['date_last_update'] = $dateFormat->formatToDisplay($post['date_last_update']);
+        if($post['date_last_update'] == NULL)
+        {
+            $post['date_publication'] = 'Publié ' . $dateFormat->formatToDisplay($post['date_publication']);
+        } else
+        {
+            $post['date_last_update'] = 'Mis à jour ' . $dateFormat->formatToDisplay($post['date_last_update']);
+        }
+        
         $commentManager = new CommentManager('comment');
         $arrayComments = $commentManager->getCommentsByIdPost($idPost);
 
@@ -29,7 +36,7 @@ class OpenPartController extends BaseController
             $userConnected = false;
         }
 
-        $this->render('post.html.twig', [
+        return $this->render('post.html.twig', [
             "post" => $post,
             "comments" => $arrayComments,
             "userConnected" => $userConnected
@@ -44,7 +51,7 @@ class OpenPartController extends BaseController
         $dateFormat = new DateFormat;
         $listPosts = $dateFormat->formatListPosts($listPosts);
 
-        $this->render('listPosts.html.twig', [
+        return $this->render('listPosts.html.twig', [
             'listPosts' => $listPosts
         ]);
     }
@@ -77,6 +84,6 @@ class OpenPartController extends BaseController
 
     public function error403(): void
     {
-        $this->render('403.html.twig', []);
+        return $this->render('403.html.twig');
     }
 }

@@ -27,11 +27,32 @@ class DateFormat extends BaseController
     {
         $dayAndHour = explode(' ', $date);
         $day = explode('-', $dayAndHour[0]);
-        return "Le " . $day[2] . "/" . $day[1] . "/" . $day[0] . ", à " . $dayAndHour[1];
+        return "le " . $day[2] . "/" . $day[1] . "/" . $day[0] . ", à " . $dayAndHour[1];
     }
     
     /**
-     * Format all the dates in the array $listPosts
+     * Format all the dates in the array $listPosts for the adminpart
+     *
+     * @param  array $listPosts
+     * @return array
+     */
+    public function formatListPostsAdmin(array $listPosts): array
+    {
+        foreach($listPosts as $key => $post)
+        {
+            if($post['date_last_update'] == NULL)
+            {
+                $listPosts[$key]['date_last_update'] = 'Ce post n\'a pas été modifié.';
+            } else
+            {
+                $listPosts[$key]['date_last_update'] = $this->formatToDisplay($post['date_last_update']);
+            }
+        }
+        return $listPosts;
+    }
+
+    /**
+     * Format all the dates in the array $listPosts for the post list page
      *
      * @param  array $listPosts
      * @return array
@@ -40,7 +61,13 @@ class DateFormat extends BaseController
     {
         foreach($listPosts as $key => $post)
         {
-            $listPosts[$key]['date_last_update'] = $this->formatToDisplay($post['date_last_update']);
+            if($post['date_last_update'] == NULL)
+            {
+                $listPosts[$key]['date_publication'] = 'Publié ' . $this->formatToDisplay($post['date_publication']);
+            } else
+            {
+                $listPosts[$key]['date_last_update'] = 'Mis à jour ' . $this->formatToDisplay($post['date_last_update']);
+            }
         }
         return $listPosts;
     }

@@ -5,7 +5,6 @@ namespace App\Controller\admin;
 use App\Core\BaseController;
 use App\Entity\Comment;
 use App\Repository\Manager\CommentManager;
-use App\Services\AdminProtectionPart;
 use App\Services\DateFormat;
 use App\Services\PHPSession;
 
@@ -24,7 +23,7 @@ class CommentController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            $this->redirect('/erreur-403');
+            return $this->redirect('/erreur-403');
         }
         $commentManager = new CommentManager('Comment');
         $commentsNotValidated = $commentManager->getCommentNotValidated();
@@ -34,7 +33,7 @@ class CommentController extends BaseController
         $commentsNotValidated = $dateFormat->formatListComments($commentsNotValidated);
         $commentsValidated = $dateFormat->formatListComments($commentsValidated);
 
-        $this->render($this->ADMIN_COMMENTS_TEMPLATE, [
+        return $this->render($this->ADMIN_COMMENTS_TEMPLATE, [
             "commentsNotValidated" => $commentsNotValidated,
             "commentsValidated" => $commentsValidated
         ]);
@@ -51,7 +50,7 @@ class CommentController extends BaseController
         $session = new PHPSession;
         if($id == NULL || $session->get('admin') == NULL || !$session->get('admin'))
         {
-            $this->redirect('/erreur-403');
+            return $this->redirect('/erreur-403');
         }
         $commentManager = new CommentManager('Comment');
         $commentData = $commentManager->getById($id);
@@ -59,7 +58,7 @@ class CommentController extends BaseController
         $commentManager->update($comment, $id);
         $session->set('success', 'Le commentaire a été validé.');
 
-        $this->redirect('/admin-commentaires');
+        return $this->redirect('/admin-commentaires');
         
     }
     
@@ -71,7 +70,7 @@ class CommentController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            $this->redirect('/erreur-403');
+            return $this->redirect('/erreur-403');
         }
         $commentManager = new CommentManager('Comment');
         $commentData = $commentManager->getById($id);

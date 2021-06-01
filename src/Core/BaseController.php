@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use App\Core\Response\Redirection;
 use App\Core\Response\Response;
 use Twig\Loader\FilesystemLoader;
 use Twig\Environment;
@@ -23,7 +24,6 @@ class BaseController
 		$this->bindManager();
 		$loader = new FilesystemLoader(TEMPLATE_DIR . '//');
 		$this->twig = new Environment($loader, ['debug' => true]);
-		$this->twig->addGlobal('session', $_SESSION);
 	}
 		
 	protected function render($filename, $array = [])
@@ -32,10 +32,13 @@ class BaseController
 		{
 			extract($this->param);
 
+			$this->twig->addGlobal('session', $_SESSION);
 			$view = $this->twig->load($filename);
 			$content = $view->render($array);
 			$response = new Response($content);
 			return $response->send();
+
+			/*echo $twig->render($filename, $array);*/
 
 		} else
 		{
@@ -43,9 +46,10 @@ class BaseController
 		}
 	}
 
-	public function redirect(string $path) {
-		header("Location:/blogphp" . $path);
-		exit();
+	public function redirect(string $path)
+	{
+		$redirection = new Redirection($path);
+		return $redirection->redirect($path);
 	}
 	
 	/**

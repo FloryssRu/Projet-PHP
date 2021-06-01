@@ -19,7 +19,7 @@ class AuthenticateController extends BaseController
 
     public function signUpForm(): void
     {
-        $this->render('signUp.html.twig', []);
+        return $this->render('signUp.html.twig');
     }
     
     /**
@@ -31,7 +31,6 @@ class AuthenticateController extends BaseController
      */
     public function signUp(string $pseudo, string $password): void
     {
-
         $fields = [$pseudo, $password];
 
         $userManager = new UserManager('user');
@@ -45,20 +44,20 @@ class AuthenticateController extends BaseController
             $isAdmin = $userManager->isAdminById($idUser);
             $session->set('admin', $isAdmin);
 
-            $this->redirect('/');
+            return $this->redirect('/');
 
         } else
         {
             $session = new PHPSession;
             $session->set('fail', 'Vous avez entré un mauvais pseudo ou mot de passe.');
-            $this->redirect($this->PATH_TO_SIGNUP_PAGE);
+            return $this->redirect($this->PATH_TO_SIGNUP_PAGE);
         }
 
     }
 
     public function signInForm(): void
     {
-        $this->render('signIn.html.twig', []);
+        return $this->render('signIn.html.twig');
     }
     
     /**
@@ -92,7 +91,7 @@ class AuthenticateController extends BaseController
         unset($_SESSION['admin']);
         $session = new PHPSession();
         $session->set('success', 'Vous avez bien été déconnecté.');
-        $this->redirect('/');
+        return $this->redirect('/');
     }
     
     /**
@@ -113,10 +112,10 @@ class AuthenticateController extends BaseController
             $userManager->setUuidNull($idUser);
             $session = new PHPSession;
             $session->set('success', 'Votre email a bien été confirmé.');
-            $this->redirect('/');
+            return $this->redirect('/');
         } else
         {
-            $this->redirect('/erreur404');
+            return $this->redirect('/erreur404');
         }
         
     }
@@ -128,7 +127,7 @@ class AuthenticateController extends BaseController
      */
     public function emailToResetPassword(): void
 	{
-		$this->render('emailToResetPassword.html.twig', []);
+		return $this->render('emailToResetPassword.html.twig');
 	}
     
     /**
@@ -156,7 +155,7 @@ class AuthenticateController extends BaseController
         $token = Uuid::uuid4();
         $token = $token->toString();
         $session->set('token', $token);
-		$this->render('changePasswordForm.html.twig', [
+		return $this->render('changePasswordForm.html.twig', [
             'uuid' => $uuid
         ]);
 	}

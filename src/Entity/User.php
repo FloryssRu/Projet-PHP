@@ -21,7 +21,7 @@ class User
     private string $email;
     private bool $admin;
     private bool $emailValidated;
-    private $uuid;
+    private ?string $uuid;
 
     public function getId(): int
     {
@@ -78,12 +78,12 @@ class User
         return $this->emailValidated;
     }
 
-    public function setUuid($uuid): void
+    public function setUuid(?string $uuid): void
     {
         $this->uuid = $uuid;
     }
 
-    public function getUuid(): string
+    public function getUuid(): ?string
     {
         return $this->uuid;
     }

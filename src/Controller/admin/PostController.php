@@ -5,7 +5,6 @@ namespace App\Controller\admin;
 use App\Core\BaseController;
 use App\Entity\Post;
 use App\Repository\Manager\PostManager;
-use App\Services\AdminProtectionPart;
 use App\Services\DateFormat;
 use App\Services\PHPSession;
 use Ramsey\Uuid\Uuid;
@@ -26,12 +25,12 @@ class PostController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            $this->redirect('/erreur-403');
+            return $this->redirect('/erreur-403');
         }
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
-        $this->render('admin/newPost.html.twig', []);
+        return $this->render('admin/newPost.html.twig');
     }
     
     /**
@@ -49,7 +48,7 @@ class PostController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            $this->redirect('/erreur-403');
+            return $this->redirect('/erreur-403');
         }
         $fields = [$title, $heading, $content, $author];
 
@@ -57,21 +56,21 @@ class PostController extends BaseController
 
             $session->delete('token');
 
-            $datePublication = $dateLastUpdate = date("Y-m-d H:i:s");
+            $datePublication = date("Y-m-d H:i:s");
             $postManager = new PostManager('post');
 
-            $post = new Post($title, $datePublication, $dateLastUpdate, $heading, $content, $author);
+            $post = new Post($title, $datePublication, NULL, $heading, $content, $author);
             $postManager->insert($post);
             
             $session->set('success', 'Votre nouveau post a bien été enregistré.');
 
-            $this->redirect($this->PATH_TO_ADMIN_POSTS);
+            return $this->redirect($this->PATH_TO_ADMIN_POSTS);
 
         } else {
 
             $session->set('fail', 'Votre nouveau post n\'a pas été enregistré, une erreur dans le formulaire a été détectée.');
 
-            $this->redirect($this->PATH_TO_ADMIN_POSTS);
+            return $this->redirect($this->PATH_TO_ADMIN_POSTS);
 
         }
     }
@@ -86,19 +85,19 @@ class PostController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            $this->redirect('/erreur-403');
+            return $this->redirect('/erreur-403');
         }
         $adminPostManager = new PostManager('Post');
         $getAllPosts = $adminPostManager->getAll();
 
         $dateFormat = new DateFormat;
-        $getAllPosts = $dateFormat->formatListPosts($getAllPosts);
+        $getAllPosts = $dateFormat->formatListPostsAdmin($getAllPosts);
 
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
 
-        $this->render($this->ADMIN_POSTS_TEMPLATE, [
+        return $this->render($this->ADMIN_POSTS_TEMPLATE, [
             "allPosts" => $getAllPosts
         ]);
         
@@ -115,7 +114,7 @@ class PostController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            $this->redirect('/erreur-403');
+            return $this->redirect('/erreur-403');
         }
         $adminPostManager = new PostManager('Post');
         $getThisPost = $adminPostManager->getById($_GET['idPost']);
@@ -123,7 +122,7 @@ class PostController extends BaseController
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
 
-        $this->render('admin/editPost.html.twig', [
+        return $this->render('admin/editPost.html.twig', [
             'getThisPost' => $getThisPost
         ]);
     }
@@ -144,7 +143,7 @@ class PostController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            $this->redirect('/erreur-403');
+            return $this->redirect('/erreur-403');
         }
         $fields = [$title, $heading, $content, $author];
 
@@ -158,12 +157,12 @@ class PostController extends BaseController
             
             $postManager->update($post, $id);
             $session->set('success', 'Votre post a bien été modifié.');
-            $this->redirect($this->PATH_TO_ADMIN_POSTS);
+            return $this->redirect($this->PATH_TO_ADMIN_POSTS);
 
         } else {
 
             $session->set('fail', 'Votre post n\'a pas été modifié, une erreur dans le formulaire a été détectée.');
-            $this->redirect($this->PATH_TO_ADMIN_POSTS);
+            return $this->redirect($this->PATH_TO_ADMIN_POSTS);
 
         }
     }
@@ -180,7 +179,7 @@ class PostController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            $this->redirect('/erreur-403');
+            return $this->redirect('/erreur-403');
         }
         if($token == $session->get('token'))
         {
@@ -190,10 +189,10 @@ class PostController extends BaseController
 
             $session->set('success', 'Votre post a bien été supprimé.');
 
-            $this->redirect('/admin-posts');
+            return $this->redirect('/admin-posts');
         } else
         {
-            $this->redirect('/');
+            return $this->redirect('/');
         }
         
     }

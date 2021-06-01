@@ -59,9 +59,15 @@ class Manager
 			$key = preg_replace('/(?=[A-Z])/', '_', $key);
 			$key = strtolower($key);
 			$fieldNames[] = $key;
-			$valuesToInsert[] = $value;
+			if($value == NULL)
+			{
+				$valuesToInsert[] = 'NULL';
+			} else
+			{
+				$valuesToInsert[] = '"' . $value . '"';
+			}
 		}
-		$this->database->query("INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (\"" . implode('", "', $valuesToInsert) . "\")");
+		$this->database->query("INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (" . implode(', ', $valuesToInsert) . ")");
 	}
 	
 	/**
@@ -80,7 +86,13 @@ class Manager
 		foreach($arrayData as $key => $value) {
 			$key = preg_replace('/(?=[A-Z])/', '_', $key);
 			$key = strtolower($key);
-			$values[] = $key . ' = "' . $value . '" ';
+			if($value == NULL)
+			{
+				$values[] = $key . ' = NULL ';
+			} else
+			{
+				$values[] = $key . ' = "' . $value . '" ';
+			}
 		}
 
 		$sql .= implode(', ', $values);

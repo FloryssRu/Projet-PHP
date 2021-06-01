@@ -5,7 +5,6 @@ namespace App\Controller\admin;
 use App\Core\BaseController;
 use App\Entity\User;
 use App\Repository\Manager\UserManager;
-use App\Services\AdminProtectionPart;
 use App\Services\PHPSession;
 use App\Services\TranslateUsersAdminStatus;
 use Ramsey\Uuid\Nonstandard\Uuid;
@@ -17,7 +16,7 @@ class UserController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            $this->redirect('/erreur-403');
+            return $this->redirect('/erreur-403');
         }
         $userManager = new UserManager('user');
         $users = $userManager->getAll();
@@ -26,7 +25,7 @@ class UserController extends BaseController
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
-        $this->render('admin/usersList.html.twig', [
+        return $this->render('admin/usersList.html.twig', [
             'users' => $users,
             'token' => $uuid
         ]);
