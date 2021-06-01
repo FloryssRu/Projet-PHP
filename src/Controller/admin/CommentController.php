@@ -11,7 +11,7 @@ use App\Services\PHPSession;
 class CommentController extends BaseController
 {
 
-    private $ADMIN_COMMENTS_TEMPLATE = 'admin/adminComments.html.twig';
+    private const ADMIN_COMMENTS_TEMPLATE = 'admin/adminComments.html.twig';
         
     /**
      * Render a list with all comments and link to validate or unvalidate for each
@@ -23,7 +23,7 @@ class CommentController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            return $this->redirect('/erreur-403');
+            return $this->redirect(parent::ERROR_403_PATH);
         }
         $commentManager = new CommentManager('Comment');
         $commentsNotValidated = $commentManager->getCommentNotValidated();
@@ -33,7 +33,7 @@ class CommentController extends BaseController
         $commentsNotValidated = $dateFormat->formatListComments($commentsNotValidated);
         $commentsValidated = $dateFormat->formatListComments($commentsValidated);
 
-        return $this->render($this->ADMIN_COMMENTS_TEMPLATE, [
+        return $this->render(self::ADMIN_COMMENTS_TEMPLATE, [
             "commentsNotValidated" => $commentsNotValidated,
             "commentsValidated" => $commentsValidated
         ]);
@@ -50,7 +50,7 @@ class CommentController extends BaseController
         $session = new PHPSession;
         if($id == NULL || $session->get('admin') == NULL || !$session->get('admin'))
         {
-            return $this->redirect('/erreur-403');
+            return $this->redirect(parent::ERROR_403_PATH);
         }
         $commentManager = new CommentManager('Comment');
         $commentData = $commentManager->getById($id);
@@ -70,7 +70,7 @@ class CommentController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            return $this->redirect('/erreur-403');
+            return $this->redirect(parent::ERROR_403_PATH);
         }
         $commentManager = new CommentManager('Comment');
         $commentData = $commentManager->getById($id);

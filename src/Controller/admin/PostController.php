@@ -25,7 +25,7 @@ class PostController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            return $this->redirect('/erreur-403');
+            return $this->redirect(parent::ERROR_403_PATH);
         }
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
@@ -48,7 +48,7 @@ class PostController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            return $this->redirect('/erreur-403');
+            return $this->redirect(parent::ERROR_403_PATH);
         }
         $fields = [$title, $heading, $content, $author];
 
@@ -85,7 +85,7 @@ class PostController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            return $this->redirect('/erreur-403');
+            return $this->redirect(parent::ERROR_403_PATH);
         }
         $adminPostManager = new PostManager('Post');
         $getAllPosts = $adminPostManager->getAll();
@@ -114,7 +114,7 @@ class PostController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            return $this->redirect('/erreur-403');
+            return $this->redirect(parent::ERROR_403_PATH);
         }
         $adminPostManager = new PostManager('Post');
         $getThisPost = $adminPostManager->getById($_GET['idPost']);
@@ -143,7 +143,7 @@ class PostController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            return $this->redirect('/erreur-403');
+            return $this->redirect(parent::ERROR_403_PATH);
         }
         $fields = [$title, $heading, $content, $author];
 
@@ -179,7 +179,7 @@ class PostController extends BaseController
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
-            return $this->redirect('/erreur-403');
+            return $this->redirect(parent::ERROR_403_PATH);
         }
         if($token == $session->get('token'))
         {

@@ -14,6 +14,8 @@ class BaseController
 	private $config;
 	protected $twig;
 
+	protected const ERROR_403_PATH = '/erreur-403';
+
 	public function __construct($httpRequest)
 	{
 		$this->httpRequest = $httpRequest;
@@ -37,8 +39,6 @@ class BaseController
 			$content = $view->render($array);
 			$response = new Response($content);
 			return $response->send();
-
-			/*echo $twig->render($filename, $array);*/
 
 		} else
 		{

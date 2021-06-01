@@ -6,9 +6,9 @@ class Redirection implements RedirectionInterface
 {
     private $path;
 
-    public function __construct($content)
+    public function __construct($path)
     {
-        $this->content = $content;
+        $this->path = $path;
     }
 
     public function redirect(string $path)
