@@ -13,11 +13,11 @@ use Ramsey\Uuid\Uuid;
 
 class AuthenticateController extends BaseController
 {
-    protected $PATH_TO_SIGNUP_PAGE = "/connexion";
-    protected $PATH_TO_FORGOTTEN_PSWD = "/mot-de-passe-oublie";
-    protected $PATH_TO_PSWD_RESET = "/reinitialisation-mot-de-passe?uuid=";
+    protected const PATH_TO_SIGNUP_PAGE = "/connexion";
+    protected const PATH_TO_FORGOTTEN_PSWD = "/mot-de-passe-oublie";
+    protected const PATH_TO_PSWD_RESET = "/reinitialisation-mot-de-passe?uuid=";
 
-    public function signUpForm(): void
+    public function signUpForm()
     {
         return $this->render('signUp.html.twig');
     }
@@ -29,7 +29,7 @@ class AuthenticateController extends BaseController
      * @param  string $password
      * @return void
      */
-    public function signUp(string $pseudo, string $password): void
+    public function signUp(string $pseudo, string $password)
     {
         $fields = [$pseudo, $password];
 
@@ -55,7 +55,7 @@ class AuthenticateController extends BaseController
 
     }
 
-    public function signInForm(): void
+    public function signInForm()
     {
         return $this->render('signIn.html.twig');
     }
@@ -70,7 +70,7 @@ class AuthenticateController extends BaseController
      * @param  mixed $mentionsAccepted
      * @return void
      */
-    public function signIn(string $pseudo, string $password, string $passwordValid, string $email, $mentionsAccepted): void
+    public function signIn(string $pseudo, string $password, string $passwordValid, string $email, $mentionsAccepted)
     {
 
         $data = [
@@ -85,7 +85,7 @@ class AuthenticateController extends BaseController
         $handlerSignIn->tryToSignIn($data);
     }
 
-    public function signOut(): void
+    public function signOut()
     {
         unset($_SESSION['pseudo']);
         unset($_SESSION['admin']);
@@ -100,7 +100,7 @@ class AuthenticateController extends BaseController
      * @param  string $uuid
      * @return void
      */
-    public function validEmail(string $uuid): void
+    public function validEmail(string $uuid)
     {
         $userManager = new UserManager('user');
         $idUser = $userManager->getIdByUuid($uuid);
@@ -125,7 +125,7 @@ class AuthenticateController extends BaseController
      * 
      * @return void
      */
-    public function emailToResetPassword(): void
+    public function emailToResetPassword()
 	{
 		return $this->render('emailToResetPassword.html.twig');
 	}
@@ -136,7 +136,7 @@ class AuthenticateController extends BaseController
      * @param  string $email
      * @return void
      */
-    public function sendEmailResetPassword(string $email): void
+    public function sendEmailResetPassword(string $email)
     {
         $handlerResetPassword = new HandlerResetPassword;
         $handlerResetPassword->handlerEmailResetPassword($email);
@@ -148,7 +148,7 @@ class AuthenticateController extends BaseController
 	 * @param  string $uuid
 	 * @return void
 	 */
-	public function changePasswordForm(string $uuid): void
+	public function changePasswordForm(string $uuid)
 	{
         $session = new PHPSession;
         $session->set('uuid', $uuid);
@@ -168,7 +168,7 @@ class AuthenticateController extends BaseController
      * @param  string $uuid
      * @return void
      */
-    public function resetPassword(string $password, string $validPassword, string $uuid, string $token): void
+    public function resetPassword(string $password, string $validPassword, string $uuid, string $token)
     {
         $handlerResetPassword = new HandlerResetPassword;
         $handlerResetPassword->handlerResetPassword($password, $validPassword, $uuid, $token);

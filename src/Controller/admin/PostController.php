@@ -12,15 +12,15 @@ use Ramsey\Uuid\Uuid;
 class PostController extends BaseController
 {
 
-    private $PATH_TO_ADMIN_POSTS = '/admin-posts';
-    private $ADMIN_POSTS_TEMPLATE = 'admin/adminPosts.html.twig';
+    private const PATH_TO_ADMIN_POSTS = '/admin-posts';
+    private const ADMIN_POSTS_TEMPLATE = 'admin/adminPosts.html.twig';
     
     /**
      * Form to create a new Post
      * 
      * @return void
      */
-    public function newPost(): void
+    public function newPost()
     {
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
@@ -43,7 +43,7 @@ class PostController extends BaseController
      * @param $token
      * @return void
      */
-    public function addPost(string $title, string $heading, string $content, string $author, string $token): void
+    public function addPost(string $title, string $heading, string $content, string $author, string $token)
     {
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
@@ -64,13 +64,13 @@ class PostController extends BaseController
             
             $session->set('success', 'Votre nouveau post a bien été enregistré.');
 
-            return $this->redirect($this->PATH_TO_ADMIN_POSTS);
+            return $this->redirect(self::PATH_TO_ADMIN_POSTS);
 
         } else {
 
             $session->set('fail', 'Votre nouveau post n\'a pas été enregistré, une erreur dans le formulaire a été détectée.');
 
-            return $this->redirect($this->PATH_TO_ADMIN_POSTS);
+            return $this->redirect(self::PATH_TO_ADMIN_POSTS);
 
         }
     }
@@ -80,7 +80,7 @@ class PostController extends BaseController
      * 
      * @return void
      */
-    public function adminPosts(): void
+    public function adminPosts()
     {
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
@@ -97,7 +97,7 @@ class PostController extends BaseController
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
 
-        return $this->render($this->ADMIN_POSTS_TEMPLATE, [
+        return $this->render(self::ADMIN_POSTS_TEMPLATE, [
             "allPosts" => $getAllPosts
         ]);
         
@@ -109,7 +109,7 @@ class PostController extends BaseController
      * 
      * @return void
      */
-    public function editPost(): void
+    public function editPost()
     {
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
@@ -138,7 +138,7 @@ class PostController extends BaseController
      * @param  string $token
      * @return void
      */
-    public function updatePost($id, string $title, string $heading, string $content, string $author, string $token): void
+    public function updatePost($id, string $title, string $heading, string $content, string $author, string $token)
     {
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
@@ -157,12 +157,12 @@ class PostController extends BaseController
             
             $postManager->update($post, $id);
             $session->set('success', 'Votre post a bien été modifié.');
-            return $this->redirect($this->PATH_TO_ADMIN_POSTS);
+            return $this->redirect(self::PATH_TO_ADMIN_POSTS);
 
         } else {
 
             $session->set('fail', 'Votre post n\'a pas été modifié, une erreur dans le formulaire a été détectée.');
-            return $this->redirect($this->PATH_TO_ADMIN_POSTS);
+            return $this->redirect(self::PATH_TO_ADMIN_POSTS);
 
         }
     }
@@ -174,7 +174,7 @@ class PostController extends BaseController
      * @param  string $token
      * @return void
      */
-    public function deletePost($id = NULL, string $token = NULL): void
+    public function deletePost($id = NULL, string $token = NULL)
     {
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
@@ -189,7 +189,7 @@ class PostController extends BaseController
 
             $session->set('success', 'Votre post a bien été supprimé.');
 
-            return $this->redirect('/admin-posts');
+            return $this->redirect(self::PATH_TO_ADMIN_POSTS);
         } else
         {
             return $this->redirect('/');

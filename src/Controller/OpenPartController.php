@@ -11,7 +11,7 @@ use App\Services\DateFormat;
 
 class OpenPartController extends BaseController
 {
-	public function showPost($idPost): void
+	public function showPost($idPost)
     {
         $postManager = new PostManager('post');
         $post = $postManager->getById($idPost);
@@ -44,7 +44,7 @@ class OpenPartController extends BaseController
 
     }
 
-    public function showList(): void
+    public function showList()
     {
         $postManager = new PostManager('post');
         $listPosts = $postManager->getAll();
@@ -56,7 +56,7 @@ class OpenPartController extends BaseController
         ]);
     }
 
-    public function newComment(string $content, int $idPost): void
+    public function newComment(string $content, int $idPost)
     {
         $fields = [$content];
 
@@ -82,7 +82,7 @@ class OpenPartController extends BaseController
         }
     }
 
-    public function error403(): void
+    public function error403()
     {
         return $this->render('403.html.twig');
     }
