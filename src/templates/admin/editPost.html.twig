@@ -4,7 +4,17 @@
 Modifier un post
 {% endblock %}
 
-
+{% block css %}
+    <script src="/blogphp/vendor/tinymce/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript">
+        tinymce.init({
+            selector: '#heading'
+        });
+        tinymce.init({
+            selector: '#content'
+        });
+    </script>
+{% endblock %}
 
 {% block body %}
 

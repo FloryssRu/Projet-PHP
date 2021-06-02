@@ -56,9 +56,9 @@ class OpenPartController extends BaseController
         ]);
     }
 
-    public function newComment(string $content, int $idPost)
+    public function newComment()
     {
-        $fields = [$content];
+        $fields = [$_POST['content']];
 
         if($this->isSubmit('newComment') && $this->isValid($fields)) {
 
@@ -68,17 +68,17 @@ class OpenPartController extends BaseController
             $isValidated = 0;
             $commentManager = new CommentManager('comment');
 
-            $comment = new Comment($pseudo, $content, $date, $isValidated, $idPost);
+            $comment = new Comment($pseudo, $_POST['content'], $date, $isValidated, $_POST['idPost']);
             $commentManager->insert($comment);
             
             $session->set('success', 'Votre commentaire a été envoyé pour validation.');
 
-            $this->showPost($idPost);
+            $this->showPost($_POST['idPost']);
         } else {
             $session = new PHPSession;
             $session->set('fail', 'Votre commentaire a rencontré un problème.');
 
-            $this->showPost($idPost);
+            $this->showPost($_POST['idPost']);
         }
     }
 

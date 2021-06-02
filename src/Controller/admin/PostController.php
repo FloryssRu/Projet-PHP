@@ -17,8 +17,6 @@ class PostController extends BaseController
     
     /**
      * Form to create a new Post
-     * 
-     * @return void
      */
     public function newPost()
     {
@@ -35,31 +33,24 @@ class PostController extends BaseController
     
     /**
      * Add a new post to the database
-     * 
-     * @param $title
-     * @param $heading
-     * @param $content
-     * @param $author
-     * @param $token
-     * @return void
      */
-    public function addPost(string $title, string $heading, string $content, string $author, string $token)
+    public function addPost()
     {
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
             return $this->redirect(parent::ERROR_403_PATH);
         }
-        $fields = [$title, $heading, $content, $author];
+        $fields = [$_POST['title'], $_POST['heading'], $_POST['content'], $_POST['author']];
 
-        if($this->isSubmit('newPost') && $this->isValid($fields) && $token == $session->get('token')) {
+        if($this->isSubmit('newPost') && $this->isValid($fields) && $_POST['token'] == $session->get('token')) {
 
             $session->delete('token');
 
             $datePublication = date("Y-m-d H:i:s");
             $postManager = new PostManager('post');
 
-            $post = new Post($title, $datePublication, NULL, $heading, $content, $author);
+            $post = new Post($_POST['title'], $datePublication, NULL, $_POST['heading'], $_POST['content'], $_POST['author']);
             $postManager->insert($post);
             
             $session->set('success', 'Votre nouveau post a bien été enregistré.');
@@ -77,8 +68,6 @@ class PostController extends BaseController
     
     /**
      * retrieves all published posts and forwards them to the page
-     * 
-     * @return void
      */
     public function adminPosts()
     {
@@ -106,8 +95,6 @@ class PostController extends BaseController
     
     /**
      * retrieves the posts to modify and complete the field of the edit page
-     * 
-     * @return void
      */
     public function editPost()
     {
@@ -129,33 +116,25 @@ class PostController extends BaseController
 
     /**
      * Update a post which just was send with the editpost form
-     *
-     * @param  mixed $id
-     * @param  string $title
-     * @param  string $heading
-     * @param  string $content
-     * @param  string $author
-     * @param  string $token
-     * @return void
      */
-    public function updatePost($id, string $title, string $heading, string $content, string $author, string $token)
+    public function updatePost()
     {
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
         {
             return $this->redirect(parent::ERROR_403_PATH);
         }
-        $fields = [$title, $heading, $content, $author];
+        $fields = [$_POST['title'], $_POST['heading'], $_POST['content'], $_POST['author']];
 
-        if($this->isSubmit('editPost') && $this->isValid($fields) && $token == $session->get('token')) {
+        if($this->isSubmit('editPost') && $this->isValid($fields) && $_POST['token'] == $session->get('token')) {
 
             $session->delete('token');
             $dateLastUpdate = date("Y-m-d H:i:s");
             $postManager = new PostManager('post');
-            $postData = $postManager->getById($id);
-            $post = new Post($title, $postData['date_publication'], $dateLastUpdate, $heading, $content, $author);
+            $postData = $postManager->getById($_POST['id']);
+            $post = new Post($_POST['title'], $postData['date_publication'], $dateLastUpdate, $_POST['heading'], $_POST['content'], $_POST['author']);
             
-            $postManager->update($post, $id);
+            $postManager->update($post, $_POST['id']);
             $session->set('success', 'Votre post a bien été modifié.');
             return $this->redirect(self::PATH_TO_ADMIN_POSTS);
 
@@ -172,7 +151,6 @@ class PostController extends BaseController
      *
      * @param  mixed $id
      * @param  string $token
-     * @return void
      */
     public function deletePost($id = NULL, string $token = NULL)
     {

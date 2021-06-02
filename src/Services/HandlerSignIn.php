@@ -40,7 +40,7 @@ class HandlerSignIn extends AuthenticateController
         if($data['password'] === $data['passwordValid']
         && $this->isValid($data)
         && $this->isSubmit('signIn')
-        && $data['mentions'] == 'on'
+        && $data['mentionsAccepted'] == 'on'
         && strlen($data['pseudo']) <= 100
         && strlen($data['password']) <= 50
         && strlen($data['email']) <= 100
@@ -98,7 +98,7 @@ class HandlerSignIn extends AuthenticateController
         } elseif(!$this->isSubmit('signIn'))
         {
             $error = 'Le formulaire n\'a pas été soumis.';
-        } elseif($data['mentions'] != 'on')
+        } elseif($data['mentionsAccepted'] != 'on')
         {
             $error = 'Vous n\'avez pas accepté les mentions.';
         } elseif(strlen($data['pseudo']) > 100)

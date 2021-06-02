@@ -37,7 +37,6 @@ class UserController extends BaseController
      * @param  int $idUser
      * @param  string $token
      * @param  int $becomeAdmin     Is 0 if the user will become an admin, and 1 if the user become a simple user
-     * @return void
      */
     public function changeUserStatut(int $idUser, string $token, int $becomeAdmin)
     {

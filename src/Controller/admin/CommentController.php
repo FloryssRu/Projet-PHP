@@ -15,10 +15,8 @@ class CommentController extends BaseController
         
     /**
      * Render a list with all comments and link to validate or unvalidate for each
-     *
-     * @return void
      */
-    public function adminComment(): void
+    public function adminComment()
     {
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
@@ -42,10 +40,8 @@ class CommentController extends BaseController
     
     /**
      * Change the isValidated attribute to 1 (valide this comment)
-     * 
-     * @return void
      */
-    public function validComment($id = NULL): void
+    public function validComment($id = NULL)
     {
         $session = new PHPSession;
         if($id == NULL || $session->get('admin') == NULL || !$session->get('admin'))

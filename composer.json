@@ -15,6 +15,7 @@
     "require": {
         "twig/twig": "3.0",
         "ramsey/uuid": "^4.1",
-        "phpmailer/phpmailer": "^6.4"
+        "phpmailer/phpmailer": "^6.4",
+        "tinymce/tinymce": "^5.8"
     }
 }
