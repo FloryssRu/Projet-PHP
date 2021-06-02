@@ -15,7 +15,7 @@ namespace App\Entity;
 class User
 {
 
-    private int $id;
+    private ?int $id;
     private string $pseudo;
     private string $password;
     private string $email;
@@ -23,7 +23,7 @@ class User
     private bool $emailValidated;
     private ?string $uuid;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

@@ -50,7 +50,7 @@ class AuthenticateController extends BaseController
         {
             $session = new PHPSession;
             $session->set('fail', 'Vous avez entré un mauvais pseudo ou mot de passe.');
-            return $this->redirect($this->PATH_TO_SIGNUP_PAGE);
+            return $this->redirect(self::PATH_TO_SIGNUP_PAGE);
         }
 
     }
@@ -82,7 +82,7 @@ class AuthenticateController extends BaseController
         ];
 
         $handlerSignIn = new HandlerSignIn;
-        $handlerSignIn->tryToSignIn($data);
+        return $handlerSignIn->tryToSignIn($data);
     }
 
     public function signOut()

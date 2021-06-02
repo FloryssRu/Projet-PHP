@@ -15,7 +15,7 @@ namespace App\Entity;
 class Post
 {
     
-    private int $id;
+    private ?int $id;
     private string $title;
     private string $datePublication;
     private ?string $dateLastUpdate;
@@ -24,7 +24,7 @@ class Post
     private string $author;
     
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
