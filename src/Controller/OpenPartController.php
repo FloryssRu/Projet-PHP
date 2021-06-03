@@ -8,6 +8,7 @@ use App\Services\PHPSession;
 use App\Repository\Manager\PostManager;
 use App\Repository\Manager\CommentManager;
 use App\Services\DateFormat;
+use App\Services\HandlerPicture;
 
 class OpenPartController extends BaseController
 {
@@ -15,6 +16,10 @@ class OpenPartController extends BaseController
     {
         $postManager = new PostManager('post');
         $post = $postManager->getById($idPost);
+
+        $handlerPicture = new HandlerPicture;
+        $picture = $handlerPicture->searchPicture($post['date_publication']);
+
         $dateFormat = new DateFormat;
         if($post['date_last_update'] == NULL)
         {
@@ -27,19 +32,10 @@ class OpenPartController extends BaseController
         $commentManager = new CommentManager('comment');
         $arrayComments = $commentManager->getCommentsByIdPost($idPost);
 
-        $session = new PHPSession;
-        if($session->get('idUser') !== NULL)
-        {
-            $userConnected = true;
-        } else
-        {
-            $userConnected = false;
-        }
-
         return $this->render('post.html.twig', [
             "post" => $post,
-            "comments" => $arrayComments,
-            "userConnected" => $userConnected
+            "picture" => $picture,
+            "comments" => $arrayComments
         ]);
 
     }

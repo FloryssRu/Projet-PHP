@@ -16,7 +16,7 @@ Liste des Posts
         {% else %}
             <p>{{ post.date_publication }}</p>
         {% endif %}
-        <p>{{ post.heading }}</p>
+        <p>{{ post.heading | raw }}</p>
         <p><a href="post?idPost={{ post.id }}">Lire ce post</a></p>
     </div>
 {% endfor %}

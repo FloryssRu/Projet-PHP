@@ -64,6 +64,7 @@ class Manager
 				$valuesToInsert[] = 'NULL';
 			} else
 			{
+				$value = addslashes($value);
 				$valuesToInsert[] = '"' . $value . '"';
 			}
 		}

@@ -36,7 +36,8 @@
 	"action" : "EditPost",
 	"method" : "GET",
 	"param" : [
-		"idPost"
+		"idPost",
+		"picture"
 	],
 	"manager": []
 },
@@ -116,6 +117,7 @@
 	"method" : "GET",
 	"param" : [
 		"idPost",
+		"picture",
 		"comments"
 	],
 	"manager": []

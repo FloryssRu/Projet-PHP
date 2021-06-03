@@ -6,6 +6,7 @@ use App\Core\BaseController;
 use App\Entity\Post;
 use App\Repository\Manager\PostManager;
 use App\Services\DateFormat;
+use App\Services\HandlerPicture;
 use App\Services\PHPSession;
 use Ramsey\Uuid\Uuid;
 
@@ -50,10 +51,13 @@ class PostController extends BaseController
             $datePublication = date("Y-m-d H:i:s");
             $postManager = new PostManager('post');
 
+            $handlerPicture = new HandlerPicture;
+            $endOfFlashMsg = $handlerPicture->savePicture($_FILES['picture'], $datePublication);
+
             $post = new Post($_POST['title'], $datePublication, NULL, $_POST['heading'], $_POST['content'], $_POST['author']);
             $postManager->insert($post);
             
-            $session->set('success', 'Votre nouveau post a bien été enregistré.');
+            $session->set('success', 'Votre nouveau post a bien été enregistré' . $endOfFlashMsg . '.');
 
             return $this->redirect(self::PATH_TO_ADMIN_POSTS);
 
@@ -105,12 +109,17 @@ class PostController extends BaseController
         }
         $adminPostManager = new PostManager('Post');
         $getThisPost = $adminPostManager->getById($_GET['idPost']);
+
+        $handlerPicture = new HandlerPicture;
+        $picture = $handlerPicture->searchPicture($getThisPost['date_publication']);
+
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
 
         return $this->render('admin/editPost.html.twig', [
-            'getThisPost' => $getThisPost
+            'getThisPost' => $getThisPost,
+            'picture' => $picture
         ]);
     }
 
@@ -132,10 +141,13 @@ class PostController extends BaseController
             $dateLastUpdate = date("Y-m-d H:i:s");
             $postManager = new PostManager('post');
             $postData = $postManager->getById($_POST['id']);
-            $post = new Post($_POST['title'], $postData['date_publication'], $dateLastUpdate, $_POST['heading'], $_POST['content'], $_POST['author']);
-            
+
+            $handlerPicture = new HandlerPicture;
+            $endOfFlashMsg = $handlerPicture->savePicture($_FILES['picture'], $postData['date_publication']);
+
+            $post = new Post($_POST['title'], $postData['date_publication'], $dateLastUpdate, $_POST['heading'], $_POST['content'], $_POST['author']);   
             $postManager->update($post, $_POST['id']);
-            $session->set('success', 'Votre post a bien été modifié.');
+            $session->set('success', 'Votre post a bien été modifié' . $endOfFlashMsg . '.');
             return $this->redirect(self::PATH_TO_ADMIN_POSTS);
 
         } else {
