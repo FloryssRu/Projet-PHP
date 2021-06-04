@@ -93,6 +93,36 @@
 	"manager": []
 },
 {
+	"path" : "/blogphp/invalider-commentaire",
+	"controller" : "Comment",
+	"action" : "InvalidComment",
+	"method" : "GET",
+	"param" : [
+		"idComment"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/liste-utilisateurs",
+	"controller" : "User",
+	"action" : "ListUsers",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
+	"path" : "/blogphp/changer-statut",
+	"controller" : "User",
+	"action" : "changeUserStatut",
+	"method" : "GET",
+	"param" : [
+		"idUser",
+		"token",
+		"becomeAdmin"
+	],
+	"manager": []
+},
+{
 	"path" : "/blogphp/post",
 	"controller" : "OpenPart",
 	"action" : "ShowPost",

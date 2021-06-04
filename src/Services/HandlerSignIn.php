@@ -65,11 +65,11 @@ class HandlerSignIn extends AuthenticateController
             
             if (!$mail->send()) {
                 $session->set('fail', "L'email de confirmation d'adresse email n'a pas pu être envoyé. Réécrivez votre adresse email.");
-                $this->redirect('/inscription');
+                return $this->redirect('/inscription');
             } else {
                 $userManager->insert($user);
                 $session->set('success', "Bienvenue sur le Blog de Floryss Rubechi. Un mail de confirmation d'email vous a été envoyé.");
-                $this->redirect('/');
+                return $this->redirect('/');
             }
 
         } else
@@ -77,7 +77,7 @@ class HandlerSignIn extends AuthenticateController
             $problem = $this->findSignInProblem($data, $isEmailOccupied);
             $session = new PHPSession;
             $session->set('fail', $problem);
-            $this->redirect('/inscription');
+            return $this->redirect('/inscription');
         }
 	}
     

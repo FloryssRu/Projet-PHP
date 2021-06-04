@@ -12,7 +12,6 @@ session_start();
 
 try
 {
-
 	$httpRequest = new HttpRequest;
 	$router = new Router();
 	$httpRequest->setRoute($router->run($httpRequest));

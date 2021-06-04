@@ -8,10 +8,15 @@
 {% block body %}
 
     <h1>{{ post.title }}</h1>
+    {% if post.date_last_update %}
+        <p>{{ post.date_last_update }}</p>
+    {% else %}
+        <p>{{ post.date_publication }}</p>
+    {% endif %}
     <p>{{ post.heading }}</p>
     <p>{{ post.content }}</p>
     <p>{{ post.author }}</p>
-    <p>{{ post.date_last_update }}</p>
+    
     {% if session.pseudo %}
         <form action="nouveau-commentaire" method="post">
             <h2>Laissez un commentaire !</h2>

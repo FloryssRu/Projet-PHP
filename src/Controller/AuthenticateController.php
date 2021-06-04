@@ -17,9 +17,9 @@ class AuthenticateController extends BaseController
     protected const PATH_TO_FORGOTTEN_PSWD = "/mot-de-passe-oublie";
     protected const PATH_TO_PSWD_RESET = "/reinitialisation-mot-de-passe?uuid=";
 
-    public function signUpForm(): void
+    public function signUpForm()
     {
-        $this->render('signUp.html.twig', []);
+        return $this->render('signUp.html.twig');
     }
     
     /**
@@ -29,9 +29,8 @@ class AuthenticateController extends BaseController
      * @param  string $password
      * @return void
      */
-    public function signUp(string $pseudo, string $password): void
+    public function signUp(string $pseudo, string $password)
     {
-
         $fields = [$pseudo, $password];
 
         $userManager = new UserManager('user');
@@ -45,20 +44,20 @@ class AuthenticateController extends BaseController
             $isAdmin = $userManager->isAdminById($idUser);
             $session->set('admin', $isAdmin);
 
-            $this->redirect('/');
+            return $this->redirect('/');
 
         } else
         {
             $session = new PHPSession;
             $session->set('fail', 'Vous avez entré un mauvais pseudo ou mot de passe.');
-            $this->redirect($this->PATH_TO_SIGNUP_PAGE);
+            return $this->redirect(self::PATH_TO_SIGNUP_PAGE);
         }
 
     }
 
-    public function signInForm(): void
+    public function signInForm()
     {
-        $this->render('signIn.html.twig', []);
+        return $this->render('signIn.html.twig');
     }
     
     /**
@@ -71,7 +70,7 @@ class AuthenticateController extends BaseController
      * @param  mixed $mentionsAccepted
      * @return void
      */
-    public function signIn(string $pseudo, string $password, string $passwordValid, string $email, $mentionsAccepted): void
+    public function signIn(string $pseudo, string $password, string $passwordValid, string $email, $mentionsAccepted)
     {
 
         $data = [
@@ -83,16 +82,16 @@ class AuthenticateController extends BaseController
         ];
 
         $handlerSignIn = new HandlerSignIn;
-        $handlerSignIn->tryToSignIn($data);
+        return $handlerSignIn->tryToSignIn($data);
     }
 
-    public function signOut(): void
+    public function signOut()
     {
         unset($_SESSION['pseudo']);
         unset($_SESSION['admin']);
         $session = new PHPSession();
         $session->set('success', 'Vous avez bien été déconnecté.');
-        $this->redirect('/');
+        return $this->redirect('/');
     }
     
     /**
@@ -101,7 +100,7 @@ class AuthenticateController extends BaseController
      * @param  string $uuid
      * @return void
      */
-    public function validEmail(string $uuid): void
+    public function validEmail(string $uuid)
     {
         $userManager = new UserManager('user');
         $idUser = $userManager->getIdByUuid($uuid);
@@ -113,10 +112,10 @@ class AuthenticateController extends BaseController
             $userManager->setUuidNull($idUser);
             $session = new PHPSession;
             $session->set('success', 'Votre email a bien été confirmé.');
-            $this->redirect('/');
+            return $this->redirect('/');
         } else
         {
-            $this->redirect('/erreur404');
+            return $this->redirect('/erreur404');
         }
         
     }
@@ -126,9 +125,9 @@ class AuthenticateController extends BaseController
      * 
      * @return void
      */
-    public function emailToResetPassword(): void
+    public function emailToResetPassword()
 	{
-		$this->render('emailToResetPassword.html.twig', []);
+		return $this->render('emailToResetPassword.html.twig');
 	}
     
     /**
@@ -137,7 +136,7 @@ class AuthenticateController extends BaseController
      * @param  string $email
      * @return void
      */
-    public function sendEmailResetPassword(string $email): void
+    public function sendEmailResetPassword(string $email)
     {
         $handlerResetPassword = new HandlerResetPassword;
         $handlerResetPassword->handlerEmailResetPassword($email);
@@ -149,14 +148,14 @@ class AuthenticateController extends BaseController
 	 * @param  string $uuid
 	 * @return void
 	 */
-	public function changePasswordForm(string $uuid): void
+	public function changePasswordForm(string $uuid)
 	{
         $session = new PHPSession;
         $session->set('uuid', $uuid);
         $token = Uuid::uuid4();
         $token = $token->toString();
         $session->set('token', $token);
-		$this->render('changePasswordForm.html.twig', [
+		return $this->render('changePasswordForm.html.twig', [
             'uuid' => $uuid
         ]);
 	}
@@ -169,39 +168,10 @@ class AuthenticateController extends BaseController
      * @param  string $uuid
      * @return void
      */
-    public function resetPassword(string $password, string $validPassword, string $uuid, string $token): void
+    public function resetPassword(string $password, string $validPassword, string $uuid, string $token)
     {
-        $session = new PHPSession;
-        $fields = [$uuid, $password, $validPassword];
-        if($this->isValid($fields) && $this->isSubmit('resetPassword') && $uuid != NULL && $password == $validPassword && $token == $session->get('token'))
-        {
-            $userManager = new UserManager('user');
-            $idUser = $userManager->getIdByUuid($uuid);
-            if($idUser == NULL) {
-                $this->redirect($this->PATH_TO_PSWD_RESET . $uuid);
-            } else
-            {
-                $password = password_hash($password, PASSWORD_DEFAULT);
-                $userData = $userManager->getById($idUser);
-                $user = new User($userData['pseudo'], $password, $userData['email'], $userData['admin'], $userData['email_validated'], NULL);
-                $userManager->update($user, $idUser);
-                $userManager->setUuidNull($idUser);
-                $session = new PHPSession;
-                $session->set('success', "Votre mot de passe a bien été changé.");
-                $this->redirect($this->PATH_TO_SIGNUP_PAGE);
-            }
-        
-        } elseif($password != $validPassword)
-        {
-            $session = new PHPSession;
-            $session->set('fail', "Les mots de passe entrés ne sont pas identiques.");
-            $this->redirect($this->PATH_TO_PSWD_RESET . $session->get('uuid'));
-        } else
-        {
-            $session = new PHPSession;
-            $session->set('fail', "Votre réinitialisation de mot de passe a rencontré un problème. Veuillez recommencer.");
-            $this->redirect($this->PATH_TO_PSWD_RESET . $session->get('uuid'));
-        }
+        $handlerResetPassword = new HandlerResetPassword;
+        $handlerResetPassword->handlerResetPassword($password, $validPassword, $uuid, $token);
     }
 
 }

@@ -15,15 +15,15 @@ namespace App\Entity;
 class User
 {
 
-    private int $id;
+    private ?int $id;
     private string $pseudo;
     private string $password;
     private string $email;
     private bool $admin;
     private bool $emailValidated;
-    private $uuid;
+    private ?string $uuid;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -78,12 +78,12 @@ class User
         return $this->emailValidated;
     }
 
-    public function setUuid($uuid): void
+    public function setUuid(?string $uuid): void
     {
         $this->uuid = $uuid;
     }
 
-    public function getUuid(): string
+    public function getUuid(): ?string
     {
         return $this->uuid;
     }

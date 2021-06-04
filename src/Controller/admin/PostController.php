@@ -5,30 +5,32 @@ namespace App\Controller\admin;
 use App\Core\BaseController;
 use App\Entity\Post;
 use App\Repository\Manager\PostManager;
-use App\Services\AdminProtectionPart;
+use App\Services\DateFormat;
 use App\Services\PHPSession;
 use Ramsey\Uuid\Uuid;
 
 class PostController extends BaseController
 {
 
-    private $PATH_TO_ADMIN_POSTS = '/admin-posts';
-    private $ADMIN_POSTS_TEMPLATE = 'admin/adminPosts.html.twig';
+    private const PATH_TO_ADMIN_POSTS = '/admin-posts';
+    private const ADMIN_POSTS_TEMPLATE = 'admin/adminPosts.html.twig';
     
     /**
      * Form to create a new Post
      * 
      * @return void
      */
-    public function newPost(): void
+    public function newPost()
     {
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
         $session = new PHPSession;
+		if($session->get('admin') == NULL || !$session->get('admin'))
+        {
+            return $this->redirect(parent::ERROR_403_PATH);
+        }
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
-        $this->render('admin/newPost.html.twig', []);
+        return $this->render('admin/newPost.html.twig');
     }
     
     /**
@@ -41,32 +43,34 @@ class PostController extends BaseController
      * @param $token
      * @return void
      */
-    public function addPost(string $title, string $heading, string $content, string $author, string $token): void
+    public function addPost(string $title, string $heading, string $content, string $author, string $token)
     {
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
-        $fields = [$title, $heading, $content, $author];
         $session = new PHPSession;
+		if($session->get('admin') == NULL || !$session->get('admin'))
+        {
+            return $this->redirect(parent::ERROR_403_PATH);
+        }
+        $fields = [$title, $heading, $content, $author];
 
         if($this->isSubmit('newPost') && $this->isValid($fields) && $token == $session->get('token')) {
 
             $session->delete('token');
 
-            $datePublication = $dateLastUpdate = date("Y-m-d H:i:s");
+            $datePublication = date("Y-m-d H:i:s");
             $postManager = new PostManager('post');
 
-            $post = new Post($title, $datePublication, $dateLastUpdate, $heading, $content, $author);
+            $post = new Post($title, $datePublication, NULL, $heading, $content, $author);
             $postManager->insert($post);
             
             $session->set('success', 'Votre nouveau post a bien été enregistré.');
 
-            $this->redirect($this->PATH_TO_ADMIN_POSTS);
+            return $this->redirect(self::PATH_TO_ADMIN_POSTS);
 
         } else {
 
             $session->set('fail', 'Votre nouveau post n\'a pas été enregistré, une erreur dans le formulaire a été détectée.');
 
-            $this->redirect($this->PATH_TO_ADMIN_POSTS);
+            return $this->redirect(self::PATH_TO_ADMIN_POSTS);
 
         }
     }
@@ -76,18 +80,24 @@ class PostController extends BaseController
      * 
      * @return void
      */
-    public function adminPosts(): void
+    public function adminPosts()
     {
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
+        $session = new PHPSession;
+		if($session->get('admin') == NULL || !$session->get('admin'))
+        {
+            return $this->redirect(parent::ERROR_403_PATH);
+        }
         $adminPostManager = new PostManager('Post');
         $getAllPosts = $adminPostManager->getAll();
-        $session = new PHPSession;
+
+        $dateFormat = new DateFormat;
+        $getAllPosts = $dateFormat->formatListPostsAdmin($getAllPosts);
+
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
 
-        $this->render($this->ADMIN_POSTS_TEMPLATE, [
+        return $this->render(self::ADMIN_POSTS_TEMPLATE, [
             "allPosts" => $getAllPosts
         ]);
         
@@ -99,18 +109,20 @@ class PostController extends BaseController
      * 
      * @return void
      */
-    public function editPost(): void
+    public function editPost()
     {
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
+        $session = new PHPSession;
+		if($session->get('admin') == NULL || !$session->get('admin'))
+        {
+            return $this->redirect(parent::ERROR_403_PATH);
+        }
         $adminPostManager = new PostManager('Post');
         $getThisPost = $adminPostManager->getById($_GET['idPost']);
-        $session = new PHPSession;
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
 
-        $this->render('admin/editPost.html.twig', [
+        return $this->render('admin/editPost.html.twig', [
             'getThisPost' => $getThisPost
         ]);
     }
@@ -126,12 +138,14 @@ class PostController extends BaseController
      * @param  string $token
      * @return void
      */
-    public function updatePost($id, string $title, string $heading, string $content, string $author, string $token): void
+    public function updatePost($id, string $title, string $heading, string $content, string $author, string $token)
     {
-        $adminProtectionPart = new AdminProtectionPart();
-        $adminProtectionPart->redirectNotAdmin();
-        $fields = [$title, $heading, $content, $author];
         $session = new PHPSession;
+		if($session->get('admin') == NULL || !$session->get('admin'))
+        {
+            return $this->redirect(parent::ERROR_403_PATH);
+        }
+        $fields = [$title, $heading, $content, $author];
 
         if($this->isSubmit('editPost') && $this->isValid($fields) && $token == $session->get('token')) {
 
@@ -142,17 +156,13 @@ class PostController extends BaseController
             $post = new Post($title, $postData['date_publication'], $dateLastUpdate, $heading, $content, $author);
             
             $postManager->update($post, $id);
-            $session = new PHPSession;
             $session->set('success', 'Votre post a bien été modifié.');
-
-            $this->redirect($this->PATH_TO_ADMIN_POSTS);
+            return $this->redirect(self::PATH_TO_ADMIN_POSTS);
 
         } else {
 
-            $session = new PHPSession;
             $session->set('fail', 'Votre post n\'a pas été modifié, une erreur dans le formulaire a été détectée.');
-
-            $this->redirect($this->PATH_TO_ADMIN_POSTS);
+            return $this->redirect(self::PATH_TO_ADMIN_POSTS);
 
         }
     }
@@ -164,28 +174,25 @@ class PostController extends BaseController
      * @param  string $token
      * @return void
      */
-    public function deletePost($id = NULL, string $token = NULL): void
+    public function deletePost($id = NULL, string $token = NULL)
     {
-        if($id == NULL || $token == NULL)
-        {
-            $this->redirect('/erreur-403');
-        }
         $session = new PHPSession;
+		if($session->get('admin') == NULL || !$session->get('admin'))
+        {
+            return $this->redirect(parent::ERROR_403_PATH);
+        }
         if($token == $session->get('token'))
         {
             $session->delete('token');
-            $adminProtectionPart = new AdminProtectionPart();
-            $adminProtectionPart->redirectNotAdmin();
             $deletePostManager = new PostManager('post');
             $deletePostManager->delete($id);
 
-            $session = new PHPSession;
             $session->set('success', 'Votre post a bien été supprimé.');
 
-            $this->redirect('/admin-posts');
+            return $this->redirect(self::PATH_TO_ADMIN_POSTS);
         } else
         {
-            $this->redirect('/');
+            return $this->redirect('/');
         }
         
     }

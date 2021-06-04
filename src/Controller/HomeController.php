@@ -6,8 +6,8 @@ use App\Core\BaseController;
 
 class HomeController extends BaseController
 {
-    public function home(): void
+    public function home()
     {
-        $this->render('home.html.twig', []);
+        return $this->render('home.html.twig');
     }
 }

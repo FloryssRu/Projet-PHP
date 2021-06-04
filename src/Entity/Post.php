@@ -15,19 +15,18 @@ namespace App\Entity;
 class Post
 {
     
-    private int $id;
+    private ?int $id;
     private string $title;
     private string $datePublication;
-    private string $dateLastUpdate;
+    private ?string $dateLastUpdate;
     private string $heading;
     private string $content;
     private string $author;
     
 
-    public function getId(): int
+    public function getId(): ?int
     {
-        $id = $this->id;
-        return $id;
+        return $this->id;
     }
     
     /**
@@ -43,8 +42,7 @@ class Post
 
     public function getTitle(): string
     {
-        $title = $this->title;
-        return $title;
+        return $this->title;
     }
 
     /**
@@ -60,25 +58,23 @@ class Post
 
     public function getDatePublication(): string
     {
-        $datePublication = $this->datePublication;
-        return $datePublication;
+        return $this->datePublication;
     }
 
     /**
      * set the date of the last update of the post
      *
-     * @param  string $dateLastUpdate The date of the last update
+     * @param  string $dateLastUpdate The date of the last update (or NULL if the post isn't modified)
      * @return void
      */
-    public function setDateLastUpdate(string $dateLastUpdate): void
+    public function setDateLastUpdate(?string $dateLastUpdate): void
     {
         $this->dateLastUpdate = $dateLastUpdate;
     }
 
-    public function getDateLastUpdate(): string
+    public function getDateLastUpdate(): ?string
     {
-        $dateLastUpdate = $this->dateLastUpdate;
-        return $dateLastUpdate;
+        return $this->dateLastUpdate;
     }
 
     /**
@@ -94,8 +90,7 @@ class Post
 
     public function getHeading(): string
     {
-        $heading = $this->heading;
-        return $heading;
+        return $this->heading;
     }
 
     /**
@@ -111,8 +106,7 @@ class Post
 
     public function getContent(): string
     {
-        $content = $this->content;
-        return $content;
+        return $this->content;
     }
 
     public function setAuthor(string $author): void
@@ -122,8 +116,7 @@ class Post
 
     public function getAuthor(): string
     {
-        $author = $this->author;
-        return $author;
+        return $this->author;
     }
 
     public function __construct($title, $datePublication, $dateLastUpdate, $heading, $content, $author)

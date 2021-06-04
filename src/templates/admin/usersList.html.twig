@@ -1,0 +1,59 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+Liste des utilisateurs
+{% endblock %}
+
+{% block css %}
+<link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+{% endblock %}
+
+
+
+{% block body %}
+
+<h1>Liste des utilisateurs</h1>
+<table id="myTable">
+    <thead>
+        <tr>
+            <th>Pseudo</th>
+            <th>Email</th>
+            <th>Statut</th>
+            <th>Changer le statut</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.pseudo }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.adminToShow }}</td>
+                {% if user.admin %}
+                    <td><a href="changer-statut?idUser={{ user.id }}&token={{ token }}&becomeAdmin=1" onclick="return confirm('Etes vous sûr de passer cet admin en simple utilisateur ?')">Retirer des admins</a></td>
+                {% else %}
+                    <td><a href="changer-statut?idUser={{ user.id }}&token={{ token }}&becomeAdmin=0" onclick="return confirm('Etes vous sûr de passer cet utilisateur en admin ?')">Passer en admin</a></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+
+{% endblock %}
+
+
+
+{% block js %}
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+    $(document).ready( function () {
+        $('#myTable').DataTable( {
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/French.json'
+            }
+        } );
+    } );
+</script>
+{% endblock %}

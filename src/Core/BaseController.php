@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use App\Core\Response\Redirection;
+use App\Core\Response\Response;
 use Twig\Loader\FilesystemLoader;
 use Twig\Environment;
 
@@ -10,7 +12,10 @@ class BaseController
 	private $httpRequest;
 	private $param;
 	private $config;
-		
+	protected $twig;
+
+	protected const ERROR_403_PATH = '/erreur-403';
+
 	public function __construct($httpRequest)
 	{
 		$this->httpRequest = $httpRequest;
@@ -19,18 +24,21 @@ class BaseController
 		$this->addParam("httprequest", $this->httpRequest);
 		$this->addParam("config", $this->config);
 		$this->bindManager();
+		$loader = new FilesystemLoader(TEMPLATE_DIR . '//');
+		$this->twig = new Environment($loader, ['debug' => true]);
 	}
 		
-	protected function render($filename, $array)
+	protected function render($filename, $array = [])
 	{
 		if(file_exists(TEMPLATE_DIR . '//' . $filename))
 		{
 			extract($this->param);
 
-			$loader = new FilesystemLoader(TEMPLATE_DIR . '//');
-			$twig = new Environment($loader, ['debug' => true]);
-			$twig->addGlobal('session', $_SESSION);
-			echo $twig->render($filename, $array);
+			$this->twig->addGlobal('session', $_SESSION);
+			$view = $this->twig->load($filename);
+			$content = $view->render($array);
+			$response = new Response($content);
+			return $response->send();
 
 		} else
 		{
@@ -38,9 +46,10 @@ class BaseController
 		}
 	}
 
-	public function redirect(string $path) {
-		header("Location:/blogphp" . $path);
-		exit();
+	public function redirect(string $path)
+	{
+		$redirection = new Redirection($path);
+		return $redirection->redirect($path);
 	}
 	
 	/**

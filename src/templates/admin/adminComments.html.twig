@@ -12,7 +12,9 @@ Gestion des posts
 
 {% block body %}
 
-<h1>Liste des commentaires à valider</h1>
+<h1>Liste des commentaires</h1>
+
+<h2>Liste des commentaires non-validés</h2>
 <table id="myTable">
     <thead>
         <tr>
@@ -36,6 +38,31 @@ Gestion des posts
 
 </table>
 
+<h2>Liste des commentaires validés</h2>
+
+<table id="myTable2">
+    <thead>
+        <tr>
+            <th>Pseudo</th>
+            <th>Commentaire</th>
+            <th>Date</th>
+            <th>Invalider</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for comment in commentsValidated %}
+            <tr>
+                <td>{{ comment.pseudo }}</td>
+                <td>{{ comment.content }}</td>
+                <td>{{ comment.date }}</td>
+                <td><a href="invalider-commentaire?idComment={{ comment.id }}" onclick="return confirm('Etes vous sûr d'invalider ce commentaire ?')">Invalider</a></td>
+            </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+
 {% endblock %}
 
 
@@ -46,6 +73,13 @@ Gestion des posts
 <script type="text/javascript">
     $(document).ready( function () {
         $('#myTable').DataTable( {
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/French.json'
+            }
+        } );
+    } );
+    $(document).ready( function () {
+        $('#myTable2').DataTable( {
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/French.json'
             }

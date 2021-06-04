@@ -7,13 +7,23 @@ use App\Entity\Comment;
 use App\Services\PHPSession;
 use App\Repository\Manager\PostManager;
 use App\Repository\Manager\CommentManager;
+use App\Services\DateFormat;
 
 class OpenPartController extends BaseController
 {
-	public function showPost($idPost): void
+	public function showPost($idPost)
     {
         $postManager = new PostManager('post');
         $post = $postManager->getById($idPost);
+        $dateFormat = new DateFormat;
+        if($post['date_last_update'] == NULL)
+        {
+            $post['date_publication'] = 'Publié ' . $dateFormat->formatToDisplay($post['date_publication']);
+        } else
+        {
+            $post['date_last_update'] = 'Mis à jour ' . $dateFormat->formatToDisplay($post['date_last_update']);
+        }
+        
         $commentManager = new CommentManager('comment');
         $arrayComments = $commentManager->getCommentsByIdPost($idPost);
 
@@ -26,7 +36,7 @@ class OpenPartController extends BaseController
             $userConnected = false;
         }
 
-        $this->render('post.html.twig', [
+        return $this->render('post.html.twig', [
             "post" => $post,
             "comments" => $arrayComments,
             "userConnected" => $userConnected
@@ -34,17 +44,19 @@ class OpenPartController extends BaseController
 
     }
 
-    public function showList(): void
+    public function showList()
     {
         $postManager = new PostManager('post');
         $listPosts = $postManager->getAll();
+        $dateFormat = new DateFormat;
+        $listPosts = $dateFormat->formatListPosts($listPosts);
 
-        $this->render('listPosts.html.twig', [
+        return $this->render('listPosts.html.twig', [
             'listPosts' => $listPosts
         ]);
     }
 
-    public function newComment(string $content, int $idPost): void
+    public function newComment(string $content, int $idPost)
     {
         $fields = [$content];
 
@@ -70,8 +82,8 @@ class OpenPartController extends BaseController
         }
     }
 
-    public function error403(): void
+    public function error403()
     {
-        $this->render('403.html.twig', []);
+        return $this->render('403.html.twig');
     }
 }
