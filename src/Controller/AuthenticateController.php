@@ -30,8 +30,7 @@ class AuthenticateController extends BaseController
         $fields = [$_POST['pseudo'], $_POST['password']];
 
         $userManager = new UserManager('user');
-        $idUser = $userManager->findOneUserBy($_POST['pseudo'], $_POST['password']);
-        var_dump($idUser);
+        $idUser = $userManager->findOneUserBy(htmlspecialchars($_POST['pseudo']), htmlspecialchars($_POST['password']));
 
         if($idUser != NULL && $this->isSubmit('signUp') && $this->isValid($fields))
         {
@@ -120,7 +119,7 @@ class AuthenticateController extends BaseController
     public function sendEmailResetPassword()
     {
         $handlerResetPassword = new HandlerResetPassword;
-        $handlerResetPassword->handlerEmailResetPassword($_POST['email']);
+        $handlerResetPassword->handlerEmailResetPassword(htmlspecialchars($_POST['email']));
     }
 	
 	/**

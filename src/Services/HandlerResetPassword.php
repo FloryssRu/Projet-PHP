@@ -23,7 +23,9 @@ class HandlerResetPassword extends AuthenticateController
     public function handlerEmailResetPassword(string $email)
     {
         $fields = [$email];
-        if($this->isValid($fields) && $this->isSubmit('emailResetPassword'))
+        if($this->isValid($fields)
+        && $this->isSubmit('emailResetPassword')
+        && filter_var($email, FILTER_VALIDATE_EMAIL))
         {
             $uuid = Uuid::uuid4();
             $uuid = $uuid->toString();
@@ -79,8 +81,17 @@ class HandlerResetPassword extends AuthenticateController
 
     public function handlerResetPassword(array $data)
     {
+        foreach($data as $key => $value)
+        {
+            $data[$key] = htmlspecialchars($value);
+        }
         $session = new PHPSession;
-        if($this->isValid($data) && $this->isSubmit('resetPassword') && $data['uuid'] != NULL && $data['password'] == $data['validPassword'] && $data['token'] == $session->get('token'))
+        if($this->isValid($data)
+        && $this->isSubmit('resetPassword')
+        && $data['uuid'] != NULL
+        && $data['password'] == $data['validPassword']
+        && $data['token'] == $session->get('token')
+        && is_int($data['idUser']))
         {
             $userManager = new UserManager('user');
             $idUser = $userManager->getIdByUuid($data['uuid']);

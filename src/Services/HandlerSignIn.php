@@ -32,9 +32,13 @@ class HandlerSignIn extends AuthenticateController
      */
     public function tryToSignIn(array $data)
 	{
+        foreach($data as $key => $value)
+        {
+            $data[$key] = htmlspecialchars($value);
+        }
 		$userManager = new UserManager('user');
-        $isEmailOccupied = $userManager->getEmail($data['email']); //returne faux ou l'email trouvée
-        $isPseudoOccupied = $userManager->getPseudo($data['pseudo']); //returne faux ou le pseudo trouvé
+        $isEmailOccupied = $userManager->getEmail($data['email']);
+        $isPseudoOccupied = $userManager->getPseudo($data['pseudo']);
 
         if($data['password'] === $data['passwordValid']
         && $this->isValid($data)

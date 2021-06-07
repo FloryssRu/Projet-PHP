@@ -158,12 +158,12 @@ class PostController extends BaseController
             $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $postData->getDatePublication());
 
             $arrayData = [
-                'title' => strip_tags($_POST['title']),
+                'title' => htmlspecialchars($_POST['title']),
                 'date_publication' => $postData->getDatePublication(),
                 'date_last_update' => $dateLastUpdate,
                 'heading' => strip_tags($_POST['heading']),
                 'content' => strip_tags($_POST['content']),
-                'author' => strip_tags($_POST['author'])
+                'author' => htmlspecialchars($_POST['author'])
             ];   
             $postManager->update($arrayData, $_POST['id']);
             
