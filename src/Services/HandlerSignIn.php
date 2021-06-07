@@ -32,34 +32,30 @@ class HandlerSignIn extends AuthenticateController
      */
     public function tryToSignIn(array $data)
 	{
-        foreach($data as $key => $value)
-        {
-            $data[$key] = htmlspecialchars($value);
-        }
 		$userManager = new UserManager('user');
-        $isEmailOccupied = $userManager->getEmail($data['email']);
-        $isPseudoOccupied = $userManager->getPseudo($data['pseudo']);
+        $isEmailOccupied = $userManager->getEmail(htmlspecialchars($data['email']));
+        $isPseudoOccupied = $userManager->getPseudo(htmlspecialchars($data['pseudo']));
 
-        if($data['password'] === $data['passwordValid']
+        if(htmlspecialchars($data['password']) === htmlspecialchars($data['passwordValid'])
         && $this->isValid($data)
         && $this->isSubmit('signIn')
-        && $data['mentionsAccepted'] == 'on'
+        && htmlspecialchars($data['mentionsAccepted']) == 'on'
         && strlen($data['pseudo']) <= 100
         && strlen($data['password']) <= 50
         && strlen($data['email']) <= 100
-        && preg_match('#^[a-zA-Z\.0-9\+]+@[a-zA-Z\.0-9]+\.[a-z]{0,5}$#', $data['email'])
+        && preg_match('#^[a-zA-Z\.0-9\+]+@[a-zA-Z\.0-9]+\.[a-z]{0,5}$#', htmlspecialchars($data['email']))
         && !$isEmailOccupied
         && !$isPseudoOccupied)
         {
             echo 'hfkdhjkfhdf';
             $uuid = Uuid::uuid4();
             $uuid = $uuid->toString();
-            $password = password_hash($data['password'], PASSWORD_DEFAULT);
+            $password = password_hash(htmlspecialchars($data['password']), PASSWORD_DEFAULT);
             $userManager = new UserManager('user');
             $arrayData = [
-                'pseudo' => $data['pseudo'],
+                'pseudo' => htmlspecialchars($data['pseudo']),
                 'password' => $password,
-                'email' => $data['email'],
+                'email' => htmlspecialchars($data['email']),
                 'admin' => 0,
                 'email_validated' => 0,
                 'uuid' => $uuid
