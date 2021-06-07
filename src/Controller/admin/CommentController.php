@@ -75,8 +75,6 @@ class CommentController extends BaseController
         }
         $commentManager = new CommentManager('Comment');
         $commentData = $commentManager->getById($id);
-        $commentManager = new CommentManager('Comment');
-        $commentData = $commentManager->getById($id);
         $arrayData = [
             'pseudo' => $commentData->getPseudo(),
             'content' => $commentData->getContent(),

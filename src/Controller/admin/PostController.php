@@ -42,7 +42,6 @@ class PostController extends BaseController
         {
             return $this->redirect(parent::ERROR_403_PATH);
         }
-        //$fields = [$_POST['title'], $_POST['heading'], $_POST['content'], $_POST['author']];
 
         if($this->isSubmit('newPost') && $this->isValid($_POST) && $_POST['token'] == $session->get('token')) {
 
@@ -54,9 +53,6 @@ class PostController extends BaseController
             $handlerPicture = new HandlerPicture;
             $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $datePublication);
 
-            //$post = new Post($_POST['title'], $datePublication, NULL, $_POST['heading'], $_POST['content'], $_POST['author']);
-            //$post = new Post();
-            //$this->hydrate($post, $_POST);
             $arrayData = [
                 'title' => $_POST['title'],
                 'date_publication' => $datePublication,

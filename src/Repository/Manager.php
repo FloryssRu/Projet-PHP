@@ -7,6 +7,7 @@ class Manager
 	protected string $table;
 	protected $object;
 	protected object $database;
+	protected const PATH_TO_ENTITIES = 'App\Entity\\';
 		
 	public function __construct($table, $object)
 	{
@@ -73,7 +74,6 @@ class Manager
 				}
 			}
 		}
-		var_dump("INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (" . implode(', ', $valuesToInsert) . ")");
 		$this->database->query("INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (" . implode(', ', $valuesToInsert) . ")");
 	}
 	

@@ -24,19 +24,16 @@ class HandlerPicture extends PostController
      */
     public function savePicture($picture, string $name)
     {
-        if($picture !== NULL AND $picture['error'] == 0)
+        if($picture !== NULL && $picture['error'] == 0 && $picture['size'] <= 3000000)
         {
-            if($picture['size'] <= 3000000)
+            $infosfichier = pathinfo($picture['name']);
+            $extension_upload = $infosfichier['extension'];
+            $extensions_autorisees = array('jpg', 'png', 'gif');
+            if(in_array($extension_upload, $extensions_autorisees))
             {
-                $infosfichier = pathinfo($picture['name']);
-                $extension_upload = $infosfichier['extension'];
-                $extensions_autorisees = array('jpg', 'png', 'gif');
-                if(in_array($extension_upload, $extensions_autorisees))
-                {
-                    $picture['name'] = str_replace([':','-',' '], '_', $name) . '.' . $extension_upload;
-                    move_uploaded_file($picture['tmp_name'], '../public/img/' . $picture['name']);
-                    return true;
-                }
+                $picture['name'] = str_replace([':','-',' '], '_', $name) . '.' . $extension_upload;
+                move_uploaded_file($picture['tmp_name'], '../public/img/' . $picture['name']);
+                return true;
             }
         }
     }

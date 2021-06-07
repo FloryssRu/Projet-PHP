@@ -23,7 +23,7 @@ class UserManager extends Manager
     public function getPseudoByIdUser(int $idUser)
     {
         $req = $this->database->query("SELECT * FROM " . $this->table . " WHERE id = " . $idUser);
-		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object);
+		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		return $req->fetchAll();
     }
 	
@@ -37,7 +37,7 @@ class UserManager extends Manager
 	public function findOneUserBy(string $pseudo, string $password)
 	{
 		$req = $this->database->query("SELECT id, password FROM " . $this->table . " WHERE pseudo = '" . $pseudo . "'");
-		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object);
+		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
 
 		if(password_verify($password, $user->getPassword()))
@@ -80,7 +80,7 @@ class UserManager extends Manager
 	{
 		$req = $this->database->query(self::SELECT_ID_FROM . $this->table . " WHERE uuid = '" . $uuid . "'");
 		
-		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object);
+		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
 		if($user)
 		{
@@ -97,7 +97,7 @@ class UserManager extends Manager
 	public function getIdByEmail(string $email)
 	{
 		$req = $this->database->query(self::SELECT_ID_FROM . $this->table . " WHERE email = '" . $email . "'");
-		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object);
+		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
 		var_dump($user);
 		if(!is_bool($req))
@@ -115,7 +115,7 @@ class UserManager extends Manager
 	public function isAdminById(int $idUser): bool
 	{
 		$req = $this->database->query("SELECT admin FROM " . $this->table . " WHERE id = '" . $idUser . "'");
-		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object);
+		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
 		if($user->getAdmin() == 1)
 		{
