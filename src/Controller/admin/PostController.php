@@ -147,7 +147,7 @@ class PostController extends BaseController
         }
         $fields = [$_POST['title'], $_POST['heading'], $_POST['content'], $_POST['author']];
 
-        if($this->isSubmit('editPost') && $this->isValid($fields) && $_POST['token'] == $session->get('token')) {
+        if($this->isSubmit('editPost') && $this->isValid($fields) && $_POST['token'] == $session->get('token') && is_int($_POST['id'])) {
 
             $session->delete('token');
             $dateLastUpdate = date("Y-m-d H:i:s");
