@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Core\BaseController;
-use App\Entity\Comment;
 use App\Services\PHPSession;
 use App\Repository\Manager\PostManager;
 use App\Repository\Manager\CommentManager;
@@ -12,7 +11,7 @@ use App\Services\HandlerPicture;
 
 class OpenPartController extends BaseController
 {
-	public function showPost($idPost)
+	public function showPost(int $idPost)
     {
         $postManager = new PostManager('post');
         $post = $postManager->getById($idPost);

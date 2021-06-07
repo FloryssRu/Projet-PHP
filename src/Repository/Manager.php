@@ -29,7 +29,7 @@ class Manager
 	{
 		$req = $this->database->prepare("SELECT * FROM " . $this->table . " WHERE id = :id");
 		$req->execute(array('id' => $id));
-		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object);
+		$req->setFetchMode(\PDO::FETCH_CLASS, self::PATH_TO_ENTITIES . $this->object);
 		return $req->fetch();
 	}
 			
@@ -42,7 +42,7 @@ class Manager
 	{
 		$req = $this->database->prepare("SELECT * FROM " . $this->table);
 		$req->execute();
-		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object, []);
+		$req->setFetchMode(\PDO::FETCH_CLASS, self::PATH_TO_ENTITIES . $this->object, []);
 		return $req->fetchAll();
 	}
 	
