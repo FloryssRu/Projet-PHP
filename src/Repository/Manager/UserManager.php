@@ -7,7 +7,7 @@ use App\Repository\Manager;
 class UserManager extends Manager
 {
 
-	private $SELECT_ID_FROM = "SELECT id FROM ";
+	private const SELECT_ID_FROM = "SELECT id FROM ";
 
 	public function __construct($object)
 	{
@@ -23,7 +23,7 @@ class UserManager extends Manager
     public function getPseudoByIdUser(int $idUser)
     {
         $req = $this->database->query("SELECT * FROM " . $this->table . " WHERE id = " . $idUser);
-		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
+		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object);
 		return $req->fetchAll();
     }
 	
@@ -36,21 +36,15 @@ class UserManager extends Manager
 	 */
 	public function findOneUserBy(string $pseudo, string $password)
 	{
-		$req = $this->database->query($this->SELECT_ID_FROM . $this->table . " WHERE pseudo = '" . $pseudo . "'");
-		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
-		$idUser = $req->fetch()['id'];
+		$req = $this->database->query("SELECT id, password FROM " . $this->table . " WHERE pseudo = '" . $pseudo . "'");
+		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object);
+		$user = $req->fetch();
 
-		$req = $this->database->query("SELECT password FROM " . $this->table . " WHERE id = '" . $idUser . "'");
-		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
-		$passwordHashed = $req->fetch()['password'];
-
-		if(password_verify($password, $passwordHashed))
+		if(password_verify($password, $user->getPassword()))
 		{
-			return $idUser;
+			return $user->getId();
 		}
-		
 	}
-
 	
 	/**
 	 * Test if an email is in the database. Return false if it's not, else true.
@@ -61,7 +55,6 @@ class UserManager extends Manager
 	public function getEmail(string $email)
 	{
 		$req = $this->database->query("SELECT email FROM " . $this->table . " WHERE email = \"" . $email . "\"");
-		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
 		return $req->fetch();
 	}
 
@@ -74,7 +67,6 @@ class UserManager extends Manager
 	public function getPseudo(string $pseudo): bool
 	{
 		$req = $this->database->query("SELECT pseudo FROM " . $this->table . " WHERE pseudo = \"" . $pseudo . "\"");
-		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
 		return $req->fetch();
 	}
 	
@@ -86,13 +78,13 @@ class UserManager extends Manager
 	 */
 	public function getidByUuid(string $uuid)
 	{
-		$req = $this->database->query($this->SELECT_ID_FROM . $this->table . " WHERE uuid = '" . $uuid . "'");
+		$req = $this->database->query(self::SELECT_ID_FROM . $this->table . " WHERE uuid = '" . $uuid . "'");
 		
-		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
-		$arrayResults = $req->fetch();
-		if($arrayResults)
+		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object);
+		$user = $req->fetch();
+		if($user)
 		{
-			return $arrayResults['id'];
+			return $user->getId();
 		}
 	}
 	
@@ -104,36 +96,31 @@ class UserManager extends Manager
 	 */
 	public function getIdByEmail(string $email)
 	{
-		$req = $this->database->query($this->SELECT_ID_FROM . $this->table . " WHERE email = '" . $email . "'");
-		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
-		$idUser = $req->fetch();
+		$req = $this->database->query(self::SELECT_ID_FROM . $this->table . " WHERE email = '" . $email . "'");
+		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object);
+		$user = $req->fetch();
+		var_dump($user);
 		if(!is_bool($req))
 		{
-			return $idUser;
+			return $user;
 		}
 	}
 	
 	/**
 	 * Return if a user is an admin (true if yes, false if no)
 	 *
-	 * @param  mixed $idUser
+	 * @param  int $idUser
 	 * @return bool
 	 */
-	public function isAdminById($idUser): bool
+	public function isAdminById(int $idUser): bool
 	{
 		$req = $this->database->query("SELECT admin FROM " . $this->table . " WHERE id = '" . $idUser . "'");
-		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
-		$isAdmin = $req->fetch()['admin'];
-		if($isAdmin == 1)
+		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object);
+		$user = $req->fetch();
+		if($user->getAdmin() == 1)
 		{
 			return true;
 		} 
 		return false;
-	}
-
-	public function setUuidNull(int $idUser)
-	{
-		$this->database->query("UPDATE user SET uuid = NULL WHERE id = " . $idUser);
-	}
-    
+	}    
 }

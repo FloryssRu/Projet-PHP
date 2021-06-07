@@ -30,9 +30,9 @@ class HandlerResetPassword extends AuthenticateController
 
             $userManager = new UserManager('user');
             $emailOccupied = $userManager->getEmail($email);
-            $idUser = $userManager->getIdByEmail($email)['id']; //returne faux si l'email n'a pas de propriétaire et je ne sais pas quoi sinon   
+            $user = $userManager->getIdByEmail($email);
 
-            if($emailOccupied && $idUser != NULL)
+            if($emailOccupied && $user->getId() != NULL)
             {
                 $baseEmails = new BaseEmails;
                 $mail = $baseEmails->sendEmail($email, 'Réinitialisation de votre mot de passe - Blog de Floryss Rubechi', '<p>Réinitialisation de votre mot de passe</p>
@@ -42,68 +42,78 @@ class HandlerResetPassword extends AuthenticateController
 
                 if ($mail->send())
                 {
-                    $userData = $userManager->getById($idUser);
-                    $user = new User($userData['pseudo'], $userData['password'], $userData['email'], $userData['admin'], $userData['email_validated'], $uuid);
-                    $userManager->update($user, $idUser);
+                    $user = $userManager->getById($user->getId());
+                    $arrayData = [
+                        'pseudo' => $user->getPseudo(),
+                        'password' => $user->getPassword(),
+                        'email' => $user->getEmail(),
+                        'admin' => $user->getAdmin(),
+                        'email_validated' => $user->getEmailValidated(),
+                        'uuid' => $uuid
+                    ];
+                    $userManager->update($arrayData, $user->getId());
                     $session = new PHPSession;
                     $session->set('success', "Un mail de réinitialisation de mot de passe vous a été envoyé.");
-                    $this->redirect(parent::PATH_TO_SIGNUP_PAGE);
+                    return $this->redirect(parent::PATH_TO_SIGNUP_PAGE);
                     
                 } else
                 {
                     $session = new PHPSession;
                     $session->set('fail', "L'email de réinitialisation de mot de passe n'a pas pu être envoyé. Veuillez réécrire votre adresse email.");
-                    $this->redirect(parent::PATH_TO_FORGOTTEN_PSWD);
                 }
 
             } else
             {
                 $session = new PHPSession;
                 $session->set('fail', "L'email de réinitialisation de mot de passe n'a pas pu être envoyé. Veuillez réécrire votre adresse email.");
-                $this->redirect(parent::PATH_TO_FORGOTTEN_PSWD);
             }
             
         } else
         {
             $session = new PHPSession;
             $session->set('fail', "Veuillez renseigner un email valide.");
-            $this->redirect(parent::PATH_TO_FORGOTTEN_PSWD);
         }
+
+        return $this->redirect(parent::PATH_TO_FORGOTTEN_PSWD);
     }
 
-    public function handlerResetPassword(string $password, string $validPassword, string $uuid, string $token)
+    public function handlerResetPassword(array $data)
     {
         $session = new PHPSession;
-        $fields = [$uuid, $password, $validPassword];
-        if($this->isValid($fields) && $this->isSubmit('resetPassword') && $uuid != NULL && $password == $validPassword && $token == $session->get('token'))
+        if($this->isValid($data) && $this->isSubmit('resetPassword') && $data['uuid'] != NULL && $data['password'] == $data['validPassword'] && $data['token'] == $session->get('token'))
         {
             $userManager = new UserManager('user');
-            $idUser = $userManager->getIdByUuid($uuid);
+            $idUser = $userManager->getIdByUuid($data['uuid']);
             if($idUser == NULL) {
-                $this->redirect(parent::PATH_TO_PSWD_RESET . $uuid);
+                $this->redirect(parent::PATH_TO_PSWD_RESET . $data['uuid']);
             } else
             {
-                $password = password_hash($password, PASSWORD_DEFAULT);
-                $userData = $userManager->getById($idUser);
-                $user = new User($userData['pseudo'], $password, $userData['email'], $userData['admin'], $userData['email_validated'], NULL);
-                $userManager->update($user, $idUser);
-                $userManager->setUuidNull($idUser);
+                $password = password_hash($data['password'], PASSWORD_DEFAULT);
+                $user = $userManager->getById($idUser);
+                $arrayData = [
+                    'pseudo' => $user->getPseudo(),
+                    'password' => $password,
+                    'email' => $user->getEmail(),
+                    'admin' => $user->getAdmin(),
+                    'email_validated' => $user->getEmailValidated(),
+                    'uuid' => NULL
+                ];
+                $userManager->update($arrayData, $idUser);
                 $session = new PHPSession;
                 $session->set('success', "Votre mot de passe a bien été changé.");
-                $this->redirect(parent::PATH_TO_SIGNUP_PAGE);
+                return $this->redirect(parent::PATH_TO_SIGNUP_PAGE);
             }
         
-        } elseif($password != $validPassword)
+        } elseif($data['password'] != $data['validPassword'])
         {
             $session = new PHPSession;
             $session->set('fail', "Les mots de passe entrés ne sont pas identiques.");
-            $this->redirect(parent::PATH_TO_PSWD_RESET . $session->get('uuid'));
         } else
         {
             $session = new PHPSession;
             $session->set('fail', "Votre réinitialisation de mot de passe a rencontré un problème. Veuillez recommencer.");
-            $this->redirect(parent::PATH_TO_PSWD_RESET . $session->get('uuid'));
         }
+        return $this->redirect(parent::PATH_TO_PSWD_RESET . $session->get('uuid'));
     }
 
 }

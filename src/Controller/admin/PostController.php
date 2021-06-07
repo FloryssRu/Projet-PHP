@@ -42,9 +42,9 @@ class PostController extends BaseController
         {
             return $this->redirect(parent::ERROR_403_PATH);
         }
-        $fields = [$_POST['title'], $_POST['heading'], $_POST['content'], $_POST['author']];
+        //$fields = [$_POST['title'], $_POST['heading'], $_POST['content'], $_POST['author']];
 
-        if($this->isSubmit('newPost') && $this->isValid($fields) && $_POST['token'] == $session->get('token')) {
+        if($this->isSubmit('newPost') && $this->isValid($_POST) && $_POST['token'] == $session->get('token')) {
 
             $session->delete('token');
 
@@ -52,12 +52,28 @@ class PostController extends BaseController
             $postManager = new PostManager('post');
 
             $handlerPicture = new HandlerPicture;
-            $endOfFlashMsg = $handlerPicture->savePicture($_FILES['picture'], $datePublication);
+            $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $datePublication);
 
-            $post = new Post($_POST['title'], $datePublication, NULL, $_POST['heading'], $_POST['content'], $_POST['author']);
-            $postManager->insert($post);
+            //$post = new Post($_POST['title'], $datePublication, NULL, $_POST['heading'], $_POST['content'], $_POST['author']);
+            //$post = new Post();
+            //$this->hydrate($post, $_POST);
+            $arrayData = [
+                'title' => $_POST['title'],
+                'date_publication' => $datePublication,
+                'date_last_update' => NULL,
+                'heading' => $_POST['heading'],
+                'content' => $_POST['content'],
+                'author' => $_POST['author']
+            ];
+            $postManager->insert($arrayData);
             
-            $session->set('success', 'Votre nouveau post a bien été enregistré' . $endOfFlashMsg . '.');
+            if($savePictureSuccess)
+            {
+                $session->set('success', 'Votre nouveau post et son image ont bien été enregistrés.');
+            } else
+            {
+                $session->set('success', 'Votre nouveau post a bien été enregistré.');
+            }
 
             return $this->redirect(self::PATH_TO_ADMIN_POSTS);
 
@@ -111,7 +127,7 @@ class PostController extends BaseController
         $getThisPost = $adminPostManager->getById($_GET['idPost']);
 
         $handlerPicture = new HandlerPicture;
-        $picture = $handlerPicture->searchPicture($getThisPost['date_publication']);
+        $picture = $handlerPicture->searchPicture($getThisPost->getDatePublication());
 
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
@@ -143,11 +159,25 @@ class PostController extends BaseController
             $postData = $postManager->getById($_POST['id']);
 
             $handlerPicture = new HandlerPicture;
-            $endOfFlashMsg = $handlerPicture->savePicture($_FILES['picture'], $postData['date_publication']);
+            $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $postData->getDatePublication());
 
-            $post = new Post($_POST['title'], $postData['date_publication'], $dateLastUpdate, $_POST['heading'], $_POST['content'], $_POST['author']);   
-            $postManager->update($post, $_POST['id']);
-            $session->set('success', 'Votre post a bien été modifié' . $endOfFlashMsg . '.');
+            $arrayData = [
+                'title' => $_POST['title'],
+                'date_publication' => $postData->getDatePublication(),
+                'date_last_update' => $dateLastUpdate,
+                'heading' => $_POST['heading'],
+                'content' => $_POST['content'],
+                'author' => $_POST['author']
+            ];   
+            $postManager->update($arrayData, $_POST['id']);
+            
+            if($savePictureSuccess)
+            {
+                $session->set('success', 'Votre post a bien été modifié et votre image a bien été enregistrée.');
+            } else
+            {
+                $session->set('success', 'Votre post a bien été modifié.');
+            }
             return $this->redirect(self::PATH_TO_ADMIN_POSTS);
 
         } else {

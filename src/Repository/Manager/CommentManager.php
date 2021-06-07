@@ -18,7 +18,7 @@ class CommentManager extends Manager
     {
         $req = $this->database->prepare($this->SELECT_ALL_FROM . $this->table . " WHERE is_validated = 0");
 		$req->execute();
-		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
+		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object);
 		return $req->fetchAll();
     }
 
@@ -26,7 +26,7 @@ class CommentManager extends Manager
     {
         $req = $this->database->prepare($this->SELECT_ALL_FROM . $this->table . " WHERE is_validated = 1");
 		$req->execute();
-		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
+		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object);
 		return $req->fetchAll();
     }
 
@@ -34,7 +34,7 @@ class CommentManager extends Manager
 	{
 		$req = $this->database->prepare($this->SELECT_ALL_FROM . $this->table . " WHERE id_post = " . $idPost . " AND is_validated = 1 ORDER BY date DESC");
 		$req->execute();
-		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
+		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object);
 		return $req->fetchAll();
 	}
     

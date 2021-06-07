@@ -50,12 +50,17 @@ class CommentController extends BaseController
         }
         $commentManager = new CommentManager('Comment');
         $commentData = $commentManager->getById($id);
-        $comment = new Comment($commentData['pseudo'], $commentData['content'], $commentData['date'], 1, $commentData['id_post']);
-        $commentManager->update($comment, $id);
+        $arrayData = [
+            'pseudo' => $commentData->getPseudo(),
+            'content' => $commentData->getContent(),
+            'date' => $commentData->getDate(),
+            'is_validated' => 1,
+            'id_post' => $commentData->getIdPost()
+        ];
+        $commentManager->update($arrayData, $id);
         $session->set('success', 'Le commentaire a été validé.');
 
         return $this->redirect('/admin-commentaires');
-        
     }
     
     /**
@@ -70,8 +75,16 @@ class CommentController extends BaseController
         }
         $commentManager = new CommentManager('Comment');
         $commentData = $commentManager->getById($id);
-        $comment = new Comment($commentData['pseudo'], $commentData['content'], $commentData['date'], 0, $commentData['id_post']);
-        $commentManager->update($comment, $id);
+        $commentManager = new CommentManager('Comment');
+        $commentData = $commentManager->getById($id);
+        $arrayData = [
+            'pseudo' => $commentData->getPseudo(),
+            'content' => $commentData->getContent(),
+            'date' => $commentData->getDate(),
+            'is_validated' => 0,
+            'id_post' => $commentData->getIdPost()
+        ];
+        $commentManager->update($arrayData, $id);
         $session->set('success', 'Le commentaire a été invalidé.');
 
         return $this->redirect('/admin-commentaires');

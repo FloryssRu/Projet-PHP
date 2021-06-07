@@ -11,10 +11,10 @@ Liste des Posts
 {% for post in listPosts %}
     <div class="postInList">
         <h2>{{ post.title }}</h2>
-        {% if post.date_last_update %}
-            <p>{{ post.date_last_update }}</p>
+        {% if post.dateLastUpdate %}
+            <p>{{ post.dateLastUpdate }}</p>
         {% else %}
-            <p>{{ post.date_publication }}</p>
+            <p>{{ post.datePublication }}</p>
         {% endif %}
         <p>{{ post.heading | raw }}</p>
         <p><a href="post?idPost={{ post.id }}">Lire ce post</a></p>

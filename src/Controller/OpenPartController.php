@@ -18,15 +18,15 @@ class OpenPartController extends BaseController
         $post = $postManager->getById($idPost);
 
         $handlerPicture = new HandlerPicture;
-        $picture = $handlerPicture->searchPicture($post['date_publication']);
+        $picture = $handlerPicture->searchPicture($post->getDatePublication());
 
         $dateFormat = new DateFormat;
-        if($post['date_last_update'] == NULL)
+        if($post->getDateLastUpdate() == NULL)
         {
-            $post['date_publication'] = 'Publié ' . $dateFormat->formatToDisplay($post['date_publication']);
+            $post->setDatePublication('Publié ' . $dateFormat->formatToDisplay($post->getDatePublication()));
         } else
         {
-            $post['date_last_update'] = 'Mis à jour ' . $dateFormat->formatToDisplay($post['date_last_update']);
+            $post->setDateLastUpdate('Mis à jour ' . $dateFormat->formatToDisplay($post->getDateLastUpdate()));
         }
         
         $commentManager = new CommentManager('comment');
@@ -59,13 +59,15 @@ class OpenPartController extends BaseController
         if($this->isSubmit('newComment') && $this->isValid($fields)) {
 
             $session = new PHPSession;
-            $pseudo = $session->get('pseudo');
-            $date = date("Y-m-d H:i:s");
-            $isValidated = 0;
             $commentManager = new CommentManager('comment');
-
-            $comment = new Comment($pseudo, $_POST['content'], $date, $isValidated, $_POST['idPost']);
-            $commentManager->insert($comment);
+            $arrayData = [
+                'pseudo' => $session->get('pseudo'),
+                'content' => $_POST['content'],
+                'date' => date("Y-m-d H:i:s"),
+                'is_validated' => 0,
+                'id_post' => $_POST['idPost']
+            ];
+            $commentManager->insert($arrayData);
             
             $session->set('success', 'Votre commentaire a été envoyé pour validation.');
 

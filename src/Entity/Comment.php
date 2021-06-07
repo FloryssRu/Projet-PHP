@@ -12,7 +12,7 @@ namespace App\Entity;
  * @since 1.0
  */
 
-class Comment
+class Comment extends Entity
 {
 
     private int $id;
@@ -21,6 +21,14 @@ class Comment
     private string $date;
     private bool $isValidated;
     private int $idPost;
+
+    public function __construct()
+    {
+        $this->isValidated = $this->is_validated;
+        unset($this->is_validated);
+        $this->idPost = $this->id_post;
+        unset($this->id_post);
+    }
 
     public function getId(): int
     {
@@ -75,43 +83,5 @@ class Comment
     public function getIdPost(): int
     {
         return $this->idPost;
-    }
-
-    public function __construct($pseudo, $content, $date, $isValidated, $idPost)
-    {
-        $data = [
-            'pseudo' => $pseudo,
-            'content' => $content,
-            'date' => $date,
-            'isValidated' => $isValidated,
-            'idPost' => $idPost
-        ];
-        $this->hydrate($data);
-    }
-
-    /**
-     * Calls each set method for the attributes
-     * 
-     * @param array $data All the attributes to hydrate
-     */
-    private function hydrate(array $data)
-    {
-        foreach ($data as $key => $value)
-        {
-            $method = 'set' . ucfirst($key);
-            if (method_exists($this, $method))
-            {
-                $this->$method($value);
-            }
-        }
-    }
-
-    public function getAttributes(object $object)
-    {
-        foreach($object as $attribute => $value)
-        {
-            $array[$attribute] = $value;
-        }
-        return $array;
     }
 }

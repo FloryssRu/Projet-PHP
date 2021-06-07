@@ -13,12 +13,12 @@ class TranslateUsersAdminStatus //extends BaseController
     {
         foreach($users as $user)
         {
-            if($user['admin'] == 1)
+            if($user->getAdmin() == 1)
             {
-                $user['adminToShow'] = 'Admin';
+                $user->adminToShow = 'Admin';
             } else
             {
-                $user['adminToShow'] = 'Utilisateur simple';
+                $user->adminToShow = 'Utilisateur simple';
             }
             $usersModified[] = $user;
         }

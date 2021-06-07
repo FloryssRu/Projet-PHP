@@ -30,9 +30,8 @@ class HandlerSignIn extends AuthenticateController
      * @param  array $data
      * @return void
      */
-    public function tryToSignIn(array $data): void
+    public function tryToSignIn(array $data)
 	{
-
 		$userManager = new UserManager('user');
         $isEmailOccupied = $userManager->getEmail($data['email']); //returne faux ou l'email trouvée
         $isPseudoOccupied = $userManager->getPseudo($data['pseudo']); //returne faux ou le pseudo trouvé
@@ -44,16 +43,23 @@ class HandlerSignIn extends AuthenticateController
         && strlen($data['pseudo']) <= 100
         && strlen($data['password']) <= 50
         && strlen($data['email']) <= 100
-        && preg_match('#^[a-zA-Z\.1-9\+]+@[a-zA-Z\.1-9]+\.[a-z]{0,5}$#', $data['email'])
+        && preg_match('#^[a-zA-Z\.0-9\+]+@[a-zA-Z\.0-9]+\.[a-z]{0,5}$#', $data['email'])
         && !$isEmailOccupied
         && !$isPseudoOccupied)
         {
-            
+            echo 'hfkdhjkfhdf';
             $uuid = Uuid::uuid4();
             $uuid = $uuid->toString();
             $password = password_hash($data['password'], PASSWORD_DEFAULT);
             $userManager = new UserManager('user');
-            $user = new User($data['pseudo'], $password, $data['email'], false, 0, $uuid);
+            $arrayData = [
+                'pseudo' => $data['pseudo'],
+                'password' => $password,
+                'email' => $data['email'],
+                'admin' => 0,
+                'email_validated' => 0,
+                'uuid' => $uuid
+            ];
 
             $baseEmails = new BaseEmails;
             $mail = $baseEmails->sendEmail($data['email'], 'Valider votre email - Blog de Floryss Rubechi', '<p>Vous vous êtes inscrit sur le Blog de Floryss Rubechi.</p>
@@ -67,7 +73,7 @@ class HandlerSignIn extends AuthenticateController
                 $session->set('fail', "L'email de confirmation d'adresse email n'a pas pu être envoyé. Réécrivez votre adresse email.");
                 return $this->redirect('/inscription');
             } else {
-                $userManager->insert($user);
+                $userManager->insert($arrayData);
                 $session->set('success', "Bienvenue sur le Blog de Floryss Rubechi. Un mail de confirmation d'email vous a été envoyé.");
                 return $this->redirect('/');
             }

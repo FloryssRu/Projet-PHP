@@ -35,12 +35,10 @@ class HandlerPicture extends PostController
                 {
                     $picture['name'] = str_replace([':','-',' '], '_', $name) . '.' . $extension_upload;
                     move_uploaded_file($picture['tmp_name'], '../public/img/' . $picture['name']);
-                    return ' et votre image a bien été enregistrée';
+                    return true;
                 }
             }
         }
-
-        return '';
     }
 
     public function searchPicture(string $date_publication)

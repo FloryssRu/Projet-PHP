@@ -22,13 +22,13 @@ class Manager
 	 * Retrieves the row that matches the id
 	 *
 	 * @param  mixed $id
-	 * @return array
+	 * @return Object
 	 */
-	public function getById($id): array
+	public function getById($id): Object
 	{
 		$req = $this->database->prepare("SELECT * FROM " . $this->table . " WHERE id = :id");
 		$req->execute(array('id' => $id));
-		$req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $this->object);
+		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object);
 		return $req->fetch();
 	}
 			
@@ -41,7 +41,7 @@ class Manager
 	{
 		$req = $this->database->prepare("SELECT * FROM " . $this->table);
 		$req->execute();
-		$req->setFetchMode(\PDO::FETCH_CLASS|\PDO::FETCH_PROPS_LATE, $this->object);
+		$req->setFetchMode(\PDO::FETCH_CLASS, 'App\Entity\\' . $this->object, []);
 		return $req->fetchAll();
 	}
 	
@@ -51,38 +51,42 @@ class Manager
 	 * @param  object $params Associative array that contains the field names as keys and the values to be inserted as values
 	 * @return void
 	 */
-	public function insert(object $object): void
+	public function insert(array $arrayData): void
 	{
-		$arrayData = $object->getAttributes($object);
-
 		foreach($arrayData as $key => $value) {
 			$key = preg_replace('/(?=[A-Z])/', '_', $key);
 			$key = strtolower($key);
 			$fieldNames[] = $key;
-			if($value == NULL)
+
+			if($value === NULL)
 			{
 				$valuesToInsert[] = 'NULL';
 			} else
 			{
-				$value = addslashes($value);
-				$valuesToInsert[] = '"' . $value . '"';
+				if(is_string($value))
+				{
+					$value = addslashes($value);
+					$valuesToInsert[] = '"' . $value . '"';
+				} else
+				{
+					$valuesToInsert[] = $value;
+				}
 			}
 		}
+		var_dump("INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (" . implode(', ', $valuesToInsert) . ")");
 		$this->database->query("INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (" . implode(', ', $valuesToInsert) . ")");
 	}
 	
 	/**
 	 * Update a line in the table targeted by its id
 	 *
-	 * @param  object $object Object that contains the updated values
+	 * @param  array $arrayData Array that contains the updated values
 	 * @param  mixed $id
 	 * @return void
 	 */
-	public function update(object $object, $id): void
+	public function update(array $arrayData, $id): void
 	{
 		$sql = "UPDATE " . $this->table . ' SET ';
-
-		$arrayData = $object->getAttributes($object);
 
 		foreach($arrayData as $key => $value) {
 			$key = preg_replace('/(?=[A-Z])/', '_', $key);

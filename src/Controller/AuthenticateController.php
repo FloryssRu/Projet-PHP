@@ -31,6 +31,7 @@ class AuthenticateController extends BaseController
 
         $userManager = new UserManager('user');
         $idUser = $userManager->findOneUserBy($_POST['pseudo'], $_POST['password']);
+        var_dump($idUser);
 
         if($idUser != NULL && $this->isSubmit('signUp') && $this->isValid($fields))
         {
@@ -85,10 +86,16 @@ class AuthenticateController extends BaseController
         $idUser = $userManager->getIdByUuid($uuid);
         if(preg_match('#[0-9]+#', $idUser))
         {
-            $userData = $userManager->getById($idUser);
-            $user = new User($userData['pseudo'], $userData['password'], $userData['email'], $userData['admin'], 1, NULL);
-            $userManager->update($user, $idUser);
-            $userManager->setUuidNull($idUser);
+            $user = $userManager->getById($idUser);
+            $arrayData = [
+                'pseudo' => $user->getPseudo(),
+                'password' => $user->getPassword(),
+                'email' => $user->getEmail(),
+                'admin' => $user->getAdmin(),
+                'email_validated' => 1,
+                'uuid' => NULL
+            ];
+            $userManager->update($arrayData, $idUser);
             $session = new PHPSession;
             $session->set('success', 'Votre email a bien été confirmé.');
             return $this->redirect('/');
@@ -139,7 +146,7 @@ class AuthenticateController extends BaseController
     public function resetPassword()
     {
         $handlerResetPassword = new HandlerResetPassword;
-        $handlerResetPassword->handlerResetPassword($_POST['password'], $_POST['validPassword'], $_POST['uuid'], $_POST['token']);
+        $handlerResetPassword->handlerResetPassword($_POST);
     }
 
 }
