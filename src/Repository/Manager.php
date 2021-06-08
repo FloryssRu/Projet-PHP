@@ -32,6 +32,19 @@ class Manager
 		$req->setFetchMode(\PDO::FETCH_CLASS, self::PATH_TO_ENTITIES . $this->object);
 		return $req->fetch();
 	}
+
+	/**
+	 * Retrieves the row that matches the slug
+	 *
+	 * @param  string $slug
+	 * @return int
+	 */
+	public function getIdBySlug($slug): int
+	{
+		$req = $this->database->prepare("SELECT id FROM " . $this->table . " WHERE slug = :slug");
+		$req->execute(array('slug' => $slug));
+		return $req->fetch()['id'];
+	}
 			
 	/**
 	 * Retrieves all the row that are in the table

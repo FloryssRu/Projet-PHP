@@ -17,6 +17,7 @@ class Post extends Entity
     
     private ?int $id;
     private string $title;
+    private string $slug;
     private string $datePublication;
     private ?string $dateLastUpdate;
     private string $heading;
@@ -51,6 +52,16 @@ class Post extends Entity
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function setSlug(string $slug): void
+    {
+        $this->slug = $slug;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
     }
 
     /**

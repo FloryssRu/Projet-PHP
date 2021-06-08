@@ -36,7 +36,7 @@
 	"action" : "EditPost",
 	"method" : "GET",
 	"param" : [
-		"idPost",
+		"slug",
 		"picture"
 	],
 	"manager": []
@@ -55,7 +55,7 @@
 	"action" : "DeletePost",
 	"method" : "GET",
 	"param" : [
-		"idPost",
+		"slug",
 		"token"
 	],
 	"manager": []
@@ -116,7 +116,7 @@
 	"action" : "ShowPost",
 	"method" : "GET",
 	"param" : [
-		"idPost",
+		"slug",
 		"picture",
 		"comments"
 	],
@@ -228,6 +228,14 @@
 	"path" : "/blogphp/erreur-403",
 	"controller" : "OpenPart",
 	"action" : "error403",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
+	"path" : "/blogphp/erreur-404",
+	"controller" : "OpenPart",
+	"action" : "error404",
 	"method" : "GET",
 	"param" : [],
 	"manager": []

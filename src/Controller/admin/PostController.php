@@ -3,7 +3,7 @@
 namespace App\Controller\admin;
 
 use App\Core\BaseController;
-use App\Entity\Post;
+use Cocur\Slugify\Slugify;
 use App\Repository\Manager\PostManager;
 use App\Services\DateFormat;
 use App\Services\HandlerPicture;
@@ -53,8 +53,11 @@ class PostController extends BaseController
             $handlerPicture = new HandlerPicture;
             $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $datePublication);
 
+            $slugify = new Slugify();
+
             $arrayData = [
                 'title' => $_POST['title'],
+                'slug' => $slugify->slugify($_POST['title']),
                 'date_publication' => $datePublication,
                 'date_last_update' => NULL,
                 'heading' => $_POST['heading'],
@@ -119,18 +122,19 @@ class PostController extends BaseController
         {
             return $this->redirect(parent::ERROR_403_PATH);
         }
-        $adminPostManager = new PostManager('Post');
-        $getThisPost = $adminPostManager->getById($_GET['idPost']);
+        $postManager = new PostManager('Post');
+        $id = $postManager->getIdBySlug($_GET['slug']);
+        $post = $postManager->getById($id);
 
         $handlerPicture = new HandlerPicture;
-        $picture = $handlerPicture->searchPicture($getThisPost->getDatePublication());
+        $picture = $handlerPicture->searchPicture($post->getDatePublication());
 
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
 
         return $this->render('admin/editPost.html.twig', [
-            'getThisPost' => $getThisPost,
+            'post' => $post,
             'picture' => $picture
         ]);
     }
@@ -152,14 +156,17 @@ class PostController extends BaseController
             $session->delete('token');
             $dateLastUpdate = date("Y-m-d H:i:s");
             $postManager = new PostManager('post');
-            $postData = $postManager->getById($_POST['id']);
+            $post = $postManager->getById($_POST['id']);
 
             $handlerPicture = new HandlerPicture;
-            $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $postData->getDatePublication());
+            $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $post->getDatePublication());
+
+            $slugify = new Slugify();
 
             $arrayData = [
                 'title' => htmlspecialchars($_POST['title']),
-                'date_publication' => $postData->getDatePublication(),
+                'slug' => $slugify->slugify(htmlspecialchars($_POST['title'])),
+                'date_publication' => $post->getDatePublication(),
                 'date_last_update' => $dateLastUpdate,
                 'heading' => strip_tags($_POST['heading']),
                 'content' => strip_tags($_POST['content']),
@@ -190,7 +197,7 @@ class PostController extends BaseController
      * @param  mixed $id
      * @param  string $token
      */
-    public function deletePost($id = NULL, string $token = NULL)
+    public function deletePost($slug = NULL, string $token = NULL)
     {
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
@@ -200,8 +207,9 @@ class PostController extends BaseController
         if($token == $session->get('token'))
         {
             $session->delete('token');
-            $deletePostManager = new PostManager('post');
-            $deletePostManager->delete($id);
+            $postManager = new PostManager('post');
+            $id = $postManager->getIdBySlug($slug);
+            $postManager->delete($id);
 
             $session->set('success', 'Votre post a bien été supprimé.');
 
