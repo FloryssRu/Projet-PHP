@@ -68,13 +68,13 @@ class BaseController
 	/**
 	 * Verify that all fileds are not empty and are valid
 	 *
-	 * @param  array $fields Array containing all the fields to check
+	 * @param  Object $object Object to check
 	 * @return boolean
 	 */
-	public function isValid(array $fields)
+	public function isValid(Object $object): bool
 	{
 		$isValid = true;
-		foreach($fields as $value) {
+		foreach($object as $value) {
 			if($value == NULL || !isset($value) || $value == '') {
 				$isValid = false;
 			}

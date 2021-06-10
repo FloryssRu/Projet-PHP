@@ -32,7 +32,7 @@ class UserManager extends Manager
 	 *
 	 * @param  string $pseudo
 	 * @param  string $password
-	 * @return mixed idUser if a match has been found
+	 * @return object $user if a match has been found
 	 */
 	public function findOneUserBy(string $pseudo, string $password)
 	{
@@ -42,7 +42,7 @@ class UserManager extends Manager
 
 		if(password_verify($password, $user->getPassword()))
 		{
-			return $user->getId();
+			return $user;
 		}
 	}
 	

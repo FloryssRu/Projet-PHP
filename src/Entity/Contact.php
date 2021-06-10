@@ -24,10 +24,16 @@ class Contact extends Entity
 
     public function __construct()
     {
-        $this->firstName = $this->first_name;
-        unset($this->first_name);
-        $this->lastName = $this->last_name;
-        unset($this->last_name);
+        if(isset($this->first_name))
+        {
+            $this->firstName = $this->first_name;
+            unset($this->first_name);
+        }
+        if(isset($this->last_name))
+        {
+            $this->lastName = $this->last_name;
+            unset($this->last_name);
+        }
     }
 
     public function getId(): int

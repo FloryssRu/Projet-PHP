@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Core\BaseController;
+use App\Entity\Comment;
 use App\Services\PHPSession;
 use App\Repository\Manager\PostManager;
 use App\Repository\Manager\CommentManager;
@@ -53,19 +54,19 @@ class OpenPartController extends BaseController
 
     public function newComment()
     {
-        $fields = [$_POST['content']];
-
-        if($this->isSubmit('newComment') && $this->isValid($fields)) {
-
-            $session = new PHPSession;
+        $session = new PHPSession;
+        $arrayData = [
+            'pseudo' => $session->get('pseudo'),
+            'content' => $_POST['content'],
+            'date' => date("Y-m-d H:i:s"),
+            'is_validated' => 0,
+            'id_post' => $_POST['idPost']
+        ];
+        $comment = new Comment();
+        $comment->hydrate($comment, $arrayData);
+        if($this->isSubmit('newComment') && $this->isValid($comment))
+        {
             $commentManager = new CommentManager('comment');
-            $arrayData = [
-                'pseudo' => $session->get('pseudo'),
-                'content' => $_POST['content'],
-                'date' => date("Y-m-d H:i:s"),
-                'is_validated' => 0,
-                'id_post' => $_POST['idPost']
-            ];
             $commentManager->insert($arrayData);
             
             $session->set('success', 'Votre commentaire a été envoyé pour validation.');

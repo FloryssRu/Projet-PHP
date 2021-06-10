@@ -43,24 +43,27 @@ class PostController extends BaseController
             return $this->redirect(parent::ERROR_403_PATH);
         }
 
-        if($this->isSubmit('newPost') && $this->isValid($_POST) && $_POST['token'] == $session->get('token')) {
+        $post = new Post();
+        $datePublication = date("Y-m-d H:i:s");
+        $arrayData = [
+            'title' => $_POST['title'],
+            'date_publication' => $datePublication,
+            'date_last_update' => NULL,
+            'heading' => $_POST['heading'],
+            'content' => $_POST['content'],
+            'author' => $_POST['author']
+        ];
+        $post->hydrate($post, $arrayData);
+
+        if($this->isSubmit('newPost') && $this->isValid($post) && $_POST['token'] == $session->get('token')) {
 
             $session->delete('token');
 
-            $datePublication = date("Y-m-d H:i:s");
             $postManager = new PostManager('post');
 
             $handlerPicture = new HandlerPicture;
             $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $datePublication);
 
-            $arrayData = [
-                'title' => $_POST['title'],
-                'date_publication' => $datePublication,
-                'date_last_update' => NULL,
-                'heading' => $_POST['heading'],
-                'content' => $_POST['content'],
-                'author' => $_POST['author']
-            ];
             $postManager->insert($arrayData);
             
             if($savePictureSuccess)
@@ -145,27 +148,32 @@ class PostController extends BaseController
         {
             return $this->redirect(parent::ERROR_403_PATH);
         }
-        $fields = [$_POST['title'], $_POST['heading'], $_POST['content'], $_POST['author']];
 
-        if($this->isSubmit('editPost') && $this->isValid($fields) && $_POST['token'] == $session->get('token') && is_int($_POST['id'])) {
+        $dateLastUpdate = date("Y-m-d H:i:s");
+        $postManager = new PostManager('post');
+        $post = $postManager->getById($_POST['id']);
+        $arrayData = [
+            'title' => htmlspecialchars($_POST['title']),
+            'date_publication' => $post->getDatePublication(),
+            'date_last_update' => $dateLastUpdate,
+            'heading' => strip_tags($_POST['heading']),
+            'content' => strip_tags($_POST['content']),
+            'author' => htmlspecialchars($_POST['author'])
+        ];   
+        $post->hydrate($post, $arrayData);
+
+
+        if($this->isSubmit('editPost')
+        && $this->isValid($post)
+        && $_POST['token'] == $session->get('token')
+        && preg_match('#^[0-9]+$#', $_POST['id'])) {
 
             $session->delete('token');
-            $dateLastUpdate = date("Y-m-d H:i:s");
-            $postManager = new PostManager('post');
-            $postData = $postManager->getById($_POST['id']);
 
             $handlerPicture = new HandlerPicture;
-            $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $postData->getDatePublication());
+            $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $post->getDatePublication());
 
-            $arrayData = [
-                'title' => htmlspecialchars($_POST['title']),
-                'date_publication' => $postData->getDatePublication(),
-                'date_last_update' => $dateLastUpdate,
-                'heading' => strip_tags($_POST['heading']),
-                'content' => strip_tags($_POST['content']),
-                'author' => htmlspecialchars($_POST['author'])
-            ];   
-            $postManager->update($arrayData, $_POST['id']);
+            $postManager->update($arrayData, $post->getId());
             
             if($savePictureSuccess)
             {
