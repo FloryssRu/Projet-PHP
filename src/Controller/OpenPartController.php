@@ -93,4 +93,9 @@ class OpenPartController extends BaseController
     {
         return $this->render('404.html.twig');
     }
+
+    public function mentions()
+    {
+        return $this->render('mentions.html.twig');
+    }
 }

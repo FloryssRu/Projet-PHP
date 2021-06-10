@@ -21,6 +21,7 @@ class Contact extends Entity
     private string $email;
     private string $title;
     private string $content;
+    private bool $isProcessed;
 
     public function __construct()
     {
@@ -28,6 +29,8 @@ class Contact extends Entity
         unset($this->first_name);
         $this->lastName = $this->last_name;
         unset($this->last_name);
+        $this->isProcessed = $this->is_processed;
+        unset($this->is_processed);
     }
 
     public function getId(): int
@@ -89,5 +92,15 @@ class Contact extends Entity
     {
         $content = $this->content;
         return $content;
+    }
+
+    public function setIsProcessed(bool $isProcessed): void
+    {
+        $this->isProcessed = $isProcessed;
+    }
+
+    public function getIsProcessed(): bool
+    {
+        return $this->isProcessed;
     }
 }

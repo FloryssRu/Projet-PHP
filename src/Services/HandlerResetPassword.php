@@ -9,7 +9,6 @@ use Ramsey\Uuid\Uuid;
 
 class HandlerResetPassword extends AuthenticateController
 {
-
     /**
      * Is empty because the mother class has a construct function and we don't want to use it for this class.
      *

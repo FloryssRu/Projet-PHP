@@ -122,5 +122,11 @@ class UserManager extends Manager
 			return true;
 		} 
 		return false;
-	}    
+	}
+	
+	public function getAdminsEmails()
+    {
+        $req = $this->database->query("SELECT email FROM " . $this->table . " WHERE admin = 1");
+		return $req->fetchAll(\PDO::FETCH_COLUMN);
+    }
 }
