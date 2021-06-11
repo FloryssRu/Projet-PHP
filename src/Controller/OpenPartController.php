@@ -44,8 +44,9 @@ class OpenPartController extends BaseController
     {
         $postManager = new PostManager('post');
         $listPosts = $postManager->getAll();
+        var_dump($listPosts);
         $dateFormat = new DateFormat;
-        $listPosts = $dateFormat->formatListPosts($listPosts);
+        $listPosts = $dateFormat->formatListPosts($listPosts); //affiche une erreur
 
         return $this->render('listPosts.html.twig', [
             'listPosts' => $listPosts

@@ -22,7 +22,8 @@ class UserManager extends Manager
      */
     public function getPseudoByIdUser(int $idUser)
     {
-        $req = $this->database->query("SELECT * FROM " . $this->table . " WHERE id = " . $idUser);
+        $req = $this->database->prepare("SELECT * FROM " . $this->table . " WHERE id = " . $idUser);
+		$req->execute();
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		return $req->fetchAll();
     }
@@ -36,7 +37,8 @@ class UserManager extends Manager
 	 */
 	public function findOneUserBy(string $pseudo, string $password)
 	{
-		$req = $this->database->query("SELECT id, password FROM " . $this->table . " WHERE pseudo = '" . $pseudo . "'");
+		$req = $this->database->prepare("SELECT id, password FROM " . $this->table . " WHERE pseudo = '" . $pseudo . "'");
+		$req->execute();
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
 
@@ -54,7 +56,8 @@ class UserManager extends Manager
 	 */
 	public function getEmail(string $email)
 	{
-		$req = $this->database->query("SELECT email FROM " . $this->table . " WHERE email = \"" . $email . "\"");
+		$req = $this->database->prepare("SELECT email FROM " . $this->table . " WHERE email = \"" . $email . "\"");
+		$req->execute();
 		return $req->fetch();
 	}
 
@@ -66,7 +69,8 @@ class UserManager extends Manager
 	 */
 	public function getPseudo(string $pseudo): bool
 	{
-		$req = $this->database->query("SELECT pseudo FROM " . $this->table . " WHERE pseudo = \"" . $pseudo . "\"");
+		$req = $this->database->prepare("SELECT pseudo FROM " . $this->table . " WHERE pseudo = \"" . $pseudo . "\"");
+		$req->execute();
 		return $req->fetch();
 	}
 	
@@ -78,7 +82,8 @@ class UserManager extends Manager
 	 */
 	public function getidByUuid(string $uuid)
 	{
-		$req = $this->database->query(self::SELECT_ID_FROM . $this->table . " WHERE uuid = '" . $uuid . "'");
+		$req = $this->database->prepare(self::SELECT_ID_FROM . $this->table . " WHERE uuid = '" . $uuid . "'");
+		$req->execute();
 		
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
@@ -96,7 +101,8 @@ class UserManager extends Manager
 	 */
 	public function getIdByEmail(string $email)
 	{
-		$req = $this->database->query(self::SELECT_ID_FROM . $this->table . " WHERE email = '" . $email . "'");
+		$req = $this->database->prepare(self::SELECT_ID_FROM . $this->table . " WHERE email = '" . $email . "'");
+		$req->execute();
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
 		var_dump($user);
@@ -114,7 +120,8 @@ class UserManager extends Manager
 	 */
 	public function isAdminById(int $idUser): bool
 	{
-		$req = $this->database->query("SELECT admin FROM " . $this->table . " WHERE id = '" . $idUser . "'");
+		$req = $this->database->prepare("SELECT admin FROM " . $this->table . " WHERE id = '" . $idUser . "'");
+		$req->execute();
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
 		if($user->getAdmin() == 1)

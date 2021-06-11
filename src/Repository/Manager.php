@@ -44,6 +44,29 @@ class Manager
 		$req->execute();
 		$req->setFetchMode(\PDO::FETCH_CLASS, self::PATH_TO_ENTITIES . $this->object, []);
 		return $req->fetchAll();
+		/*$result = $req->fetchAll();
+		foreach($result as $object)
+		{
+			foreach($object as $attribute => $value)
+			{
+				if(preg_match('#^[a-z]+(_[a-z]+)+$#', $attribute))
+				{
+					$newAttribute = 'set' . preg_replace('#_#', '', ucwords($attribute, '_'));
+					var_dump($newAttribute);
+					/*
+					$method = 'set' . ucfirst($key);
+            		if (method_exists($object, $method))
+            		{
+            		    $object->$method($value);
+            		}
+					$object->$newAttribute = $object->$attribute;
+					unset($object->$attribute);
+				}
+			}
+		}
+		var_dump($result);
+		return $result;*/
+		
 	}
 	
 	/**
@@ -115,7 +138,8 @@ class Manager
 	 */
 	public function delete($id)
 	{
-		$req = $this->database->query("DELETE FROM " . $this->table . " WHERE id=" . $id);
+		$req = $this->database->prepare("DELETE FROM " . $this->table . " WHERE id=" . $id);
+		$req->execute();
 		$req->closeCursor();
 	}
 	

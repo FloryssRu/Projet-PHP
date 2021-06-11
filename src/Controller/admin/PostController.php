@@ -151,17 +151,9 @@ class PostController extends BaseController
 
         $dateLastUpdate = date("Y-m-d H:i:s");
         $postManager = new PostManager('post');
-        $post = $postManager->getById($_POST['id']);
-        $arrayData = [
-            'title' => htmlspecialchars($_POST['title']),
-            'date_publication' => $post->getDatePublication(),
-            'date_last_update' => $dateLastUpdate,
-            'heading' => strip_tags($_POST['heading']),
-            'content' => strip_tags($_POST['content']),
-            'author' => htmlspecialchars($_POST['author'])
-        ];   
-        $post->hydrate($post, $arrayData);
-
+        $post = new Post();
+        $_POST['dateLastUpdate'] = $dateLastUpdate; 
+        $post->hydrate($post, $_POST);
 
         if($this->isSubmit('editPost')
         && $this->isValid($post)
@@ -173,7 +165,7 @@ class PostController extends BaseController
             $handlerPicture = new HandlerPicture;
             $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $post->getDatePublication());
 
-            $postManager->update($arrayData, $post->getId());
+            $postManager->update($_POST, $post->getId());
             
             if($savePictureSuccess)
             {

@@ -26,17 +26,8 @@ class Post extends Entity
 
     public function __construct()
     {
-        if(isset($this->date_publication))
-        {
-            $this->datePublication = $this->date_publication;
-            unset($this->date_publication);
-        }
-        $this->dateLastUpdate = $this->date_last_update;
-        unset($this->date_last_update);
-        if(isset($this->slug))
-        {
-            unset($this->slug);
-        }   
+        //$this->datePublication = date("Y-m-d H:i:s");
+        //$this->dateLastUpdate = NULL;
     }
 
     public function getId(): ?int
