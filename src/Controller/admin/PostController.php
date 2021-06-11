@@ -44,16 +44,11 @@ class PostController extends BaseController
         }
 
         $post = new Post();
-        $datePublication = date("Y-m-d H:i:s");
-        $arrayData = [
-            'title' => $_POST['title'],
-            'date_publication' => $datePublication,
-            'date_last_update' => NULL,
-            'heading' => $_POST['heading'],
-            'content' => $_POST['content'],
-            'author' => $_POST['author']
-        ];
-        $post->hydrate($post, $arrayData);
+
+        $_POST['date_publication'] = date("Y-m-d H:i:s");
+        $_POST['date_last_update'] = NULL;
+
+        $post->hydrate($post, $_POST);
 
         if($this->isSubmit('newPost') && $this->isValid($post) && $_POST['token'] == $session->get('token')) {
 
@@ -62,9 +57,9 @@ class PostController extends BaseController
             $postManager = new PostManager('post');
 
             $handlerPicture = new HandlerPicture;
-            $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $datePublication);
+            $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], date("Y-m-d H:i:s"));
 
-            $postManager->insert($arrayData);
+            $postManager->insert($_POST);
             
             if($savePictureSuccess)
             {

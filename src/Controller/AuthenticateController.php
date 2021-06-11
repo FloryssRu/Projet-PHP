@@ -82,11 +82,7 @@ class AuthenticateController extends BaseController
         $idUser = $userManager->getIdByUuid($uuid);
         if(preg_match('#[0-9]+#', $idUser))
         {
-            $arrayData = [
-                'email_validated' => 1,
-                'uuid' => NULL
-            ];
-            $userManager->update($arrayData, $idUser);
+            $userManager->update(['email_validated' => 1, 'uuid' => NULL], $idUser);
             $session = new PHPSession;
             $session->set('success', 'Votre email a bien été confirmé.');
             return $this->redirect('/');

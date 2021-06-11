@@ -24,16 +24,7 @@ class Comment extends Entity
 
     public function __construct()
     {
-        if(isset($this->is_validated))
-        {
-            $this->isValidated = $this->is_validated;
-            unset($this->is_validated);
-        }
-        if(isset($this->id_post))
-        {
-            $this->idPost = $this->id_post;
-            unset($this->id_post);
-        }
+        $this->date = date("Y-m-d H:i:s");
     }
 
     public function getId(): int

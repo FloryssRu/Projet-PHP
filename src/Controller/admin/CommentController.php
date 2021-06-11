@@ -48,10 +48,7 @@ class CommentController extends BaseController
             return $this->redirect(parent::ERROR_403_PATH);
         }
         $commentManager = new CommentManager('Comment');
-        $arrayData = [
-            'is_validated' => 1
-        ];
-        $commentManager->update($arrayData, $id);
+        $commentManager->update(['is_validated' => 1], $id);
         $session->set('success', 'Le commentaire a été validé.');
 
         return $this->redirect('/admin-commentaires');
@@ -68,10 +65,7 @@ class CommentController extends BaseController
             return $this->redirect(parent::ERROR_403_PATH);
         }
         $commentManager = new CommentManager('Comment');
-        $arrayData = [
-            'is_validated' => 0
-        ];
-        $commentManager->update($arrayData, $id);
+        $commentManager->update(['is_validated' => 0], $id);
         $session->set('success', 'Le commentaire a été invalidé.');
 
         return $this->redirect('/admin-commentaires');

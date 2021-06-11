@@ -44,7 +44,6 @@ class OpenPartController extends BaseController
     {
         $postManager = new PostManager('post');
         $listPosts = $postManager->getAll();
-        var_dump($listPosts);
         $dateFormat = new DateFormat;
         $listPosts = $dateFormat->formatListPosts($listPosts); //affiche une erreur
 
@@ -56,19 +55,18 @@ class OpenPartController extends BaseController
     public function newComment()
     {
         $session = new PHPSession;
-        $arrayData = [
-            'pseudo' => $session->get('pseudo'),
-            'content' => $_POST['content'],
-            'date' => date("Y-m-d H:i:s"),
-            'is_validated' => 0,
-            'id_post' => $_POST['idPost']
-        ];
+
+        $_POST['pseudo'] = $session->get('pseudo');
+        $_POST['date'] = date("Y-m-d H:i:s");
+        $_POST['is_validated'] = 0;
+
         $comment = new Comment();
-        $comment->hydrate($comment, $arrayData);
+        $comment->hydrate($comment, $_POST);
+        
         if($this->isSubmit('newComment') && $this->isValid($comment))
         {
             $commentManager = new CommentManager('comment');
-            $commentManager->insert($arrayData);
+            $commentManager->insert($_POST);
             
             $session->set('success', 'Votre commentaire a été envoyé pour validation.');
 

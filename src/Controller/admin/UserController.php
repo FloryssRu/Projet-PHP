@@ -56,10 +56,8 @@ class UserController extends BaseController
                 $admin = false;
                 $session->set('success', "L'utilisateur est passé en statut simple utilisateur.");
             }
-            $arrayData = [
-                'admin' => $admin
-            ];
-            $userManager->update($arrayData, $idUser);
+
+            $userManager->update(['admin' => $admin], $idUser);
             
             
         } else
