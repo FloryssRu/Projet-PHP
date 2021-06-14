@@ -15,11 +15,19 @@ class Router
     public function run(HttpRequest $httpRequest)
     {
 
-        $routeFound = array_filter($this->listRoute, function($route) use ($httpRequest){
+        $routeFound = array_filter($this->listRoute, function($route) use ($httpRequest)
+        {
+            if(preg_match('#\/post\/[a-zA-Z\-0-9]+$#', $httpRequest->getUrl()))
+			{
+				$url = preg_replace("#\/post\/[a-zA-Z\-0-9]+$#", '/post', $httpRequest->getUrl());
+			} else {
+                $url = preg_replace("#\?[a-zA-Z]+=[0-9a-zA-Z\-]+(&[a-zA-Z]+=[0-9a-zA-Z\-]+)*#", '', $httpRequest->getUrl());
+            }
 
-            $url = preg_replace("#\?[a-zA-Z]+=[0-9a-zA-Z\-]+(&[a-zA-Z]+=[0-9a-zA-Z\-]+)*#", '', $httpRequest->getUrl());
-            //test : $url = preg_replace("#(\?[a-zA-Z]+=[0-9a-zA-Z\-]+(&[a-zA-Z]+=[0-9a-zA-Z\-]+)*)|(\/[a-zA-Z\-0-9]+$)#", '', $httpRequest->getUrl());
-            $route = preg_match("#^" . $route->path . "$#", $url) && $route->method == $httpRequest->getMethod(); 
+            //origin : $url = preg_replace("#\?[a-zA-Z]+=[0-9a-zA-Z\-]+(&[a-zA-Z]+=[0-9a-zA-Z\-]+)*#", '', $httpRequest->getUrl());
+            //test 1 : $url = preg_replace("#(\?[a-zA-Z]+=[0-9a-zA-Z\-]+(&[a-zA-Z]+=[0-9a-zA-Z\-]+)*)|(\/[a-zA-Z\-0-9]+$)#", '', $httpRequest->getUrl());
+
+            $route = preg_match("#^" . $route->path . "$#", $url) && $route->method == $httpRequest->getMethod();
 
             return $route;
         });
@@ -39,7 +47,7 @@ class Router
                 return $route;
             });
             return new Route(array_shift($route404));
-			//throw new Exceptions\NoRouteFoundException($httpRequest);
+			//ancien : throw new Exceptions\NoRouteFoundException($httpRequest);
 		}
 		else
 		{

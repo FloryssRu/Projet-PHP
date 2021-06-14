@@ -49,6 +49,9 @@ class HttpRequest
 					if(isset($_GET[$param]))
 					{
 						$this->param[] = $_GET[$param];
+					} elseif (preg_match('#\/post\/([a-z\-]+)$#', $this->url))
+					{
+						$this->param[] = preg_replace('#\/blogphp\/post\/#', '', $this->url);
 					}
 				}
 			case "POST":
