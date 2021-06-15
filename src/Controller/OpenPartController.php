@@ -72,15 +72,21 @@ class OpenPartController extends BaseController
                 'id_post' => $_POST['idPost']
             ];
             $commentManager->insert($arrayData);
+
+            $postManager = new PostManager('post');
+            $post = $postManager->getById($_POST['idPost']);
             
             $session->set('success', 'Votre commentaire a été envoyé pour validation.');
 
-            $this->showPost($_POST['idPost']);
+            $this->redirect('/post/' . $post->getSlug());
         } else {
+            $postManager = new PostManager('post');
+            $post = $postManager->getById($_POST['idPost']);
+
             $session = new PHPSession;
             $session->set('fail', 'Votre commentaire a rencontré un problème.');
 
-            $this->showPost($_POST['idPost']);
+            $this->redirect('/post/' . $post->getSlug());
         }
     }
 

@@ -19,9 +19,9 @@
     <p>{{ post.author }}</p>
     
     {% if session.pseudo %}
-        <form action="nouveau-commentaire" method="post">
+        <form action="/blogphp/nouveau-commentaire" method="post">
             <h2>Laissez un commentaire !</h2>
-            <p><label for="content">Commentaire : </label><textarea id="content" name="content"></textarea></p>
+            <p><label for="content">Commentaire : </label><textarea id="content" name="content" required></textarea></p>
             <input type="hidden" value="{{ post.id }}" name="idPost">
             <input type="submit" value="Envoyer le commentaire" name="newComment">
         </form>
