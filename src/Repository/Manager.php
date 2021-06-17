@@ -92,7 +92,8 @@ class Manager
 				}
 			}
 		}
-		$this->database->query("INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (" . implode(', ', $valuesToInsert) . ")");
+		$this->database->prepare("INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (" . implode(', ', $valuesToInsert) . ")");
+		$this->database->execute();
 	}
 	
 	/**
@@ -121,7 +122,8 @@ class Manager
 		$sql .= implode(', ', $values);
 
 		$sql .= 'WHERE id = ' . $id;
-		$req = $this->database->query($sql);
+		$req = $this->database->prepare($sql);
+		$req->execute();
 		$req->closeCursor();
 	}
 
