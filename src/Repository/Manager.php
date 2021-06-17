@@ -121,9 +121,9 @@ class Manager
 
 		$sql .= implode(', ', $values);
 
-		$sql .= 'WHERE id = ' . $id;
+		$sql .= 'WHERE id = :id';
 		$req = $this->database->prepare($sql);
-		$req->execute();
+		$req->execute(['id' => $id]);
 		$req->closeCursor();
 	}
 
