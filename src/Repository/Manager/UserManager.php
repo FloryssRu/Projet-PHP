@@ -62,9 +62,8 @@ class UserManager extends Manager
 	 * Test if a pseudo is in the database. Return false if it's not, else true.
 	 *
 	 * @param  string $email Email to test
-	 * @return bool
 	 */
-	public function getPseudo(string $pseudo): bool
+	public function getPseudo(string $pseudo)
 	{
 		$req = $this->database->query("SELECT pseudo FROM " . $this->table . " WHERE pseudo = \"" . $pseudo . "\"");
 		return $req->fetch();
@@ -99,7 +98,6 @@ class UserManager extends Manager
 		$req = $this->database->query(self::SELECT_ID_FROM . $this->table . " WHERE email = '" . $email . "'");
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
-		var_dump($user);
 		if(!is_bool($req))
 		{
 			return $user;
@@ -129,4 +127,11 @@ class UserManager extends Manager
         $req = $this->database->query("SELECT email FROM " . $this->table . " WHERE admin = 1");
 		return $req->fetchAll(\PDO::FETCH_COLUMN);
     }
+
+	public function getAvatarByPseudo(string $pseudo)
+	{
+		$req = $this->database->query("SELECT avatar_number FROM " . $this->table . " WHERE pseudo = '" . $pseudo . "'");
+		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
+		return $req->fetch();
+	}
 }

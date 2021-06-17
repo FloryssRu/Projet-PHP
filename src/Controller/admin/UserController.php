@@ -3,7 +3,6 @@
 namespace App\Controller\admin;
 
 use App\Core\BaseController;
-use App\Entity\User;
 use App\Repository\Manager\UserManager;
 use App\Services\PHPSession;
 use App\Services\TranslateUsersAdminStatus;

@@ -37,5 +37,19 @@ class CommentManager extends Manager
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		return $req->fetchAll();
 	}
+	
+	/**
+	 * Return an array with all the comments of an user. This is used for dashboard.
+	 *
+	 * @param  string $pseudo
+	 * @return ?array
+	 */
+	public function getAllCommentsByPseudo(string $pseudo)
+	{
+		$req = $this->database->prepare(self::SELECT_ALL_FROM . $this->table . " WHERE pseudo = \"" . $pseudo . "\" ORDER BY date DESC");
+		$req->execute();
+		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
+		return $req->fetchAll();
+	}
     
 }

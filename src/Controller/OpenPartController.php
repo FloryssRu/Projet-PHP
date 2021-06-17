@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Core\BaseController;
+use App\Entity\User;
 use App\Services\PHPSession;
 use App\Repository\Manager\PostManager;
 use App\Repository\Manager\CommentManager;
+use App\Repository\Manager\UserManager;
 use App\Services\DateFormat;
 use App\Services\HandlerPicture;
 
@@ -32,12 +34,20 @@ class OpenPartController extends BaseController
             }
             
             $commentManager = new CommentManager('comment');
-            $arrayComments = $commentManager->getCommentsByIdPost($id);
+            $comments = $commentManager->getCommentsByIdPost($id);
 
+            $userManager = new UserManager('user');
+            foreach($comments as $comment)
+            {
+                $user = new User;
+                $user->setAvatarNumber($userManager->getAvatarByPseudo($comment->getPseudo())->avatar_number);
+                $comment->avatar = $user->getAvatarNumber();
+                $comment->postTitle = $postManager->getById($comment->getIdPost())->getTitle();
+            }
             return $this->render('post.html.twig', [
                 "post" => $post,
                 "picture" => $picture,
-                "comments" => $arrayComments
+                "comments" => $comments
             ]);
         }
 
@@ -88,6 +98,59 @@ class OpenPartController extends BaseController
 
             $this->redirect('/post/' . $post->getSlug());
         }
+    }
+    
+    /**
+     * Displays the page of user's dashboard
+     *
+     * @param  mixed $idUser
+     * @return void
+     */
+    public function showDashboard()
+    {
+        $session = new PHPSession();
+        if($session->get('pseudo') == null)
+        {
+            return $this->redirect('/erreur-404');
+        }
+
+        $userManager = new UserManager('user');
+        $user = $userManager->getById($session->get('idUser'));
+
+        $commentManager = new CommentManager('comment');
+        $comments = $commentManager->getAllCommentsByPseudo($session->get('pseudo'));
+        
+        $postManager = new PostManager('post');
+        $dateFormat = new DateFormat;
+        foreach($comments as $comment)
+        {
+            $comment->postTitle = $postManager->getById($comment->getIdPost())->getTitle();
+            $comment->setDate($dateFormat->formatToDisplay($comment->getDate()));
+        }
+
+        return $this->render('dashboard.html.twig', ["user" => $user, "comments" => $comments]);
+    }
+
+    public function changeAvatar()
+    {
+        $session = new PHPSession();
+        if($session->get('pseudo') == null)
+        {
+            return $this->redirect('/erreur-404');
+        }
+        if($this->isSubmit('avatarChange')
+        && $this->isValid($_POST)
+        && 0 < $_POST['avatar']
+        && $_POST['avatar'] < 6)
+        {
+            $userManager = new UserManager('user');
+            $userManager->update(['avatar_number' => $_POST['avatar']], $session->get('idUser'));
+            $session->set('success', 'Votre avatar a bien été changé.');
+        } else 
+        {
+            $session->set('fail', 'Une erreur dans le formulaire a été détectée.');
+        }
+        $this->redirect('/dashboard');
     }
 
     public function error403()

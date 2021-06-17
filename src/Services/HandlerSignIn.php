@@ -47,7 +47,6 @@ class HandlerSignIn extends AuthenticateController
         && !$isEmailOccupied
         && !$isPseudoOccupied)
         {
-            echo 'hfkdhjkfhdf';
             $uuid = Uuid::uuid4();
             $uuid = $uuid->toString();
             $password = password_hash(htmlspecialchars($data['password']), PASSWORD_DEFAULT);
@@ -74,6 +73,8 @@ class HandlerSignIn extends AuthenticateController
                 return $this->redirect('/inscription');
             } else {
                 $userManager->insert($arrayData);
+                $user = $userManager->getIdByEmail($data['email']);
+                $session->set('idUser', $user->getId());
                 $session->set('success', "Bienvenue sur le Blog de Floryss Rubechi. Un mail de confirmation d'email vous a été envoyé.");
                 return $this->redirect('/');
             }
