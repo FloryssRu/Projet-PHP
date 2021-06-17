@@ -161,7 +161,7 @@ class PostController extends BaseController
             $handlerPicture = new HandlerPicture;
             $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $post->getDatePublication());
 
-            $postManager->update($_POST, $post->getId());
+            $postManager->update($_POST, $post);
             
             if($savePictureSuccess)
             {

@@ -103,7 +103,7 @@ class Manager
 	 * @param  mixed $id
 	 * @return void
 	 */
-	public function update(array $arrayData, $id): void
+	public function update(array $arrayData, Object $object): void
 	{
 		$sql = "UPDATE " . $this->table . ' SET ';
 
@@ -123,7 +123,7 @@ class Manager
 
 		$sql .= 'WHERE id = :id';
 		$req = $this->database->prepare($sql);
-		$req->execute(['id' => $id]);
+		$req->execute(['id' => $object->getId()]);
 		$req->closeCursor();
 	}
 
