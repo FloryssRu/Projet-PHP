@@ -15,6 +15,7 @@ class PostController extends BaseController
 
     private const PATH_TO_ADMIN_POSTS = '/admin-posts';
     private const ADMIN_POSTS_TEMPLATE = 'admin/adminPosts.html.twig';
+    private const DATE = "Y-m-d H:i:s";
     
     /**
      * Form to create a new Post
@@ -45,7 +46,7 @@ class PostController extends BaseController
 
         $post = new Post();
 
-        $_POST['date_publication'] = date("Y-m-d H:i:s");
+        $_POST['date_publication'] = date(self::DATE);
         $_POST['date_last_update'] = NULL;
 
         $post->hydrate($post, $_POST);
@@ -57,7 +58,7 @@ class PostController extends BaseController
             $postManager = new PostManager('post');
 
             $handlerPicture = new HandlerPicture;
-            $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], date("Y-m-d H:i:s"));
+            $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], date(self::DATE));
 
             $postManager->insert($_POST);
             
@@ -144,7 +145,7 @@ class PostController extends BaseController
             return $this->redirect(parent::ERROR_403_PATH);
         }
 
-        $dateLastUpdate = date("Y-m-d H:i:s");
+        $dateLastUpdate = date(self::DATE);
         $postManager = new PostManager('post');
         $post = new Post();
         $_POST['dateLastUpdate'] = $dateLastUpdate; 

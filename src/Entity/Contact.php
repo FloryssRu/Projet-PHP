@@ -22,10 +22,6 @@ class Contact extends Entity
     private string $title;
     private string $content;
 
-    public function __construct()
-    {
-        
-    }
 
     public function getId(): int
     {

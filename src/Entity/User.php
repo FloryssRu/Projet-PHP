@@ -23,11 +23,6 @@ class User extends Entity
     private bool $emailValidated;
     private ?string $uuid;
 
-    public function __construct()
-    {
-        
-    }
-
     public function getId(): ?int
     {
         return $this->id;
