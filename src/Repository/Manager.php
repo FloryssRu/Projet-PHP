@@ -123,7 +123,7 @@ class Manager
 
 		$sql .= 'WHERE id = :id';
 		$req = $this->database->prepare($sql);
-		$req->bindParam([':id' => $id]);
+		$req->bindParam(':id', $id);
 		$req->execute();
 	}
 
