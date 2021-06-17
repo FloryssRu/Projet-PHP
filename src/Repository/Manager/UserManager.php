@@ -37,8 +37,8 @@ class UserManager extends Manager
 	 */
 	public function findOneUserBy(string $pseudo, string $password)
 	{
-		$req = $this->database->prepare("SELECT id, password FROM " . $this->table . " WHERE pseudo = '" . $pseudo . "'");
-		$req->execute();
+		$req = $this->database->prepare("SELECT id, password FROM " . $this->table . " WHERE pseudo = :pseudo");
+		$req->execute(["pseudo" => $pseudo]);
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
 
@@ -56,8 +56,8 @@ class UserManager extends Manager
 	 */
 	public function getEmail(string $email)
 	{
-		$req = $this->database->prepare("SELECT email FROM " . $this->table . " WHERE email = \"" . $email . "\"");
-		$req->execute();
+		$req = $this->database->prepare("SELECT email FROM " . $this->table . " WHERE email = :email");
+		$req->execute(["email" => $email]);
 		return $req->fetch();
 	}
 
@@ -101,8 +101,8 @@ class UserManager extends Manager
 	 */
 	public function getIdByEmail(string $email)
 	{
-		$req = $this->database->prepare(self::SELECT_ID_FROM . $this->table . " WHERE email = '" . $email . "'");
-		$req->execute();
+		$req = $this->database->prepare(self::SELECT_ID_FROM . $this->table . " WHERE email = :email");
+		$req->execute(['email' => $email]);
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
 		var_dump($user);
