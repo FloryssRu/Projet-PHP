@@ -103,11 +103,11 @@ class Manager
 	 * @param  mixed $id
 	 * @return void
 	 */
-	public function update(array $arrayData, int $id): void
+	public function update(Object $object, int $id): void
 	{
 		$sql = "UPDATE " . $this->table . ' SET ';
 
-		foreach($arrayData as $key => $value) {
+		foreach($object as $key => $value) {
 			$key = preg_replace('/(?=[A-Z])/', '_', $key);
 			$key = strtolower($key);
 			if($value == NULL)
