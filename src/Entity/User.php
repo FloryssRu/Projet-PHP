@@ -23,15 +23,6 @@ class User extends Entity
     private bool $emailValidated;
     private ?string $uuid;
 
-    public function __construct()
-    {
-        if(isset($this->email_validated))
-        {
-            $this->emailValidated = $this->email_validated;
-            unset($this->email_validated);
-        }
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -95,5 +86,14 @@ class User extends Entity
     public function getUuid(): ?string
     {
         return $this->uuid;
+    }
+
+    public function getAttributes(Object $object)
+    {
+        foreach($object as $attribute => $value)
+        {
+            $array[$attribute] = $value;
+        }
+        return $array;
     }
 }

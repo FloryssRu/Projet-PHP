@@ -3,6 +3,7 @@
 namespace App\Controller\admin;
 
 use App\Core\BaseController;
+use App\Entity\Post;
 use Cocur\Slugify\Slugify;
 use App\Repository\Manager\PostManager;
 use App\Services\DateFormat;
@@ -15,6 +16,7 @@ class PostController extends BaseController
 
     private const PATH_TO_ADMIN_POSTS = '/admin-posts';
     private const ADMIN_POSTS_TEMPLATE = 'admin/adminPosts.html.twig';
+    private const DATE = "Y-m-d H:i:s";
     
     /**
      * Form to create a new Post
@@ -43,29 +45,30 @@ class PostController extends BaseController
             return $this->redirect(parent::ERROR_403_PATH);
         }
 
-        if($this->isSubmit('newPost') && $this->isValid($_POST) && $_POST['token'] == $session->get('token')) {
+        $post = new Post();
+
+        $_POST['date_publication'] = date(self::DATE);
+        $_POST['date_last_update'] = NULL;
+
+        $post->hydrate($post, $_POST);
+
+        if($this->isSubmit('newPost') && $this->isValid($post) && $_POST['token'] == $session->get('token')) {
 
             $session->delete('token');
 
-            $datePublication = date("Y-m-d H:i:s");
-            $postManager = new PostManager('post');
-
             $handlerPicture = new HandlerPicture;
-            $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $datePublication);
+//conflit ici
+            $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], date(self::DATE));
 
             $slugify = new Slugify();
+            $_POST['slug'] = $slugify->slugify($_POST['title']);
 
-            $arrayData = [
-                'title' => $_POST['title'],
-                'slug' => $slugify->slugify($_POST['title']),
-                'date_publication' => $datePublication,
-                'date_last_update' => NULL,
-                'heading' => $_POST['heading'],
-                'content' => $_POST['content'],
-                'author' => $_POST['author']
-            ];
-            $postManager->insert($arrayData);
+            $postManager = new PostManager('post');
+            unset($_POST['newPost']);
+            unset($_POST['token']);
             
+            $postManager->insert($_POST);
+//fin conflit
             if($savePictureSuccess)
             {
                 $session->set('success', 'Votre nouveau post et son image ont bien été enregistrés.');
@@ -149,31 +152,34 @@ class PostController extends BaseController
         {
             return $this->redirect(parent::ERROR_403_PATH);
         }
-        $fields = [$_POST['title'], $_POST['heading'], $_POST['content'], $_POST['author']];
 
-        if($this->isSubmit('editPost') && $this->isValid($fields) && $_POST['token'] == $session->get('token') && is_int($_POST['id'])) {
+        $postManager = new PostManager('post');
+        $post = new Post();
+        $_POST['dateLastUpdate'] = date(self::DATE);
+        $post->hydrate($post, $_POST);
+
+        if($this->isSubmit('editPost')
+        && $this->isValid($post)
+        && $_POST['token'] == $session->get('token')
+        && preg_match('#^[0-9]+$#', $_POST['id'])) {
 
             $session->delete('token');
+//conflit ici
             $dateLastUpdate = date("Y-m-d H:i:s");
             $postManager = new PostManager('post');
             $post = $postManager->getById($_POST['id']);
-
+//fin conflit
             $handlerPicture = new HandlerPicture;
             $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $post->getDatePublication());
-
+//conflit ici
             $slugify = new Slugify();
 
-            $arrayData = [
-                'title' => htmlspecialchars($_POST['title']),
-                'slug' => $slugify->slugify(htmlspecialchars($_POST['title'])),
-                'date_publication' => $post->getDatePublication(),
-                'date_last_update' => $dateLastUpdate,
-                'heading' => strip_tags($_POST['heading']),
-                'content' => strip_tags($_POST['content']),
-                'author' => htmlspecialchars($_POST['author'])
-            ];   
-            $postManager->update($arrayData, $_POST['id']);
-            
+            $_POST['slug'] = $slugify->slugify(htmlspecialchars($_POST['title']));
+            //'heading' => strip_tags($_POST['heading']),
+            //'content' => strip_tags($_POST['content']),
+
+            $postManager->update($post, $_POST['id']);
+//fin conflit  
             if($savePictureSuccess)
             {
                 $session->set('success', 'Votre post a bien été modifié et votre image a bien été enregistrée.');

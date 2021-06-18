@@ -20,13 +20,4 @@ class Entity
             }
         }
     }
-
-    public function getAttributes(Object $object)
-    {
-        foreach($object as $attribute => $value)
-        {
-            $array[$attribute] = $value;
-        }
-        return $array;
-    }
 }
