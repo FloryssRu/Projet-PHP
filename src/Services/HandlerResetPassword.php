@@ -122,7 +122,7 @@ class HandlerResetPassword extends AuthenticateController
             $session = new PHPSession;
             $session->set('fail', "Votre réinitialisation de mot de passe a rencontré un problème. Veuillez recommencer.");
         }
-        //return $this->redirect(parent::PATH_TO_PSWD_RESET . $session->get('uuid'));
+        return $this->redirect(parent::PATH_TO_PSWD_RESET . $session->get('uuid'));
     }
 
 }

@@ -22,11 +22,6 @@ class Comment extends Entity
     private bool $isValidated;
     private int $idPost;
 
-    public function __construct()
-    {
-        //$this->date = date("Y-m-d H:i:s");
-    }
-
     public function getId(): int
     {
         return $this->id;
