@@ -83,4 +83,13 @@ class Contact extends Entity
         $content = $this->content;
         return $content;
     }
+
+    public function getAttributes(Object $object)
+    {
+        foreach($object as $attribute => $value)
+        {
+            $array[$attribute] = $value;
+        }
+        return $array;
+    }
 }

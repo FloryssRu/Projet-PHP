@@ -92,30 +92,32 @@ class Manager
 				}
 			}
 		}
-		$this->database->prepare("INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (" . implode(', ', $valuesToInsert) . ")");
-		$this->database->execute();
+		$req = $this->database->prepare("INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (" . implode(', ', $valuesToInsert) . ")");
+		$req->execute();
 	}
 	
 	/**
 	 * Update a line in the table targeted by its id
 	 *
-	 * @param  array $arrayData Array that contains the updated values
-	 * @param  mixed $id
+	 * @param  Object $object
+	 * @param  int $id
 	 * @return void
 	 */
 	public function update(Object $object, int $id): void
 	{
 		$sql = "UPDATE " . $this->table . ' SET ';
+		$arrayData = $object->getAttributes($object);
 
-		foreach($object as $key => $value) {
-			$key = preg_replace('/(?=[A-Z])/', '_', $key);
-			$key = strtolower($key);
+		foreach($arrayData as $attribute => $value) {
+			$attribute = preg_replace('/(?=[A-Z])/', '_', $attribute);
+			$attribute = strtolower($attribute);
+
 			if($value == NULL)
 			{
-				$values[] = $key . ' = NULL ';
+				$values[] = $attribute . ' = NULL ';
 			} else
 			{
-				$values[] = $key . ' = "' . $value . '" ';
+				$values[] = $attribute . ' = "' . $value . '" ';
 			}
 		}
 

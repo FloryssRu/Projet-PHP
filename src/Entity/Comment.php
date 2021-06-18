@@ -24,7 +24,7 @@ class Comment extends Entity
 
     public function __construct()
     {
-        $this->date = date("Y-m-d H:i:s");
+        //$this->date = date("Y-m-d H:i:s");
     }
 
     public function getId(): int
@@ -80,5 +80,14 @@ class Comment extends Entity
     public function getIdPost(): int
     {
         return $this->idPost;
+    }
+
+    public function getAttributes(Object $object)
+    {
+        foreach($object as $attribute => $value)
+        {
+            $array[$attribute] = $value;
+        }
+        return $array;
     }
 }

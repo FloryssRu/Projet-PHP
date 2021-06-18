@@ -3,6 +3,7 @@
 namespace App\Controller\admin;
 
 use App\Core\BaseController;
+use App\Entity\User;
 use App\Repository\Manager\UserManager;
 use App\Services\PHPSession;
 use App\Services\TranslateUsersAdminStatus;
@@ -57,8 +58,9 @@ class UserController extends BaseController
                 $session->set('success', "L'utilisateur est passé en statut simple utilisateur.");
             }
 
-            $userManager->update(['admin' => $admin], $idUser);
-            
+            $user = new User();
+            $user->hydrate($user, ['admin' => $admin]);
+            $userManager->update($user, $idUser);
             
         } else
         {

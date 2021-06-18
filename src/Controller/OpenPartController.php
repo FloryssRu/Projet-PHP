@@ -66,6 +66,7 @@ class OpenPartController extends BaseController
         if($this->isSubmit('newComment') && $this->isValid($comment))
         {
             $commentManager = new CommentManager('comment');
+            unset($_POST['newComment']);
             $commentManager->insert($_POST);
             
             $session->set('success', 'Votre commentaire a été envoyé pour validation.');

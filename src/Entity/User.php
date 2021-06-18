@@ -87,4 +87,13 @@ class User extends Entity
     {
         return $this->uuid;
     }
+
+    public function getAttributes(Object $object)
+    {
+        foreach($object as $attribute => $value)
+        {
+            $array[$attribute] = $value;
+        }
+        return $array;
+    }
 }

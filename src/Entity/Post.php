@@ -125,4 +125,13 @@ class Post extends Entity
         return $this->author;
     }
 
+    public function getAttributes(Object $object)
+    {
+        foreach($object as $attribute => $value)
+        {
+            $array[$attribute] = $value;
+        }
+        return $array;
+    }
+
 }

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Core\BaseController;
+use App\Entity\User;
 use App\Repository\Manager\UserManager;
 use App\Services\HandlerResetPassword;
 use App\Services\HandlerSignIn;
@@ -82,7 +83,9 @@ class AuthenticateController extends BaseController
         $idUser = $userManager->getIdByUuid($uuid);
         if(preg_match('#[0-9]+#', $idUser))
         {
-            $userManager->update(['email_validated' => 1, 'uuid' => NULL], $idUser);
+            $user = new User();
+            $user->hydrate($user, ['emailValidated' => 1, 'uuid' => NULL]);
+            $userManager->update($user, $idUser);
             $session = new PHPSession;
             $session->set('success', 'Votre email a bien été confirmé.');
             return $this->redirect('/');

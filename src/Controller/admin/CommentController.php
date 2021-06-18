@@ -3,6 +3,7 @@
 namespace App\Controller\admin;
 
 use App\Core\BaseController;
+use App\Entity\Comment;
 use App\Repository\Manager\CommentManager;
 use App\Services\DateFormat;
 use App\Services\PHPSession;
@@ -47,8 +48,10 @@ class CommentController extends BaseController
         {
             return $this->redirect(parent::ERROR_403_PATH);
         }
-        $commentManager = new CommentManager('Comment');
-        $commentManager->update(['is_validated' => 1], $id);
+        $commentManager = new CommentManager('comment');
+        $comment = new Comment();
+        $comment->hydrate($comment, ['isValidated' => 1]);
+        $commentManager->update($comment, $id);
         $session->set('success', 'Le commentaire a été validé.');
 
         return $this->redirect('/admin-commentaires');
@@ -64,8 +67,10 @@ class CommentController extends BaseController
         {
             return $this->redirect(parent::ERROR_403_PATH);
         }
-        $commentManager = new CommentManager('Comment');
-        $commentManager->update(['is_validated' => 0], $id);
+        $commentManager = new CommentManager('comment');
+        $comment = new Comment();
+        $comment->hydrate($comment, ['isValidated' => 0]);
+        $commentManager->update($comment, $id);
         $session->set('success', 'Le commentaire a été invalidé.');
 
         return $this->redirect('/admin-commentaires');

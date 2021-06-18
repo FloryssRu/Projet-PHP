@@ -55,11 +55,12 @@ class PostController extends BaseController
 
             $session->delete('token');
 
-            $postManager = new PostManager('post');
-
             $handlerPicture = new HandlerPicture;
             $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], date(self::DATE));
 
+            $postManager = new PostManager('post');
+            unset($_POST['newPost']);
+            unset($_POST['token']);
             $postManager->insert($_POST);
             
             if($savePictureSuccess)
@@ -161,7 +162,7 @@ class PostController extends BaseController
             $handlerPicture = new HandlerPicture;
             $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $post->getDatePublication());
 
-            $postManager->update($post, $post->getId());
+            $postManager->update($post, $_POST['id']);
             
             if($savePictureSuccess)
             {

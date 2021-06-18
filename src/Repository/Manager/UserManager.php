@@ -105,7 +105,6 @@ class UserManager extends Manager
 		$req->execute(['email' => $email]);
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
-		var_dump($user);
 		if(!is_bool($req))
 		{
 			return $user;
