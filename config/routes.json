@@ -271,7 +271,7 @@
 },
 {
 	"path" : "/blogphp/erreur-403",
-	"controller" : "OpenPart",
+	"controller" : "Error",
 	"action" : "error403",
 	"method" : "GET",
 	"param" : [],
@@ -279,7 +279,7 @@
 },
 {
 	"path" : "/blogphp/erreur-404",
-	"controller" : "OpenPart",
+	"controller" : "Error",
 	"action" : "error404",
 	"method" : "GET",
 	"param" : [],

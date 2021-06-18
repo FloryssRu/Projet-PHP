@@ -90,16 +90,6 @@ class OpenPartController extends BaseController
         }
     }
 
-    public function error403()
-    {
-        return $this->render('403.html.twig');
-    }
-
-    public function error404()
-    {
-        return $this->render('404.html.twig');
-    }
-
     public function mentions()
     {
         return $this->render('mentions.html.twig');
