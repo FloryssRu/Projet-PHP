@@ -15,10 +15,8 @@ class CommentController extends BaseController
         
     /**
      * Render a list with all comments and link to validate or unvalidate for each
-     *
-     * @return void
      */
-    public function adminComment(): void
+    public function adminComment()
     {
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
@@ -42,24 +40,21 @@ class CommentController extends BaseController
     
     /**
      * Change the isValidated attribute to 1 (valide this comment)
-     * 
-     * @return void
      */
-    public function validComment($id = NULL): void
+    public function validComment($id = NULL)
     {
         $session = new PHPSession;
         if($id == NULL || $session->get('admin') == NULL || !$session->get('admin'))
         {
             return $this->redirect(parent::ERROR_403_PATH);
         }
-        $commentManager = new CommentManager('Comment');
-        $commentData = $commentManager->getById($id);
-        $comment = new Comment($commentData['pseudo'], $commentData['content'], $commentData['date'], 1, $commentData['id_post']);
+        $commentManager = new CommentManager('comment');
+        $comment = new Comment();
+        $comment->hydrate($comment, ['isValidated' => 1]);
         $commentManager->update($comment, $id);
         $session->set('success', 'Le commentaire a été validé.');
 
         return $this->redirect('/admin-commentaires');
-        
     }
     
     /**
@@ -72,9 +67,9 @@ class CommentController extends BaseController
         {
             return $this->redirect(parent::ERROR_403_PATH);
         }
-        $commentManager = new CommentManager('Comment');
-        $commentData = $commentManager->getById($id);
-        $comment = new Comment($commentData['pseudo'], $commentData['content'], $commentData['date'], 0, $commentData['id_post']);
+        $commentManager = new CommentManager('comment');
+        $comment = new Comment();
+        $comment->hydrate($comment, ['isValidated' => 0]);
         $commentManager->update($comment, $id);
         $session->set('success', 'Le commentaire a été invalidé.');
 

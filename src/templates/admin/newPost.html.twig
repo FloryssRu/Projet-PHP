@@ -4,15 +4,26 @@
 Nouveau Post
 {% endblock %}
 
-
+{% block css %}
+    <script src="/blogphp/vendor/tinymce/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript">
+        tinymce.init({
+            selector: '#heading'
+        });
+        tinymce.init({
+            selector: '#content'
+        });
+    </script>
+{% endblock %}
 
 {% block body %}
 
 <h1>Formulaire pour ajouter un nouveau Post</h1>
-<form action="ajout-post" method="post">
+<form action="ajout-post" method="post" enctype="multipart/form-data">
     <label for="title">Titre</label><input type="text" name="title" id="title" required>
-	<label for="heading">Chapô</label><textarea name="heading" id="heading" required></textarea>
-    <label for="content">Contenu de l'article</label><textarea name="content" id="content" required></textarea>
+	<label for="heading">Chapô</label><textarea id="heading" name="heading"></textarea>
+    <label for="content">Contenu de l'article</label><textarea id="content" name="content"></textarea>
+    <label for="picture">Ajouter une image au post (optionnel) Formats acceptés : .jpg, .png et .gif, Taille max 3Mo</label><input type="file" name="picture" id="picture">
     <label for="author">Auteur</label><input type="text" name="author" id="author" required>
     <input type="hidden" name="token" value="{{ session.token }}">
 	<input type="submit" value="Ajouter le post" name="newPost">

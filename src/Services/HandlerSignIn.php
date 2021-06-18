@@ -30,30 +30,38 @@ class HandlerSignIn extends AuthenticateController
      * @param  array $data
      * @return void
      */
-    public function tryToSignIn(array $data): void
+    public function tryToSignIn(array $data)
 	{
-
 		$userManager = new UserManager('user');
-        $isEmailOccupied = $userManager->getEmail($data['email']); //returne faux ou l'email trouvée
-        $isPseudoOccupied = $userManager->getPseudo($data['pseudo']); //returne faux ou le pseudo trouvé
+        $isEmailOccupied = $userManager->getEmail(htmlspecialchars($data['email']));
+        $isPseudoOccupied = $userManager->getPseudo(htmlspecialchars($data['pseudo']));
 
-        if($data['password'] === $data['passwordValid']
-        && $this->isValid($data)
+        $user = new User();
+        $user->hydrate($user, $data);
+
+        if(htmlspecialchars($data['password']) === htmlspecialchars($data['passwordValid'])
+        && $this->isValid($user)
         && $this->isSubmit('signIn')
-        && $data['mentions'] == 'on'
+        && htmlspecialchars($data['mentionsAccepted']) == 'on'
         && strlen($data['pseudo']) <= 100
         && strlen($data['password']) <= 50
         && strlen($data['email']) <= 100
-        && preg_match('#^[a-zA-Z\.1-9\+]+@[a-zA-Z\.1-9]+\.[a-z]{0,5}$#', $data['email'])
+        && preg_match('#^[a-zA-Z\.0-9\+]+@[a-zA-Z\.0-9]+\.[a-z]{0,5}$#', htmlspecialchars($data['email']))
         && !$isEmailOccupied
         && !$isPseudoOccupied)
         {
-            
             $uuid = Uuid::uuid4();
             $uuid = $uuid->toString();
-            $password = password_hash($data['password'], PASSWORD_DEFAULT);
+            $password = password_hash(htmlspecialchars($data['password']), PASSWORD_DEFAULT);
             $userManager = new UserManager('user');
-            $user = new User($data['pseudo'], $password, $data['email'], false, 0, $uuid);
+            $arrayData = [
+                'pseudo' => htmlspecialchars($data['pseudo']),
+                'password' => $password,
+                'email' => htmlspecialchars($data['email']),
+                'admin' => 0,
+                'email_validated' => 0,
+                'uuid' => $uuid
+            ];
 
             $baseEmails = new BaseEmails;
             $mail = $baseEmails->sendEmail($data['email'], 'Valider votre email - Blog de Floryss Rubechi', '<p>Vous vous êtes inscrit sur le Blog de Floryss Rubechi.</p>
@@ -67,14 +75,14 @@ class HandlerSignIn extends AuthenticateController
                 $session->set('fail', "L'email de confirmation d'adresse email n'a pas pu être envoyé. Réécrivez votre adresse email.");
                 return $this->redirect('/inscription');
             } else {
-                $userManager->insert($user);
+                $userManager->insert($arrayData);
                 $session->set('success', "Bienvenue sur le Blog de Floryss Rubechi. Un mail de confirmation d'email vous a été envoyé.");
                 return $this->redirect('/');
             }
 
         } else
         {
-            $problem = $this->findSignInProblem($data, $isEmailOccupied);
+            $problem = $this->findSignInProblem($data, $user, $isEmailOccupied);
             $session = new PHPSession;
             $session->set('fail', $problem);
             return $this->redirect('/inscription');
@@ -87,18 +95,18 @@ class HandlerSignIn extends AuthenticateController
      * @param  mixed $data
      * @return string
      */
-    private function findSignInProblem(array $data, bool $isEmailOccupied): string
+    private function findSignInProblem(array $data, Object $user, bool $isEmailOccupied): string
     {
         if($data['password'] != $data['passwordValid'])
         {
             $error = 'Vous n\'avez pas écrit deux fois le même mot de passe.';
-        } elseif(!$this->isValid($data))
+        } elseif(!$this->isValid($user))
         {
             $error = 'Un ou plusieurs champs sont vides.';
         } elseif(!$this->isSubmit('signIn'))
         {
             $error = 'Le formulaire n\'a pas été soumis.';
-        } elseif($data['mentions'] != 'on')
+        } elseif($data['mentionsAccepted'] != 'on')
         {
             $error = 'Vous n\'avez pas accepté les mentions.';
         } elseif(strlen($data['pseudo']) > 100)

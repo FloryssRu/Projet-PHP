@@ -8,13 +8,14 @@
 {% block body %}
 
     <h1>{{ post.title }}</h1>
-    {% if post.date_last_update %}
-        <p>{{ post.date_last_update }}</p>
+    {% if post.dateLastUpdate %}
+        <p>{{ post.dateLastUpdate }}</p>
     {% else %}
-        <p>{{ post.date_publication }}</p>
+        <p>{{ post.datePublication }}</p>
     {% endif %}
-    <p>{{ post.heading }}</p>
-    <p>{{ post.content }}</p>
+    <img src="{{ picture }}" alt="image de présentation">
+    <p>{{ post.heading | raw }}</p>
+    <p>{{ post.content | raw }}</p>
     <p>{{ post.author }}</p>
     
     {% if session.pseudo %}

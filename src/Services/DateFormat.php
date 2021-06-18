@@ -40,12 +40,12 @@ class DateFormat extends BaseController
     {
         foreach($listPosts as $key => $post)
         {
-            if($post['date_last_update'] == NULL)
+            if($post->getDateLastUpdate() == NULL)
             {
-                $listPosts[$key]['date_last_update'] = 'Ce post n\'a pas été modifié.';
+                $listPosts[$key]->setDateLastUpdate('Ce post n\'a pas été modifié.');
             } else
             {
-                $listPosts[$key]['date_last_update'] = $this->formatToDisplay($post['date_last_update']);
+                $listPosts[$key]->setDateLastUpdate($this->formatToDisplay($post->getDateLastUpdate()));
             }
         }
         return $listPosts;
@@ -54,19 +54,20 @@ class DateFormat extends BaseController
     /**
      * Format all the dates in the array $listPosts for the post list page
      *
-     * @param  array $listPosts
+     * @param  array $listPosts An array of posts objects
      * @return array
      */
     public function formatListPosts(array $listPosts): array
     {
         foreach($listPosts as $key => $post)
         {
-            if($post['date_last_update'] == NULL)
+            
+            if($post->getDateLastUpdate() == NULL)
             {
-                $listPosts[$key]['date_publication'] = 'Publié ' . $this->formatToDisplay($post['date_publication']);
+                $listPosts[$key]->setDatePublication('Publié ' . $this->formatToDisplay($post->getDatePublication()));
             } else
             {
-                $listPosts[$key]['date_last_update'] = 'Mis à jour ' . $this->formatToDisplay($post['date_last_update']);
+                $listPosts[$key]->setDateLastUpdate('Mis à jour ' . $this->formatToDisplay($post->getDateLastUpdate()));
             }
         }
         return $listPosts;
@@ -82,7 +83,7 @@ class DateFormat extends BaseController
     {
         foreach($listComments as $key => $comment)
         {
-            $listComments[$key]['date'] = $this->formatToDisplay($comment['date']);
+            $listComments[$key]->setDate($this->formatToDisplay($comment->getDate()));
         }
         return $listComments;
     }

@@ -37,7 +37,6 @@ class UserController extends BaseController
      * @param  int $idUser
      * @param  string $token
      * @param  int $becomeAdmin     Is 0 if the user will become an admin, and 1 if the user become a simple user
-     * @return void
      */
     public function changeUserStatut(int $idUser, string $token, int $becomeAdmin)
     {
@@ -49,7 +48,6 @@ class UserController extends BaseController
         if($token == $session->get('token'))
         {
             $userManager = new UserManager('user');
-            $userAttributes = $userManager->getById($idUser);
             if($becomeAdmin == 0)
             {
                 $admin = true;
@@ -59,9 +57,10 @@ class UserController extends BaseController
                 $admin = false;
                 $session->set('success', "L'utilisateur est passé en statut simple utilisateur.");
             }
-            $user = new User($userAttributes['pseudo'], $userAttributes['password'], $userAttributes['email'], $admin, $userAttributes['email_validated'], $userAttributes['uuid']);
+
+            $user = new User();
+            $user->hydrate($user, ['admin' => $admin]);
             $userManager->update($user, $idUser);
-            
             
         } else
         {

@@ -12,7 +12,7 @@ namespace App\Entity;
  * @since 1.0
  */
 
-class User
+class User extends Entity
 {
 
     private ?int $id;
@@ -88,37 +88,7 @@ class User
         return $this->uuid;
     }
 
-    public function __construct($pseudo, $password, $email, $admin, $emailValidated, $uuid)
-    {
-        $data = [
-            'pseudo' => $pseudo,
-            'password' => $password,
-            'email' => $email,
-            'admin' => $admin,
-            'emailValidated' => $emailValidated,
-            'uuid' => $uuid
-        ];
-        $this->hydrate($data);
-    }
-
-    /**
-     * Calls each set method for the attributes
-     * 
-     * @param array $data All the attributs to hydrate
-     */
-    private function hydrate(array $data)
-    {
-        foreach ($data as $key => $value)
-        {
-            $method = 'set' . ucfirst($key);
-            if (method_exists($this, $method))
-            {
-                $this->$method($value);
-            }
-        }
-    }
-
-    public function getAttributes(object $object)
+    public function getAttributes(Object $object)
     {
         foreach($object as $attribute => $value)
         {

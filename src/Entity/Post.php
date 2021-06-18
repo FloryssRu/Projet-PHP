@@ -12,7 +12,7 @@ namespace App\Entity;
  * @since 1.0
  */
 
-class Post
+class Post extends Entity
 {
     
     private ?int $id;
@@ -23,6 +23,12 @@ class Post
     private string $content;
     private string $author;
     
+
+    public function __construct()
+    {
+        $this->datePublication = date("Y-m-d H:i:s");
+        $this->dateLastUpdate = NULL;
+    }
 
     public function getId(): ?int
     {
@@ -119,37 +125,7 @@ class Post
         return $this->author;
     }
 
-    public function __construct($title, $datePublication, $dateLastUpdate, $heading, $content, $author)
-    {
-        $data = [
-            'title' => $title,
-            'datePublication' => $datePublication,
-            'dateLastUpdate' => $dateLastUpdate,
-            'heading' => $heading,
-            'content' => $content,
-            'author' => $author
-        ];
-        $this->hydrate($data);
-    }
-
-    /**
-     * Calls each set method for the attributes
-     * 
-     * @param array $data All the attributes to hydrate
-     */
-    private function hydrate(array $data)
-    {
-        foreach ($data as $key => $value)
-        {
-            $method = 'set' . ucfirst($key);
-            if (method_exists($this, $method))
-            {
-                $this->$method($value);
-            }
-        }
-    }
-
-    public function getAttributes(object $object)
+    public function getAttributes(Object $object)
     {
         foreach($object as $attribute => $value)
         {

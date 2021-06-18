@@ -27,7 +27,7 @@ Gestion des posts
         {% for post in allPosts %}
             <tr>
                 <td>{{ post.title }}</td>
-                <td>{{ post.date_last_update }}</td>
+                <td>{{ post.dateLastUpdate }}</td>
                 <td><a href="modifier-post?idPost={{ post.id }}">Modifier</a></td>
                 <td><a href="supprimer-post?idPost={{ post.id }}&token={{ session.token }}" onclick="return confirm('Etes vous sûr de supprimer ce post ?')">Supprimer</a></td>
             </tr>

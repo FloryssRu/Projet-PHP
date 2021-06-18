@@ -19,13 +19,7 @@
 	"controller" : "Post",
 	"action" : "AddPost",
 	"method" : "POST",
-	"param" : [
-		"title",
-		"heading",
-		"content",
-		"author",
-		"token"
-	],
+	"param" : [],
 	"manager": []
 },
 {
@@ -42,7 +36,8 @@
 	"action" : "EditPost",
 	"method" : "GET",
 	"param" : [
-		"idPost"
+		"idPost",
+		"picture"
 	],
 	"manager": []
 },
@@ -51,14 +46,7 @@
 	"controller" : "Post",
 	"action" : "UpdatePost",
 	"method" : "POST",
-	"param" : [
-		"id",
-		"title",
-		"heading",
-		"content",
-		"author",
-		"token"
-	],
+	"param" : [],
 	"manager": []
 },
 {
@@ -129,6 +117,7 @@
 	"method" : "GET",
 	"param" : [
 		"idPost",
+		"picture",
 		"comments"
 	],
 	"manager": []
@@ -148,10 +137,7 @@
 	"controller" : "OpenPart",
 	"action" : "NewComment",
 	"method" : "POST",
-	"param" : [
-		"content",
-		"idPost"
-	],
+	"param" : [],
 	"manager": []
 },
 {
@@ -167,10 +153,7 @@
 	"controller" : "Authenticate",
 	"action" : "SignUp",
 	"method" : "POST",
-	"param" : [
-		"pseudo",
-		"password"
-	],
+	"param" : [],
 	"manager": []
 },
 {
@@ -186,13 +169,7 @@
 	"controller" : "Authenticate",
 	"action" : "SignIn",
 	"method" : "POST",
-	"param" : [
-		"pseudo",
-		"password",
-		"passwordValid",
-		"email",
-		"mentionsAccepted"
-	],
+	"param" : [],
 	"manager": []
 },
 {
@@ -226,9 +203,7 @@
 	"controller" : "Authenticate",
 	"action" : "SendEmailResetPassword",
 	"method" : "POST",
-	"param" : [
-		"email"
-	],
+	"param" : [],
 	"manager": []
 },
 {
@@ -246,12 +221,7 @@
 	"controller" : "Authenticate",
 	"action" : "resetPassword",
 	"method" : "POST",
-	"param" : [
-		"password",
-		"validPassword",
-		"uuid",
-		"token"
-	],
+	"param" : [],
 	"manager": []
 },
 {

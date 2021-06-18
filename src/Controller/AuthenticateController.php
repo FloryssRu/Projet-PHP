@@ -24,24 +24,18 @@ class AuthenticateController extends BaseController
     
     /**
      * Connects the user if the pair of username and password is valid, else sends an error message
-     *
-     * @param  string $pseudo
-     * @param  string $password
-     * @return void
      */
-    public function signUp(string $pseudo, string $password)
+    public function signUp()
     {
-        $fields = [$pseudo, $password];
-
         $userManager = new UserManager('user');
-        $idUser = $userManager->findOneUserBy($pseudo, $password);
+        $user = $userManager->findOneUserBy($_POST['pseudo'], $_POST['password']);
 
-        if($idUser != NULL && $this->isSubmit('signUp') && $this->isValid($fields))
+        if(is_object($user) && $this->isSubmit('signUp') && $this->isValid($user))
         {
             $session = new PHPSession;
-            $session->set('pseudo', $pseudo);
+            $session->set('pseudo', $_POST['pseudo']);
 
-            $isAdmin = $userManager->isAdminById($idUser);
+            $isAdmin = $userManager->isAdminById($user->getId());
             $session->set('admin', $isAdmin);
 
             return $this->redirect('/');
@@ -62,27 +56,11 @@ class AuthenticateController extends BaseController
     
     /**
      * Calls a sub-function to test if the fields are filled in correctly to register the visitor
-     *
-     * @param  string $pseudo
-     * @param  string $password
-     * @param  string $passwordValid
-     * @param  string $email
-     * @param  mixed $mentionsAccepted
-     * @return void
      */
-    public function signIn(string $pseudo, string $password, string $passwordValid, string $email, $mentionsAccepted)
+    public function signIn()
     {
-
-        $data = [
-            'pseudo' => $pseudo,
-            'password' => $password,
-            'passwordValid' => $passwordValid,
-            'email' => $email,
-            'mentions' => $mentionsAccepted
-        ];
-
         $handlerSignIn = new HandlerSignIn;
-        return $handlerSignIn->tryToSignIn($data);
+        return $handlerSignIn->tryToSignIn($_POST);
     }
 
     public function signOut()
@@ -98,7 +76,6 @@ class AuthenticateController extends BaseController
      * Validates the user's email, identifying the user by the uuid
      *
      * @param  string $uuid
-     * @return void
      */
     public function validEmail(string $uuid)
     {
@@ -106,10 +83,9 @@ class AuthenticateController extends BaseController
         $idUser = $userManager->getIdByUuid($uuid);
         if(preg_match('#[0-9]+#', $idUser))
         {
-            $userData = $userManager->getById($idUser);
-            $user = new User($userData['pseudo'], $userData['password'], $userData['email'], $userData['admin'], 1, NULL);
+            $user = new User();
+            $user->hydrate($user, ['emailValidated' => 1, 'uuid' => NULL]);
             $userManager->update($user, $idUser);
-            $userManager->setUuidNull($idUser);
             $session = new PHPSession;
             $session->set('success', 'Votre email a bien été confirmé.');
             return $this->redirect('/');
@@ -122,8 +98,6 @@ class AuthenticateController extends BaseController
     
     /**
      * Leads to the form to enter your email address and change your password
-     * 
-     * @return void
      */
     public function emailToResetPassword()
 	{
@@ -132,21 +106,17 @@ class AuthenticateController extends BaseController
     
     /**
      * Calls functions to check if the email is in the database, generates a uuid, assigns it to the user and generates a password reset email.
-     *
-     * @param  string $email
-     * @return void
      */
-    public function sendEmailResetPassword(string $email)
+    public function sendEmailResetPassword()
     {
         $handlerResetPassword = new HandlerResetPassword;
-        $handlerResetPassword->handlerEmailResetPassword($email);
+        $handlerResetPassword->handlerEmailResetPassword($_POST['email']);
     }
 	
 	/**
 	 * Shows the form to change your password
 	 *
 	 * @param  string $uuid
-	 * @return void
 	 */
 	public function changePasswordForm(string $uuid)
 	{
@@ -162,16 +132,11 @@ class AuthenticateController extends BaseController
     
     /**
      * Processes the password change form
-     *
-     * @param  string $password
-     * @param  string $validPassword
-     * @param  string $uuid
-     * @return void
      */
-    public function resetPassword(string $password, string $validPassword, string $uuid, string $token)
+    public function resetPassword()
     {
         $handlerResetPassword = new HandlerResetPassword;
-        $handlerResetPassword->handlerResetPassword($password, $validPassword, $uuid, $token);
+        $handlerResetPassword->handlerResetPassword($_POST);
     }
 
 }

@@ -12,7 +12,7 @@ namespace App\Entity;
  * @since 1.0
  */
 
-class Contact
+class Contact extends Entity
 {
 
     private int $id;
@@ -21,6 +21,7 @@ class Contact
     private string $email;
     private string $title;
     private string $content;
+
 
     public function getId(): int
     {
@@ -83,36 +84,7 @@ class Contact
         return $content;
     }
 
-    public function __construct($firstName, $lastName, $email, $title, $content)
-    {
-        $data = [
-            'firstName' => $firstName,
-            'lastName' => $lastName,
-            'email' => $email,
-            'title' => $title,
-            'content' => $content
-        ];
-        $this->hydrate($data);
-    }
-
-    /**
-     * Calls each set method for the attributes
-     * 
-     * @param array $data All the attributes to hydrate
-     */
-    private function hydrate(array $data)
-    {
-        foreach ($data as $key => $value)
-        {
-            $method = 'set' . ucfirst($key);
-            if (method_exists($this, $method))
-            {
-                $this->$method($value);
-            }
-        }
-    }
-
-    public function getAttributes(object $object)
+    public function getAttributes(Object $object)
     {
         foreach($object as $attribute => $value)
         {
