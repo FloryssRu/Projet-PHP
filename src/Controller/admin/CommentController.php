@@ -3,6 +3,7 @@
 namespace App\Controller\admin;
 
 use App\Core\BaseController;
+use App\Entity\Comment;
 use App\Repository\Manager\CommentManager;
 use App\Services\DateFormat;
 use App\Services\PHPSession;
