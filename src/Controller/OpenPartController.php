@@ -71,28 +71,25 @@ class OpenPartController extends BaseController
         if($this->isSubmit('newComment') && $this->isValid($comment))
         {
             $commentManager = new CommentManager('comment');
+
+            $postManager = new PostManager('post');
+            $post = $postManager->getById($_POST['idPost']);
+
             unset($_POST['newComment']);
             $commentManager->insert($_POST);
             
             $session->set('success', 'Votre commentaire a été envoyé pour validation.');
 
-            $this->showPost($_POST['idPost']);
+            $this->redirect('/post/' . $post->getSlug());
         } else {
+            $postManager = new PostManager('post');
+            $post = $postManager->getById($_POST['idPost']);
+
             $session = new PHPSession;
             $session->set('fail', 'Votre commentaire a rencontré un problème.');
 
-            $this->showPost($_POST['idPost']);
+            $this->redirect('/post/' . $post->getSlug());
         }
-    }
-
-    public function error403()
-    {
-        return $this->render('403.html.twig');
-    }
-
-    public function error404()
-    {
-        return $this->render('404.html.twig');
     }
 
     public function mentions()
