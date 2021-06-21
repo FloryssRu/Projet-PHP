@@ -57,7 +57,7 @@ class PostController extends BaseController
             $session->delete('token');
 
             $handlerPicture = new HandlerPicture;
-//conflit ici
+
             $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], date(self::DATE));
 
             $slugify = new Slugify();
@@ -68,7 +68,7 @@ class PostController extends BaseController
             unset($_POST['token']);
             
             $postManager->insert($_POST);
-//fin conflit
+
             if($savePictureSuccess)
             {
                 $session->set('success', 'Votre nouveau post et son image ont bien été enregistrés.');
@@ -153,7 +153,6 @@ class PostController extends BaseController
             return $this->redirect(parent::ERROR_403_PATH);
         }
 
-        $postManager = new PostManager('post');
         $post = new Post();
         $_POST['dateLastUpdate'] = date(self::DATE);
         $post->hydrate($post, $_POST);
@@ -164,14 +163,13 @@ class PostController extends BaseController
         && preg_match('#^[0-9]+$#', $_POST['id'])) {
 
             $session->delete('token');
-//conflit ici
-            $dateLastUpdate = date("Y-m-d H:i:s");
+
             $postManager = new PostManager('post');
             $post = $postManager->getById($_POST['id']);
-//fin conflit
+
             $handlerPicture = new HandlerPicture;
             $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $post->getDatePublication());
-//conflit ici
+
             $slugify = new Slugify();
 
             $_POST['slug'] = $slugify->slugify(htmlspecialchars($_POST['title']));
@@ -179,7 +177,7 @@ class PostController extends BaseController
             //'content' => strip_tags($_POST['content']),
 
             $postManager->update($post, $_POST['id']);
-//fin conflit  
+ 
             if($savePictureSuccess)
             {
                 $session->set('success', 'Votre post a bien été modifié et votre image a bien été enregistrée.');
