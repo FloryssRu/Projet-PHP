@@ -30,22 +30,22 @@ class Manager
 		$req = $this->database->prepare("SELECT * FROM " . $this->table . " WHERE id = :id");
 		$req->execute(array('id' => $id));
 		$req->setFetchMode(\PDO::FETCH_CLASS, self::PATH_TO_ENTITIES . $this->object);
-		$object = $req->fetch();
-		foreach($object as $attribute => $value)
+		$objectResult = $req->fetch();
+		foreach($objectResult as $attribute => $value)
 		{
 			if(preg_match('#^[a-z]+(_[a-z]+)+$#', $attribute))
 			{
 				$method = 'set' . preg_replace('#_#', '', ucwords($attribute, '_'));
 
-        		if(method_exists($object, $method))
+        		if(method_exists($objectResult, $method))
         		{
-        		    $object->$method($value);
+        		    $objectResult->$method($value);
         		}
-				unset($object->$attribute);
+				unset($objectResult->$attribute);
 			}
 		}
 		
-		return $object;
+		return $objectResult;
 	}
 
 	/**
