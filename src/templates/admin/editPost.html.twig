@@ -20,13 +20,13 @@ Modifier un post
 
 <h1>Modifier ce post</h1>
 <form action="mise-a-jour-post" method="post" enctype="multipart/form-data">
-    <label for="title">Titre</label><input type="text" name="title" id="title" value="{{ getThisPost.title }}" required>
-	<label for="heading">Chapô</label><textarea name="heading" id="heading" required>{{ getThisPost.heading }}</textarea>
-    <label for="content">Contenu de l'article</label><textarea name="content" id="content" required>{{ getThisPost.content }}</textarea>
+    <label for="title">Titre</label><input type="text" name="title" id="title" value="{{ post.title }}" required>
+	<label for="heading">Chapô</label><textarea name="heading" id="heading" required>{{ post.heading }}</textarea>
+    <label for="content">Contenu de l'article</label><textarea name="content" id="content" required>{{ post.content }}</textarea>
     <p>Image actuelle : <img src="{{ picture }}" alt="image actuellement associée à ce post"></p>
     <label for="picture">Changer l'image du post (Formats acceptés : .jpg, .png et .gif, taille max 3Mo)</label><input type="file" name="picture" id="picture">
-    <label for="author">Auteur</label><input type="text" name="author" id="author" value="{{ getThisPost.author }}" required>
-    <input type="hidden" name="id" value="{{ getThisPost.id }}">
+    <label for="author">Auteur</label><input type="text" name="author" id="author" value="{{ post.author }}" required>
+    <input type="hidden" name="id" value="{{ post.id }}">
     <input type="hidden" name="token" value="{{ session.token }}">
 	<input type="submit" value="Modifier le post" name="editPost">
 </form>

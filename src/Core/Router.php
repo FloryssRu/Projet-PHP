@@ -18,10 +18,10 @@ class Router
         $routeFound = array_filter($this->listRoute, function($route) use ($httpRequest){
 
             $url = preg_replace("#\?[a-zA-Z]+=[0-9a-zA-Z\-]+(&[a-zA-Z]+=[0-9a-zA-Z\-]+)*#", '', $httpRequest->getUrl());
-            $route = preg_match("#^" . $route->path . "$#", $url) && $route->method == $httpRequest->getMethod();
+            //test : $url = preg_replace("#(\?[a-zA-Z]+=[0-9a-zA-Z\-]+(&[a-zA-Z]+=[0-9a-zA-Z\-]+)*)|(\/[a-zA-Z\-0-9]+$)#", '', $httpRequest->getUrl());
+            $route = preg_match("#^" . $route->path . "$#", $url) && $route->method == $httpRequest->getMethod(); 
 
             return $route;
-
         });
         $numberRoute = count($routeFound);
 
@@ -31,7 +31,14 @@ class Router
 		}
 		else if($numberRoute == 0)
 		{
-			throw new Exceptions\NoRouteFoundException($httpRequest);
+            $route404 = array_filter($this->listRoute, function($route) use ($httpRequest){
+
+                $url = preg_replace("#^.*$#", '/blogphp/erreur-404', $httpRequest->getUrl());
+                $route = preg_match("#^" . $route->path . "$#", $url) && $route->method == $httpRequest->getMethod();
+    
+                return $route;
+            });
+            return new Route(array_shift($route404));
 		}
 		else
 		{

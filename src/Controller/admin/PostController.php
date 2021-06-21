@@ -4,6 +4,7 @@ namespace App\Controller\admin;
 
 use App\Core\BaseController;
 use App\Entity\Post;
+use Cocur\Slugify\Slugify;
 use App\Repository\Manager\PostManager;
 use App\Services\DateFormat;
 use App\Services\HandlerPicture;
@@ -56,13 +57,18 @@ class PostController extends BaseController
             $session->delete('token');
 
             $handlerPicture = new HandlerPicture;
+
             $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], date(self::DATE));
+
+            $slugify = new Slugify();
+            $_POST['slug'] = $slugify->slugify($_POST['title']);
 
             $postManager = new PostManager('post');
             unset($_POST['newPost']);
             unset($_POST['token']);
-            $postManager->insert($_POST);
             
+            $postManager->insert($_POST);
+
             if($savePictureSuccess)
             {
                 $session->set('success', 'Votre nouveau post et son image ont bien été enregistrés.');
@@ -119,18 +125,19 @@ class PostController extends BaseController
         {
             return $this->redirect(parent::ERROR_403_PATH);
         }
-        $adminPostManager = new PostManager('Post');
-        $getThisPost = $adminPostManager->getById($_GET['idPost']);
+        $postManager = new PostManager('Post');
+        $id = $postManager->getIdBySlug($_GET['slug']);
+        $post = $postManager->getById($id);
 
         $handlerPicture = new HandlerPicture;
-        $picture = $handlerPicture->searchPicture($getThisPost->getDatePublication());
+        $picture = $handlerPicture->searchPicture($post->getDatePublication());
 
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
 
         return $this->render('admin/editPost.html.twig', [
-            'getThisPost' => $getThisPost,
+            'post' => $post,
             'picture' => $picture
         ]);
     }
@@ -146,10 +153,8 @@ class PostController extends BaseController
             return $this->redirect(parent::ERROR_403_PATH);
         }
 
-        $dateLastUpdate = date(self::DATE);
-        $postManager = new PostManager('post');
         $post = new Post();
-        $_POST['dateLastUpdate'] = $dateLastUpdate; 
+        $_POST['dateLastUpdate'] = date(self::DATE);
         $post->hydrate($post, $_POST);
 
         if($this->isSubmit('editPost')
@@ -159,11 +164,20 @@ class PostController extends BaseController
 
             $session->delete('token');
 
+            $postManager = new PostManager('post');
+            $post = $postManager->getById($_POST['id']);
+
             $handlerPicture = new HandlerPicture;
             $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $post->getDatePublication());
 
+            $slugify = new Slugify();
+
+            $_POST['slug'] = $slugify->slugify(htmlspecialchars($_POST['title']));
+            //'heading' => strip_tags($_POST['heading']),
+            //'content' => strip_tags($_POST['content']),
+
             $postManager->update($post, $_POST['id']);
-            
+ 
             if($savePictureSuccess)
             {
                 $session->set('success', 'Votre post a bien été modifié et votre image a bien été enregistrée.');
@@ -187,7 +201,7 @@ class PostController extends BaseController
      * @param  mixed $id
      * @param  string $token
      */
-    public function deletePost($id = NULL, string $token = NULL)
+    public function deletePost($slug = NULL, string $token = NULL)
     {
         $session = new PHPSession;
 		if($session->get('admin') == NULL || !$session->get('admin'))
@@ -197,8 +211,9 @@ class PostController extends BaseController
         if($token == $session->get('token'))
         {
             $session->delete('token');
-            $deletePostManager = new PostManager('post');
-            $deletePostManager->delete($id);
+            $postManager = new PostManager('post');
+            $id = $postManager->getIdBySlug($slug);
+            $postManager->delete($id);
 
             $session->set('success', 'Votre post a bien été supprimé.');
 

@@ -7,6 +7,22 @@
 	"manager": []
 },
 {
+	"path" : "/blogphp/contact",
+	"controller" : "Home",
+	"action" : "saveMessage",
+	"method" : "POST",
+	"param" : [],
+	"manager": []
+},
+{
+	"path" : "/blogphp/mentions-legales",
+	"controller" : "OpenPart",
+	"action" : "mentions",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
 	"path" : "/blogphp/nouveau-post",
 	"controller" : "Post",
 	"action" : "NewPost",
@@ -36,7 +52,7 @@
 	"action" : "EditPost",
 	"method" : "GET",
 	"param" : [
-		"idPost",
+		"slug",
 		"picture"
 	],
 	"manager": []
@@ -55,7 +71,7 @@
 	"action" : "DeletePost",
 	"method" : "GET",
 	"param" : [
-		"idPost",
+		"slug",
 		"token"
 	],
 	"manager": []
@@ -111,12 +127,43 @@
 	"manager": []
 },
 {
+	"path" : "/blogphp/liste-messages",
+	"controller" : "Contact",
+	"action" : "listMessages",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
+	"path" : "/blogphp/message-changement-statut",
+	"controller" : "Contact",
+	"action" : "messageStatut",
+	"method" : "GET",
+	"param" : [
+		"idMessage",
+		"isProcessed",
+		"token"
+	],
+	"manager": []
+},
+{
+	"path" : "/blogphp/supprimer-message",
+	"controller" : "Contact",
+	"action" : "deleteMessage",
+	"method" : "GET",
+	"param" : [
+		"idMessage",
+		"token"
+	],
+	"manager": []
+},
+{
 	"path" : "/blogphp/post",
 	"controller" : "OpenPart",
 	"action" : "ShowPost",
 	"method" : "GET",
 	"param" : [
-		"idPost",
+		"slug",
 		"picture",
 		"comments"
 	],
@@ -228,6 +275,14 @@
 	"path" : "/blogphp/erreur-403",
 	"controller" : "OpenPart",
 	"action" : "error403",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
+	"path" : "/blogphp/erreur-404",
+	"controller" : "OpenPart",
+	"action" : "error404",
 	"method" : "GET",
 	"param" : [],
 	"manager": []

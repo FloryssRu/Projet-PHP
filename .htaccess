@@ -1,4 +1,7 @@
 RewriteEngine On
 
+#test pour faire fonctionner le slug (redirige vers une page 404 pour toutes les urls qui n'ont pas de paramètres) :
+#RewriteRule ^/[a-zA-Z0-9\-]+$ ?slug=
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ public/index.php [QSA,L]

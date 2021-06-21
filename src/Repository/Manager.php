@@ -30,7 +30,35 @@ class Manager
 		$req = $this->database->prepare("SELECT * FROM " . $this->table . " WHERE id = :id");
 		$req->execute(array('id' => $id));
 		$req->setFetchMode(\PDO::FETCH_CLASS, self::PATH_TO_ENTITIES . $this->object);
-		return $req->fetch();
+		$objectResult = $req->fetch();
+		foreach($objectResult as $attribute => $value)
+		{
+			if(preg_match('#^[a-z]+(_[a-z]+)+$#', $attribute))
+			{
+				$method = 'set' . preg_replace('#_#', '', ucwords($attribute, '_'));
+
+        		if(method_exists($objectResult, $method))
+        		{
+        		    $objectResult->$method($value);
+        		}
+				unset($objectResult->$attribute);
+			}
+		}
+		
+		return $objectResult;
+	}
+
+	/**
+	 * Retrieves the id that matches the slug
+	 *
+	 * @param  string $slug
+	 * @return int
+	 */
+	public function getIdBySlug($slug): int
+	{
+		$req = $this->database->prepare("SELECT id FROM " . $this->table . " WHERE slug = :slug");
+		$req->execute(array('slug' => $slug));
+		return $req->fetch()['id'];
 	}
 			
 	/**

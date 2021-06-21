@@ -12,32 +12,37 @@ use App\Services\HandlerPicture;
 
 class OpenPartController extends BaseController
 {
-	public function showPost(int $idPost)
+	public function showPost(string $slug)
     {
         $postManager = new PostManager('post');
-        $post = $postManager->getById($idPost);
-
-        $handlerPicture = new HandlerPicture;
-        $picture = $handlerPicture->searchPicture($post->getDatePublication());
-
-        $dateFormat = new DateFormat;
-        if($post->getDateLastUpdate() == NULL)
+        if($postManager->thisSlugExists($slug))
         {
-            $post->setDatePublication('Publié ' . $dateFormat->formatToDisplay($post->getDatePublication()));
-        } else
-        {
-            $post->setDateLastUpdate('Mis à jour ' . $dateFormat->formatToDisplay($post->getDateLastUpdate()));
+            $id = $postManager->getIdBySlug($slug);
+            $post = $postManager->getById($id);
+
+            $handlerPicture = new HandlerPicture;
+            $picture = $handlerPicture->searchPicture($post->getDatePublication());
+
+            $dateFormat = new DateFormat;
+            if($post->getDateLastUpdate() == NULL)
+            {
+                $post->setDatePublication('Publié ' . $dateFormat->formatToDisplay($post->getDatePublication()));
+            } else
+            {
+                $post->setDateLastUpdate('Mis à jour ' . $dateFormat->formatToDisplay($post->getDateLastUpdate()));
+            }
+            
+            $commentManager = new CommentManager('comment');
+            $arrayComments = $commentManager->getCommentsByIdPost($id);
+
+            return $this->render('post.html.twig', [
+                "post" => $post,
+                "picture" => $picture,
+                "comments" => $arrayComments
+            ]);
         }
-        
-        $commentManager = new CommentManager('comment');
-        $arrayComments = $commentManager->getCommentsByIdPost($idPost);
 
-        return $this->render('post.html.twig', [
-            "post" => $post,
-            "picture" => $picture,
-            "comments" => $arrayComments
-        ]);
-
+        return $this->redirect('/erreur-404');
     }
 
     public function showList()
@@ -83,5 +88,15 @@ class OpenPartController extends BaseController
     public function error403()
     {
         return $this->render('403.html.twig');
+    }
+
+    public function error404()
+    {
+        return $this->render('404.html.twig');
+    }
+
+    public function mentions()
+    {
+        return $this->render('mentions.html.twig');
     }
 }
