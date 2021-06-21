@@ -34,7 +34,7 @@ class AuthenticateController extends BaseController
         {
             $session = new PHPSession;
             $session->set('pseudo', $_POST['pseudo']);
-            $session->set('idUser', $idUser);
+            $session->set('idUser', $user->getId());
 
             $isAdmin = $userManager->isAdminById($user->getId());
             $session->set('admin', $isAdmin);

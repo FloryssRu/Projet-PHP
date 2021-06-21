@@ -33,26 +33,7 @@ class CommentManager extends Manager
 	public function getCommentsByIdPost(int $idPost)
 	{
 		$req = $this->database->prepare(self::SELECT_ALL_FROM . $this->table . " WHERE id_post = " . $idPost . " AND is_validated = 1 ORDER BY date DESC");
-		$req->execute();
-		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object, []);
-		$result = $req->fetchAll();
-		foreach($result as $object)
-		{
-			foreach($object as $attribute => $value)
-			{
-				if(preg_match('#^[a-z]+(_[a-z]+)+$#', $attribute))
-				{
-					$method = 'set' . preg_replace('#_#', '', ucwords($attribute, '_'));
-
-            		if(method_exists($object, $method))
-            		{
-            		    $object->$method($value);
-            		}
-					unset($object->$attribute);
-				}
-			}
-		}
-		return $result;
+		return $this->finishQuery($req);
 	}
 	
 	/**
@@ -64,6 +45,11 @@ class CommentManager extends Manager
 	public function getAllCommentsByPseudo(string $pseudo)
 	{
 		$req = $this->database->prepare(self::SELECT_ALL_FROM . $this->table . " WHERE pseudo = \"" . $pseudo . "\" ORDER BY date DESC");
+		return $this->finishQuery($req);
+	}
+
+	private function finishQuery($req)
+	{
 		$req->execute();
 		$req->setFetchMode(\PDO::FETCH_CLASS, self::PATH_TO_ENTITIES . $this->object, []);
 		$result = $req->fetchAll();

@@ -14,6 +14,8 @@ use App\Services\HandlerPicture;
 
 class OpenPartController extends BaseController
 {
+    private const URL_ERROR_404 = '/erreur-404';
+
 	public function showPost(string $slug)
     {
         $postManager = new PostManager('post');
@@ -52,7 +54,7 @@ class OpenPartController extends BaseController
             ]);
         }
 
-        return $this->redirect('/erreur-404');
+        return $this->redirect(self::URL_ERROR_404);
     }
 
     public function showList()
@@ -112,7 +114,7 @@ class OpenPartController extends BaseController
         $session = new PHPSession();
         if($session->get('pseudo') == null)
         {
-            return $this->redirect('/erreur-404');
+            return $this->redirect(self::URL_ERROR_404);
         }
 
         $userManager = new UserManager('user');
@@ -137,7 +139,7 @@ class OpenPartController extends BaseController
         $session = new PHPSession();
         if($session->get('pseudo') == null)
         {
-            return $this->redirect('/erreur-404');
+            return $this->redirect(self::URL_ERROR_404);
         }
 
         $user = new User();

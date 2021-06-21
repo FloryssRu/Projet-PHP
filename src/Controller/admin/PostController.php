@@ -110,9 +110,7 @@ class PostController extends BaseController
 
         return $this->render(self::ADMIN_POSTS_TEMPLATE, [
             "allPosts" => $getAllPosts
-        ]);
-        
-        
+        ]);   
     }
     
     /**

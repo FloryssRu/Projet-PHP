@@ -23,13 +23,6 @@ class Post extends Entity
     private string $content;
     private string $author;
     
-
-    public function __construct()
-    {
-        //$this->datePublication = date("Y-m-d H:i:s");
-        //$this->dateLastUpdate = NULL;
-    }
-
     public function getId(): ?int
     {
         return $this->id;
