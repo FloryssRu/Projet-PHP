@@ -27,18 +27,16 @@ class AuthenticateController extends BaseController
      */
     public function signUp()
     {
-        $fields = [$_POST['pseudo'], $_POST['password']];
-
         $userManager = new UserManager('user');
-        $idUser = $userManager->findOneUserBy(htmlspecialchars($_POST['pseudo']), htmlspecialchars($_POST['password']));
+        $user = $userManager->findOneUserBy($_POST['pseudo'], $_POST['password']);
 
-        if($idUser != NULL && $this->isSubmit('signUp') && $this->isValid($fields))
+        if(is_object($user) && $this->isSubmit('signUp') && $this->isValid($user))
         {
             $session = new PHPSession;
             $session->set('pseudo', $_POST['pseudo']);
             $session->set('idUser', $idUser);
 
-            $isAdmin = $userManager->isAdminById($idUser);
+            $isAdmin = $userManager->isAdminById($user->getId());
             $session->set('admin', $isAdmin);
 
             return $this->redirect('/');
@@ -86,16 +84,9 @@ class AuthenticateController extends BaseController
         $idUser = $userManager->getIdByUuid($uuid);
         if(preg_match('#[0-9]+#', $idUser))
         {
-            $user = $userManager->getById($idUser);
-            $arrayData = [
-                'pseudo' => $user->getPseudo(),
-                'password' => $user->getPassword(),
-                'email' => $user->getEmail(),
-                'admin' => $user->getAdmin(),
-                'email_validated' => 1,
-                'uuid' => NULL
-            ];
-            $userManager->update($arrayData, $idUser);
+            $user = new User();
+            $user->hydrate($user, ['emailValidated' => 1, 'uuid' => NULL]);
+            $userManager->update($user, $idUser);
             $session = new PHPSession;
             $session->set('success', 'Votre email a bien été confirmé.');
             return $this->redirect('/');
@@ -120,7 +111,7 @@ class AuthenticateController extends BaseController
     public function sendEmailResetPassword()
     {
         $handlerResetPassword = new HandlerResetPassword;
-        $handlerResetPassword->handlerEmailResetPassword(htmlspecialchars($_POST['email']));
+        $handlerResetPassword->handlerEmailResetPassword($_POST['email']);
     }
 	
 	/**

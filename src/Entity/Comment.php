@@ -22,14 +22,6 @@ class Comment extends Entity
     private bool $isValidated;
     private int $idPost;
 
-    public function __construct()
-    {
-        $this->isValidated = $this->is_validated;
-        unset($this->is_validated);
-        $this->idPost = $this->id_post;
-        unset($this->id_post);
-    }
-
     public function getId(): int
     {
         return $this->id;
@@ -83,5 +75,14 @@ class Comment extends Entity
     public function getIdPost(): int
     {
         return $this->idPost;
+    }
+
+    public function getAttributes(Object $object)
+    {
+        foreach($object as $attribute => $value)
+        {
+            $array[$attribute] = $value;
+        }
+        return $array;
     }
 }

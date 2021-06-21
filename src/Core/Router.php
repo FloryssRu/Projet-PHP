@@ -46,8 +46,7 @@ class Router
     
                 return $route;
             });
-            //test : return new Route(array_shift($route404));
-			throw new Exceptions\NoRouteFoundException($httpRequest);
+            return new Route(array_shift($route404));
 		}
 		else
 		{

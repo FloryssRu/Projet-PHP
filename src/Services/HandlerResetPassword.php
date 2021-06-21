@@ -21,8 +21,10 @@ class HandlerResetPassword extends AuthenticateController
 
     public function handlerEmailResetPassword(string $email)
     {
-        $fields = [$email];
-        if($this->isValid($fields)
+        $user = new User();
+        $user->hydrate($user, ['email' => $email]);
+
+        if($this->isValid($user)
         && $this->isSubmit('emailResetPassword')
         && filter_var($email, FILTER_VALIDATE_EMAIL))
         {
@@ -44,15 +46,8 @@ class HandlerResetPassword extends AuthenticateController
                 if ($mail->send())
                 {
                     $user = $userManager->getById($user->getId());
-                    $arrayData = [
-                        'pseudo' => $user->getPseudo(),
-                        'password' => $user->getPassword(),
-                        'email' => $user->getEmail(),
-                        'admin' => $user->getAdmin(),
-                        'email_validated' => $user->getEmailValidated(),
-                        'uuid' => $uuid
-                    ];
-                    $userManager->update($arrayData, $user->getId());
+                    $user->hydrate($user, ['uuid' => $uuid]);
+                    $userManager->update($user, $user->getId());
                     $session = new PHPSession;
                     $session->set('success', "Un mail de réinitialisation de mot de passe vous a été envoyé.");
 
@@ -90,30 +85,33 @@ class HandlerResetPassword extends AuthenticateController
             $data[$key] = htmlspecialchars($value);
         }
         $session = new PHPSession;
-        if($this->isValid($data)
+
+        $user = new User();
+        $user->hydrate($user, $data);
+
+        $userManager = new UserManager('user');
+        $idUser = $userManager->getIdByUuid(htmlspecialchars($data['uuid']));
+
+        if($this->isValid($user)
         && $this->isSubmit('resetPassword')
         && $data['uuid'] != NULL
         && $data['password'] == $data['validPassword']
         && $data['token'] == $session->get('token')
-        && is_int($data['idUser']))
+        && is_int($idUser))
         {
-            $userManager = new UserManager('user');
-            $idUser = $userManager->getIdByUuid(htmlspecialchars($data['uuid']));
+            unset($user);
+            $user = $userManager->getById($idUser);
+
             if($idUser == NULL) {
                 $this->redirect(parent::PATH_TO_PSWD_RESET . $data['uuid']);
             } else
             {
                 $password = password_hash($data['password'], PASSWORD_DEFAULT);
-                $user = $userManager->getById($idUser);
-                $arrayData = [
-                    'pseudo' => $user->getPseudo(),
-                    'password' => $password,
-                    'email' => $user->getEmail(),
-                    'admin' => $user->getAdmin(),
-                    'email_validated' => $user->getEmailValidated(),
-                    'uuid' => NULL
-                ];
-                $userManager->update($arrayData, $idUser);
+
+                $user->setPassword($password);
+                $user->setUuid(NULL);
+                $userManager->update($user, $idUser);
+
                 $session = new PHPSession;
                 $session->set('success', "Votre mot de passe a bien été changé.");
                 return $this->redirect(parent::PATH_TO_SIGNUP_PAGE);

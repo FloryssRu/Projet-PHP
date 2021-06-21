@@ -26,10 +26,8 @@ class Post extends Entity
 
     public function __construct()
     {
-        $this->datePublication = $this->date_publication;
-        unset($this->date_publication);
-        $this->dateLastUpdate = $this->date_last_update;
-        unset($this->date_last_update);
+        //$this->datePublication = date("Y-m-d H:i:s");
+        //$this->dateLastUpdate = NULL;
     }
 
     public function getId(): ?int
@@ -123,6 +121,15 @@ class Post extends Entity
     public function getAuthor(): string
     {
         return $this->author;
+    }
+
+    public function getAttributes(Object $object)
+    {
+        foreach($object as $attribute => $value)
+        {
+            $array[$attribute] = $value;
+        }
+        return $array;
     }
 
 }

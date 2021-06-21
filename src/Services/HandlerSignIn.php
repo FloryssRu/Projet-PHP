@@ -36,8 +36,11 @@ class HandlerSignIn extends AuthenticateController
         $isEmailOccupied = $userManager->getEmail(htmlspecialchars($data['email']));
         $isPseudoOccupied = $userManager->getPseudo(htmlspecialchars($data['pseudo']));
 
+        $user = new User();
+        $user->hydrate($user, $data);
+
         if(htmlspecialchars($data['password']) === htmlspecialchars($data['passwordValid'])
-        && $this->isValid($data)
+        && $this->isValid($user)
         && $this->isSubmit('signIn')
         && htmlspecialchars($data['mentionsAccepted']) == 'on'
         && strlen($data['pseudo']) <= 100
@@ -81,7 +84,7 @@ class HandlerSignIn extends AuthenticateController
 
         } else
         {
-            $problem = $this->findSignInProblem($data, $isEmailOccupied);
+            $problem = $this->findSignInProblem($data, $user, $isEmailOccupied);
             $session = new PHPSession;
             $session->set('fail', $problem);
             return $this->redirect('/inscription');
@@ -94,12 +97,12 @@ class HandlerSignIn extends AuthenticateController
      * @param  mixed $data
      * @return string
      */
-    private function findSignInProblem(array $data, bool $isEmailOccupied): string
+    private function findSignInProblem(array $data, Object $user, bool $isEmailOccupied): string
     {
         if($data['password'] != $data['passwordValid'])
         {
             $error = 'Vous n\'avez pas écrit deux fois le même mot de passe.';
-        } elseif(!$this->isValid($data))
+        } elseif(!$this->isValid($user))
         {
             $error = 'Un ou plusieurs champs sont vides.';
         } elseif(!$this->isSubmit('signIn'))
