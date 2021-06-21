@@ -72,22 +72,11 @@ class OpenPartController extends BaseController
         {
             $commentManager = new CommentManager('comment');
 
-            $arrayData = [
-                'pseudo' => $session->get('pseudo'),
-                'content' => $_POST['content'],
-                'date' => date("Y-m-d H:i:s"),
-                'is_validated' => 0,
-                'id_post' => $_POST['idPost']
-            ];
-
-            //$commentManager->insert($arrayData);
-
             $postManager = new PostManager('post');
             $post = $postManager->getById($_POST['idPost']);
 
             unset($_POST['newComment']);
             $commentManager->insert($_POST);
-            //fin conflit
             
             $session->set('success', 'Votre commentaire a été envoyé pour validation.');
 
