@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Core\BaseController;
+use App\Entity\Comment;
 use App\Services\PHPSession;
 use App\Repository\Manager\PostManager;
 use App\Repository\Manager\CommentManager;
@@ -49,7 +50,7 @@ class OpenPartController extends BaseController
         $postManager = new PostManager('post');
         $listPosts = $postManager->getAll();
         $dateFormat = new DateFormat;
-        $listPosts = $dateFormat->formatListPosts($listPosts);
+        $listPosts = $dateFormat->formatListPosts($listPosts); //affiche une erreur
 
         return $this->render('listPosts.html.twig', [
             'listPosts' => $listPosts
@@ -58,12 +59,19 @@ class OpenPartController extends BaseController
 
     public function newComment()
     {
-        $fields = [$_POST['content']];
+        $session = new PHPSession;
 
-        if($this->isSubmit('newComment') && $this->isValid($fields)) {
+        $_POST['pseudo'] = $session->get('pseudo');
+        $_POST['date'] = date("Y-m-d H:i:s");
+        $_POST['is_validated'] = 0;
 
-            $session = new PHPSession;
+        $comment = new Comment();
+        $comment->hydrate($comment, $_POST);
+        
+        if($this->isSubmit('newComment') && $this->isValid($comment))
+        {
             $commentManager = new CommentManager('comment');
+
             $arrayData = [
                 'pseudo' => $session->get('pseudo'),
                 'content' => $_POST['content'],
@@ -71,10 +79,15 @@ class OpenPartController extends BaseController
                 'is_validated' => 0,
                 'id_post' => $_POST['idPost']
             ];
-            $commentManager->insert($arrayData);
+
+            //$commentManager->insert($arrayData);
 
             $postManager = new PostManager('post');
             $post = $postManager->getById($_POST['idPost']);
+
+            unset($_POST['newComment']);
+            $commentManager->insert($_POST);
+            //fin conflit
             
             $session->set('success', 'Votre commentaire a été envoyé pour validation.');
 

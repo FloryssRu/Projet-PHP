@@ -23,16 +23,6 @@ class Contact extends Entity
     private string $content;
     private bool $isProcessed;
 
-    public function __construct()
-    {
-        $this->firstName = $this->first_name;
-        unset($this->first_name);
-        $this->lastName = $this->last_name;
-        unset($this->last_name);
-        $this->isProcessed = $this->is_processed;
-        unset($this->is_processed);
-    }
-
     public function getId(): int
     {
         $id = $this->id;
@@ -103,4 +93,14 @@ class Contact extends Entity
     {
         return $this->isProcessed;
     }
+
+    public function getAttributes(Object $object)
+    {
+        foreach($object as $attribute => $value)
+        {
+            $array[$attribute] = $value;
+        }
+        return $array;
+    }
+
 }

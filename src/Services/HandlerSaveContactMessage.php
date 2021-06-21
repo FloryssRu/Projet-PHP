@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Controller\HomeController;
+use App\Entity\Contact;
 use App\Repository\Manager\ContactManager;
 use App\Repository\Manager\UserManager;
 
@@ -22,21 +23,24 @@ class HandlerSaveContactMessage extends HomeController
     {
         $session = new PHPSession;
 
+        $message = new Contact('contact');
+        $message->hydrate($message, $_POST); //qu'y a-t-il dans Post ?
+
         if($this->isSubmit('contactForm')
-        && $this->isValid($_POST)
+        && $this->isValid($message)
         && strlen($_POST['firstName']) <= 100
         && strlen($_POST['lastName']) <= 100
         && strlen($_POST['email'] <= 100)
-        && htmlspecialchars($_POST['mentions']) == 'on'
-        && preg_match('#^[a-zA-Z\.0-9\+]+@[a-zA-Z\.0-9]+\.[a-z]{0,5}$#', htmlspecialchars($_POST['email'])))
+        && $_POST['mentions'] == 'on'
+        && preg_match('#^[a-zA-Z\.0-9\+]+@[a-zA-Z\.0-9]+\.[a-z]{0,5}$#', $_POST['email']))
         {
-            $title = htmlspecialchars($_POST['title']);
-            $content = htmlspecialchars($_POST['content']);
+            $title = $_POST['title'];
+            $content = $_POST['content'];
 
             $arrayData = [
-                'first_name' => htmlspecialchars($_POST['firstName']),
-                'last_name' => htmlspecialchars($_POST['lastName']),
-                'email' => htmlspecialchars($_POST['email']),
+                'first_name' => $_POST['firstName'],
+                'last_name' => $_POST['lastName'],
+                'email' => $_POST['email'],
                 'title' => $title,
                 'content' => $content,
                 'is_processed' => 0
@@ -66,6 +70,7 @@ class HandlerSaveContactMessage extends HomeController
             foreach($adminsEmails as $email)
             {
                 $mail = $baseEmails->sendEmail($email, $titleEmail, $contentEmail);
+                $mail->send();
                 if (!$mail->send()) {
                     $success = false;
                 }
@@ -75,7 +80,7 @@ class HandlerSaveContactMessage extends HomeController
             {
                 $contactManager = new ContactManager('contact');
                 $contactManager->insert($arrayData);
-                $session->set('success', 'Votre message a bien été envoyé. Nous vous répondrons par email dans les plus brefs délais.');
+                $session->set('success', 'Votre message a bien été envoyé.');
             } else
             {
                 $session->set('fail', 'Votre message a rencontré un problème.');
