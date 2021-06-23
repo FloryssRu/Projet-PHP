@@ -186,6 +186,22 @@
 	"manager": []
 },
 {
+	"path" : "/blogphp/dashboard",
+	"controller" : "OpenPart",
+	"action" : "ShowDashboard",
+	"method" : "GET",
+	"param" : [],
+	"manager": []
+},
+{
+	"path" : "/blogphp/changer-son-avatar",
+	"controller" : "OpenPart",
+	"action" : "ChangeAvatar",
+	"method" : "POST",
+	"param" : [],
+	"manager": []
+},
+{
 	"path" : "/blogphp/connexion",
 	"controller" : "Authenticate",
 	"action" : "SignUpForm",

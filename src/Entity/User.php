@@ -14,13 +14,13 @@ namespace App\Entity;
 
 class User extends Entity
 {
-
     private ?int $id;
     private string $pseudo;
     private string $password;
     private string $email;
     private bool $admin;
     private bool $emailValidated;
+    private int $avatarNumber;
     private ?string $uuid;
 
     public function getId(): ?int
@@ -76,6 +76,16 @@ class User extends Entity
     public function getEmailValidated(): bool
     {
         return $this->emailValidated;
+    }
+
+    public function setAvatarNumber(int $avatarNumber): void
+    {
+        $this->avatarNumber = $avatarNumber;
+    }
+
+    public function getAvatarNumber(): int
+    {
+        return $this->avatarNumber;
     }
 
     public function setUuid(?string $uuid): void

@@ -1,0 +1,80 @@
+{% extends "base.html.twig" %}
+
+
+{% block title %}
+{{ post.title }}
+{% endblock %}
+
+{% block css %}
+<link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+{% endblock %}
+
+{% block body %}
+
+<h1>Mon tableau de bord</h1>
+
+<img src="/blogphp/public/img/avatars/avatar{{ user.avatarNumber }}.png" alt="l'avatar choisi">
+<p>{{ user.pseudo }}</p>
+
+<h2>Changer d'avatar</h2>
+<form action="changer-son-avatar" method="post">
+    <p>Sélectionnez l'un des avatars ci-dessous pour vous représenter</p>
+    <p>
+        <input type="radio" id="avatar1" name="avatar" value="1"><label for="avatar1"><img src="/blogphp/public/img/avatars/avatar1.png" alt="terre"> (par défaut)</label>
+        <input type="radio" id="avatar2" name="avatar" value="2"><label for="avatar2"><img src="/blogphp/public/img/avatars/avatar2.png" alt="smiley"></label>
+        <input type="radio" id="avatar3" name="avatar" value="3"><label for="avatar3"><img src="/blogphp/public/img/avatars/avatar3.png" alt="vinyle"></label>
+        <input type="radio" id="avatar4" name="avatar" value="4"><label for="avatar4"><img src="/blogphp/public/img/avatars/avatar4.png" alt="personnage"></label>
+        <input type="radio" id="avatar5" name="avatar" value="5"><label for="avatar5"><img src="/blogphp/public/img/avatars/avatar5.png" alt="épée"></label>
+    </p>
+    <input type="submit" value="Changer !" name="avatarChange">
+</form>
+
+<h2>Changer mon mot de passe</h2>
+<form action="mot-de-passe-oublie" method="post">
+    <input type="hidden" value="{{ user.email }}" name="email">
+    <input type="submit" name="emailResetPassword" value="Changer mon mot de passe">
+</form>
+
+<h2>Mes commentaires postés</h2>
+<table id="myTable">
+    <thead>
+        <tr>
+            <th>Nom du post</th>
+            <th>Mon commentaire</th>
+            <th>Date</th>
+            <th>Accepté</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for comment in comments %}
+            <tr>
+                <td>{{ comment.postTitle }}</td>
+                <td>{{ comment.content }}</td>
+                <td>{{ comment.date }}</td>
+                {% if comment.isValidated %}
+                <td>Commentaire validé</td>
+                {% else %}
+                <td>Commentaire en traitement</td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+    $(document).ready( function () {
+        $('#myTable').DataTable( {
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.10.24/i18n/French.json'
+            }
+        } );
+    } );
+</script>
+{% endblock %}

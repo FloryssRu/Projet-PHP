@@ -76,6 +76,8 @@ class HandlerSignIn extends AuthenticateController
                 return $this->redirect('/inscription');
             } else {
                 $userManager->insert($arrayData);
+                $user = $userManager->getIdByEmail($data['email']);
+                $session->set('idUser', $user->getId());
                 $session->set('success', "Bienvenue sur le Blog de Floryss Rubechi. Un mail de confirmation d'email vous a été envoyé.");
                 return $this->redirect('/');
             }

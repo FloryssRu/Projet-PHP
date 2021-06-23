@@ -69,26 +69,7 @@ class Manager
 	public function getAll(): array
 	{
 		$req = $this->database->prepare("SELECT * FROM " . $this->table);
-		$req->execute();
-		$req->setFetchMode(\PDO::FETCH_CLASS, self::PATH_TO_ENTITIES . $this->object, []);
-		$result = $req->fetchAll();
-		foreach($result as $object)
-		{
-			foreach($object as $attribute => $value)
-			{
-				if(preg_match('#^[a-z]+(_[a-z]+)+$#', $attribute))
-				{
-					$method = 'set' . preg_replace('#_#', '', ucwords($attribute, '_'));
-
-            		if(method_exists($object, $method))
-            		{
-            		    $object->$method($value);
-            		}
-					unset($object->$attribute);
-				}
-			}
-		}
-		return $result;
+		return $this->finishQuery($req);
 		
 	}
 	
@@ -168,6 +149,30 @@ class Manager
 		$req = $this->database->prepare("DELETE FROM " . $this->table . " WHERE id=" . $id);
 		$req->execute();
 		$req->closeCursor();
+	}
+
+	protected function finishQuery($req)
+	{
+		$req->execute();
+		$req->setFetchMode(\PDO::FETCH_CLASS, self::PATH_TO_ENTITIES . $this->object, []);
+		$result = $req->fetchAll();
+		foreach($result as $object)
+		{
+			foreach($object as $attribute => $value)
+			{
+				if(preg_match('#^[a-z]+(_[a-z]+)+$#', $attribute))
+				{
+					$method = 'set' . preg_replace('#_#', '', ucwords($attribute, '_'));
+
+            		if(method_exists($object, $method))
+            		{
+            		    $object->$method($value);
+            		}
+					unset($object->$attribute);
+				}
+			}
+		}
+		return $result;
 	}
 	
 }

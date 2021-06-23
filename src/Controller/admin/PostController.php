@@ -110,9 +110,7 @@ class PostController extends BaseController
 
         return $this->render(self::ADMIN_POSTS_TEMPLATE, [
             "allPosts" => $getAllPosts
-        ]);
-        
-        
+        ]);   
     }
     
     /**
@@ -154,7 +152,6 @@ class PostController extends BaseController
         }
 
         $post = new Post();
-        $_POST['dateLastUpdate'] = date(self::DATE);
         $post->hydrate($post, $_POST);
 
         if($this->isSubmit('editPost')
@@ -166,16 +163,14 @@ class PostController extends BaseController
 
             $postManager = new PostManager('post');
             $post = $postManager->getById($_POST['id']);
+            $post->setDateLastUpdate(date(self::DATE));
 
             $handlerPicture = new HandlerPicture;
             $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $post->getDatePublication());
 
             $slugify = new Slugify();
 
-            $_POST['slug'] = $slugify->slugify(htmlspecialchars($_POST['title']));
-            //'heading' => strip_tags($_POST['heading']),
-            //'content' => strip_tags($_POST['content']),
-
+            $_POST['slug'] = $slugify->slugify($_POST['title']);
             $postManager->update($post, $_POST['id']);
  
             if($savePictureSuccess)

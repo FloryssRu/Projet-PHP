@@ -14,7 +14,6 @@ namespace App\Entity;
 
 class Post extends Entity
 {
-    
     private ?int $id;
     private string $title;
     private string $slug;
@@ -24,24 +23,11 @@ class Post extends Entity
     private string $content;
     private string $author;
     
-
-    public function __construct()
-    {
-        $this->datePublication = date("Y-m-d H:i:s");
-        $this->dateLastUpdate = NULL;
-    }
-
     public function getId(): ?int
     {
         return $this->id;
     }
-    
-    /**
-     * set title
-     *
-     * @param  string $title The title which we want to give
-     * @return void
-     */
+
     public function setTitle(string $title): void
     {
         $this->title = $title;
@@ -62,12 +48,6 @@ class Post extends Entity
         return $this->slug;
     }
 
-    /**
-     * set the date of publication
-     *
-     * @param  string $datePublication The date the post was made
-     * @return void
-     */
     public function setDatePublication(string $datePublication): void
     {
         $this->datePublication = $datePublication;

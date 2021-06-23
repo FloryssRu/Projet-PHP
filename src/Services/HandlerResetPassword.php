@@ -50,6 +50,11 @@ class HandlerResetPassword extends AuthenticateController
                     $userManager->update($user, $user->getId());
                     $session = new PHPSession;
                     $session->set('success', "Un mail de réinitialisation de mot de passe vous a été envoyé.");
+
+                    if($session->get('idUser') !== NULL)
+                    {
+                        return $this->redirect('/dashboard');
+                    }
                     return $this->redirect(parent::PATH_TO_SIGNUP_PAGE);
                     
                 } else
