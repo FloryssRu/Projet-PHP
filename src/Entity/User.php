@@ -100,7 +100,6 @@ class User extends Entity
 
     public function getAttributes(Object $object)
     {
-        var_dump($object);
         foreach($object as $attribute => $value)
         {
             $array[$attribute] = $value;
