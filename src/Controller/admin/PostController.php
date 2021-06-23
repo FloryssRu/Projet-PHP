@@ -46,13 +46,18 @@ class PostController extends BaseController
         }
 
         $post = new Post();
-
         $_POST['date_publication'] = date(self::DATE);
         $_POST['date_last_update'] = NULL;
-
         $post->hydrate($post, $_POST);
 
-        if($this->isSubmit('newPost') && $this->isValid($post) && $_POST['token'] == $session->get('token')) {
+        $postManager = new PostManager('post');
+        $titleFree = $postManager->titleIsFree($_POST['title']);
+
+        if($this->isSubmit('newPost')
+        && $this->isValid($post)
+        && $_POST['token'] == $session->get('token')
+        && $titleFree)
+        {
 
             $session->delete('token');
 
@@ -77,15 +82,12 @@ class PostController extends BaseController
                 $session->set('success', 'Votre nouveau post a bien été enregistré.');
             }
 
-            return $this->redirect(self::PATH_TO_ADMIN_POSTS);
-
         } else {
 
             $session->set('fail', 'Votre nouveau post n\'a pas été enregistré, une erreur dans le formulaire a été détectée.');
-
-            return $this->redirect(self::PATH_TO_ADMIN_POSTS);
-
         }
+
+        return $this->redirect(self::PATH_TO_ADMIN_POSTS);
     }
     
     /**
@@ -160,10 +162,11 @@ class PostController extends BaseController
         && preg_match('#^[0-9]+$#', $_POST['id'])) {
 
             $session->delete('token');
+            
+            $post->setDateLastUpdate(date(self::DATE));
 
             $postManager = new PostManager('post');
-            $post = $postManager->getById($_POST['id']);
-            $post->setDateLastUpdate(date(self::DATE));
+            $post->setDatePublication($postManager->getById($_POST['id'])->getDatePublication());
 
             $handlerPicture = new HandlerPicture;
             $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $post->getDatePublication());
@@ -171,6 +174,8 @@ class PostController extends BaseController
             $slugify = new Slugify();
 
             $_POST['slug'] = $slugify->slugify($_POST['title']);
+
+            $postManager = new PostManager('post');
             $postManager->update($post, $_POST['id']);
  
             if($savePictureSuccess)
@@ -180,14 +185,13 @@ class PostController extends BaseController
             {
                 $session->set('success', 'Votre post a bien été modifié.');
             }
-            return $this->redirect(self::PATH_TO_ADMIN_POSTS);
-
+            
         } else {
 
             $session->set('fail', 'Votre post n\'a pas été modifié, une erreur dans le formulaire a été détectée.');
-            return $this->redirect(self::PATH_TO_ADMIN_POSTS);
-
         }
+
+        return $this->redirect(self::PATH_TO_ADMIN_POSTS);
     }
 
     /**

@@ -9,11 +9,11 @@ S'inscrire
     <h1>Inscrivez-vous</h1>
 
     <form action="traitement-inscription" method="post">
-        <p><label for="pseudo">Pseudo : </label><input type="text" id="pseudo" name="pseudo" value="{{ data.pseudo }}" required></p>
+        <p><label for="pseudo">Pseudo : </label><input type="text" id="pseudo" name="pseudo" required></p>
         <p><label for="password">Mot de passe : </label><input type="password" id="password" name="password" required></p>
         <p><label for="password-valid">Validation du mot de passe : </label><input type="password" id="password-valid" name="passwordValid" required></p>
-        <p><label for="email">Email : </label><input type="mail" id="email" name="email" value="{{ data.email }}" required></p>
-        <p><input type="checkbox" name="mentionsAccepted"> J'accepte les conditions d'utilisation du site</p>
+        <p><label for="email">Email : </label><input type="mail" id="email" name="email" required></p>
+        <p><input type="checkbox" name="mentionsAccepted" required> J'accepte les conditions d'utilisation du site</p>
         <input type="submit" name="signIn" value="S'incrire">
     </form>
 

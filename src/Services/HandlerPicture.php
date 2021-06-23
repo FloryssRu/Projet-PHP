@@ -34,6 +34,10 @@ class HandlerPicture extends PostController
                 $picture['name'] = str_replace([':','-',' '], '_', $name) . '.' . $extension_upload;
                 move_uploaded_file($picture['tmp_name'], '../public/img/' . $picture['name']);
                 return true;
+            } elseif (!in_array($extension_upload, $extensions_autorisees))
+            {
+                $session = new PHPSession();
+                $session->set('fail', "Le fichier n'a pas pu être ajouté car son extension n'est pas acceptée.");
             }
         }
     }

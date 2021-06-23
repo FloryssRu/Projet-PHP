@@ -33,22 +33,25 @@ class HandlerSignIn extends AuthenticateController
     public function tryToSignIn(array $data)
 	{
 		$userManager = new UserManager('user');
-        $isEmailOccupied = $userManager->getEmail(htmlspecialchars($data['email']));
-        $isPseudoOccupied = $userManager->getPseudo(htmlspecialchars($data['pseudo']));
+        $isEmailOccupied = $userManager->getEmail($data['email']);
+        $isPseudoOccupied = $userManager->getPseudo($data['pseudo']);
 
         $user = new User();
         $user->hydrate($user, $data);
 
-        if(htmlspecialchars($data['password']) === htmlspecialchars($data['passwordValid'])
+        if($data['password'] === $data['passwordValid']
         && $this->isValid($user)
         && $this->isSubmit('signIn')
-        && htmlspecialchars($data['mentionsAccepted']) == 'on'
+        && isset($data['mentionsAccepted'])
         && strlen($data['pseudo']) <= 100
         && strlen($data['password']) <= 50
         && strlen($data['email']) <= 100
-        && preg_match('#^[a-zA-Z\.0-9\+]+@[a-zA-Z\.0-9]+\.[a-z]{0,5}$#', htmlspecialchars($data['email']))
+        && preg_match('#^[a-zA-Z\.0-9\+]+@[a-zA-Z\.0-9]+\.[a-z]{0,5}$#', $data['email'])
         && !$isEmailOccupied
-        && !$isPseudoOccupied)
+        && !$isPseudoOccupied
+        && isset($data['pseudo'])
+        && isset($data['password'])
+        && isset($data['passwordValid']))
         {
             $uuid = Uuid::uuid4();
             $uuid = $uuid->toString();
@@ -94,12 +97,14 @@ class HandlerSignIn extends AuthenticateController
     /**
      * Finds the problem that caused the registration fail and returns the appropriate message
      *
-     * @param  mixed $data
+     * @param  array $data
+     * @param  Object $user
+     * @param  $isEmailOccupied (bool or array of results)
      * @return string
      */
-    private function findSignInProblem(array $data, Object $user, bool $isEmailOccupied): string
+    private function findSignInProblem(array $data, Object $user, $isEmailOccupied): string
     {
-        if($data['password'] != $data['passwordValid'])
+        if($data['password'] !== $data['passwordValid'])
         {
             $error = 'Vous n\'avez pas écrit deux fois le même mot de passe.';
         } elseif(!$this->isValid($user))
@@ -108,7 +113,7 @@ class HandlerSignIn extends AuthenticateController
         } elseif(!$this->isSubmit('signIn'))
         {
             $error = 'Le formulaire n\'a pas été soumis.';
-        } elseif($data['mentionsAccepted'] != 'on')
+        } elseif(!isset($data['mentionsAccepted']))
         {
             $error = 'Vous n\'avez pas accepté les mentions.';
         } elseif(strlen($data['pseudo']) > 100)
@@ -126,7 +131,7 @@ class HandlerSignIn extends AuthenticateController
         } elseif(!is_bool($isEmailOccupied))
         {
             $error = 'Votre inscription a échoué.';
-        } elseif(!is_bool($data['pseudo']))
+        } elseif(is_bool($data['pseudo']))
         {
             $error = 'Choisissez un autre pseudo.';
         } else

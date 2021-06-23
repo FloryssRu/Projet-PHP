@@ -24,7 +24,7 @@ class HandlerSaveContactMessage extends HomeController
         $session = new PHPSession;
 
         $message = new Contact('contact');
-        $message->hydrate($message, $_POST); //qu'y a-t-il dans Post ?
+        $message->hydrate($message, $_POST);
 
         if($this->isSubmit('contactForm')
         && $this->isValid($message)
@@ -32,7 +32,12 @@ class HandlerSaveContactMessage extends HomeController
         && strlen($_POST['lastName']) <= 100
         && strlen($_POST['email'] <= 100)
         && $_POST['mentions'] == 'on'
-        && preg_match('#^[a-zA-Z\.0-9\+]+@[a-zA-Z\.0-9]+\.[a-z]{0,5}$#', $_POST['email']))
+        && preg_match('#^[a-zA-Z\.0-9\+]+@[a-zA-Z\.0-9]+\.[a-z]{0,5}$#', $_POST['email'])
+        && isset($_POST['firstName'])
+        && isset($_POST['lastName'])
+        && isset($_POST['email'])
+        && isset($_POST['title'])
+        && isset($_POST['content']))
         {
             $title = $_POST['title'];
             $content = $_POST['content'];

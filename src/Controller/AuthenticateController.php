@@ -67,6 +67,7 @@ class AuthenticateController extends BaseController
     public function signOut()
     {
         unset($_SESSION['pseudo']);
+        unset($_SESSION['idUser']);
         unset($_SESSION['admin']);
         $session = new PHPSession();
         $session->set('success', 'Vous avez bien été déconnecté.');

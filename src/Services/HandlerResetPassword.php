@@ -74,7 +74,6 @@ class HandlerResetPassword extends AuthenticateController
             $session = new PHPSession;
             $session->set('fail', "Veuillez renseigner un email valide.");
         }
-
         return $this->redirect(parent::PATH_TO_FORGOTTEN_PSWD);
     }
 
@@ -114,7 +113,14 @@ class HandlerResetPassword extends AuthenticateController
 
                 $session = new PHPSession;
                 $session->set('success', "Votre mot de passe a bien été changé.");
-                return $this->redirect(parent::PATH_TO_SIGNUP_PAGE);
+                if($session->get('pseudo') == NULL)
+                {
+                    return $this->redirect(parent::PATH_TO_SIGNUP_PAGE);
+                } else
+                {
+                    return $this->redirect('/dashboard');
+                }
+                
             }
         
         } elseif($data['password'] != $data['validPassword'])
