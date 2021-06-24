@@ -38,10 +38,10 @@ class UserController extends BaseController
      * @param  string $token
      * @param  int $becomeAdmin     Is 0 if the user will become an admin, and 1 if the user become a simple user
      */
-    public function changeUserStatut(int $idUser, string $token, int $becomeAdmin)
+    public function changeUserStatut(int $idUser = NULL, string $token = NULL, int $becomeAdmin = NULL)
     {
         $session = new PHPSession;
-		if($session->get('admin') == NULL || !$session->get('admin'))
+		if($session->get('admin') == NULL || !$session->get('admin') || !is_int($idUser) || !is_string($token) || !is_int($becomeAdmin))
         {
             return $this->redirect('/erreur-403');
         }

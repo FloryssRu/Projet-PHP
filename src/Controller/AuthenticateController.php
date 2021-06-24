@@ -27,12 +27,24 @@ class AuthenticateController extends BaseController
      */
     public function signUp()
     {
-        $userManager = new UserManager('user');
-        $user = $userManager->findOneUserBy($_POST['pseudo'], $_POST['password']);
+        $session = new PHPSession;
 
-        if(is_object($user) && $this->isSubmit('signUp') && $this->isValid($user))
+        if($session->get('pseudo') !== NULL)
         {
-            $session = new PHPSession;
+            $session->set('fail', 'Vous êtes déjà connecté à un compte.');
+            return $this->redirect(self::PATH_TO_SIGNUP_PAGE);
+        }
+
+        $userManager = new UserManager('user');
+        $user = new User();
+        $user->hydrate($user, $_POST);
+
+        if(is_object($user) && $this->isSubmit('signUp') && $this->isValid($user) && isset($_POST['pseudo']) && isset($_POST['password']))
+        {
+            unset($user);
+            $user = $userManager->findOneUserBy($_POST['pseudo'], $_POST['password']);
+
+            
             $session->set('pseudo', $_POST['pseudo']);
             $session->set('idUser', $user->getId());
 
@@ -43,7 +55,6 @@ class AuthenticateController extends BaseController
 
         } else
         {
-            $session = new PHPSession;
             $session->set('fail', 'Vous avez entré un mauvais pseudo ou mot de passe.');
             return $this->redirect(self::PATH_TO_SIGNUP_PAGE);
         }
@@ -79,8 +90,12 @@ class AuthenticateController extends BaseController
      *
      * @param  string $uuid
      */
-    public function validEmail(string $uuid)
+    public function validEmail(string $uuid = NULL)
     {
+        if($uuid == NULL)
+        {
+            return $this->redirect('/erreur-404');
+        }
         $userManager = new UserManager('user');
         $idUser = $userManager->getIdByUuid($uuid);
         if(preg_match('#[0-9]+#', $idUser))
@@ -120,8 +135,12 @@ class AuthenticateController extends BaseController
 	 *
 	 * @param  string $uuid
 	 */
-	public function changePasswordForm(string $uuid)
+	public function changePasswordForm(string $uuid = NULL)
 	{
+        if($uuid == NULL)
+        {
+            return $this->redirect('/erreur-404');
+        }
         $session = new PHPSession;
         $session->set('uuid', $uuid);
         $token = Uuid::uuid4();

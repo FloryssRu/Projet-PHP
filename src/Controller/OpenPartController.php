@@ -16,8 +16,12 @@ class OpenPartController extends BaseController
 {
     private const URL_ERROR_404 = '/erreur-404';
 
-	public function showPost(string $slug)
+	public function showPost(string $slug = NULL)
     {
+        if(!is_string($slug) || $slug == NULL)
+        {
+            return $this->redirect('/erreur-404');
+        }
         $postManager = new PostManager('post');
         if($postManager->thisSlugExists($slug))
         {
@@ -72,6 +76,11 @@ class OpenPartController extends BaseController
     public function newComment()
     {
         $session = new PHPSession;
+        if($session->get('pseudo') == NULL)
+        {
+            $session->set('fail', 'Connectez-vous pour poster un commentaire.');
+            return $this->redirect('/connexion');
+        }
 
         $_POST['pseudo'] = $session->get('pseudo');
         $_POST['date'] = date("Y-m-d H:i:s");

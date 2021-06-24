@@ -41,10 +41,10 @@ class CommentController extends BaseController
     /**
      * Change the isValidated attribute to 1 (valide this comment)
      */
-    public function validComment($id = NULL)
+    public function validComment(int $id = NULL)
     {
         $session = new PHPSession;
-        if($id == NULL || $session->get('admin') == NULL || !$session->get('admin'))
+        if($session->get('admin') == NULL || !$session->get('admin') || !is_int($id))
         {
             return $this->redirect(parent::ERROR_403_PATH);
         }
@@ -60,10 +60,10 @@ class CommentController extends BaseController
     /**
      * Change the isValidated attribute to 0 (invalide this comment)
      */
-    public function invalidComment($id)
+    public function invalidComment(int $id = NULL)
     {
         $session = new PHPSession;
-		if($session->get('admin') == NULL || !$session->get('admin'))
+		if($session->get('admin') == NULL || !$session->get('admin') || !is_int($id))
         {
             return $this->redirect(parent::ERROR_403_PATH);
         }

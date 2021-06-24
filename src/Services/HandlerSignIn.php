@@ -51,7 +51,8 @@ class HandlerSignIn extends AuthenticateController
         && !$isPseudoOccupied
         && isset($data['pseudo'])
         && isset($data['password'])
-        && isset($data['passwordValid']))
+        && isset($data['passwordValid'])
+        && !preg_match("#[<>':=\/$();&]*#", $_POST['pseudo'])) //je ne veux pas de certains caractères dans mon pseudo
         {
             $uuid = Uuid::uuid4();
             $uuid = $uuid->toString();
@@ -134,6 +135,9 @@ class HandlerSignIn extends AuthenticateController
         } elseif(is_bool($data['pseudo']))
         {
             $error = 'Choisissez un autre pseudo.';
+        } elseif (preg_match("#[<>':=\/$();&]*#", $_POST['pseudo']))
+        {
+            $error = 'Votre pseudo contient des caractères interdits.';
         } else
         {
             $error = 'Une erreur est survenue.';

@@ -64,9 +64,9 @@ class HandlerSaveContactMessage extends HomeController
 
             $titleEmail = 'Nouveau message - Blog de Floryss Rubechi';
             $contentEmail = '<p>Vous venez de recevoir un nouveau message sur le site "Blog de Floryss Rubechi".</p>
-            <p>Titre : <i>' . $title . '</i></p>
+            <p>Titre : <i>' . htmlspecialchars($title) . '</i></p>
             <p>Contenu :</p>
-            <p><i>' . $cutContent . '</i></p>
+            <p><i>' . htmlspecialchars($cutContent) . '</i></p>
             <p>Pour voir la liste des messages reçus, veuillez cliquer sur le lien ci-dessous.</p>
             <p><a href="http://localhost/blogphp/liste-messages">Voir les messages</a></p>';
 
