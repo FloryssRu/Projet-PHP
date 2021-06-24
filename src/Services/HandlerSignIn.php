@@ -52,20 +52,17 @@ class HandlerSignIn extends AuthenticateController
         && isset($data['pseudo'])
         && isset($data['password'])
         && isset($data['passwordValid'])
-        && !preg_match("#[<>':=\/$();&]*#", $_POST['pseudo'])) //je ne veux pas de certains caractères dans mon pseudo
+        && !preg_match("#[<>':=\/$();&]+#", $_POST['pseudo']))
         {
             $uuid = Uuid::uuid4();
             $uuid = $uuid->toString();
             $password = password_hash(htmlspecialchars($data['password']), PASSWORD_DEFAULT);
             $userManager = new UserManager('user');
-            $arrayData = [
-                'pseudo' => htmlspecialchars($data['pseudo']),
-                'password' => $password,
-                'email' => htmlspecialchars($data['email']),
-                'admin' => 0,
-                'email_validated' => 0,
-                'uuid' => $uuid
-            ];
+
+            $data['password'] = $password;
+            $data['admin'] = 0;
+            $data['email_validated'] = 0;
+            $data['uuid'] = $uuid;
 
             $baseEmails = new BaseEmails;
             $mail = $baseEmails->sendEmail($data['email'], 'Valider votre email - Blog de Floryss Rubechi', '<p>Vous vous êtes inscrit sur le Blog de Floryss Rubechi.</p>
@@ -79,7 +76,10 @@ class HandlerSignIn extends AuthenticateController
                 $session->set('fail', "L'email de confirmation d'adresse email n'a pas pu être envoyé. Réécrivez votre adresse email.");
                 return $this->redirect('/inscription');
             } else {
-                $userManager->insert($arrayData);
+                unset($data['mentionsAccepted']);
+                unset($data['passwordValid']);
+                unset($data['signIn']);
+                $userManager->insert($data);
                 $user = $userManager->getIdByEmail($data['email']);
                 $session->set('idUser', $user->getId());
                 $session->set('success', "Bienvenue sur le Blog de Floryss Rubechi. Un mail de confirmation d'email vous a été envoyé.");

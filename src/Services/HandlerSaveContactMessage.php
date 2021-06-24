@@ -42,14 +42,7 @@ class HandlerSaveContactMessage extends HomeController
             $title = $_POST['title'];
             $content = $_POST['content'];
 
-            $arrayData = [
-                'first_name' => $_POST['firstName'],
-                'last_name' => $_POST['lastName'],
-                'email' => $_POST['email'],
-                'title' => $title,
-                'content' => $content,
-                'is_processed' => 0
-            ];
+            $_POST['is_processed'] = 0;
 
             $cutContent = substr($content, 0, 200);
             if($cutContent != $content)
@@ -84,7 +77,10 @@ class HandlerSaveContactMessage extends HomeController
             if($success)
             {
                 $contactManager = new ContactManager('contact');
-                $contactManager->insert($arrayData);
+                
+                unset($_POST['mentions']);
+                unset($_POST['contactForm']);
+                $contactManager->insert($_POST);
                 $session->set('success', 'Votre message a bien été envoyé.');
             } else
             {

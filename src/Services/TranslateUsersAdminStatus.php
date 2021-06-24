@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-class TranslateUsersAdminStatus //extends BaseController
+class TranslateUsersAdminStatus
 {    
     /**
      * Translate the value of admin attribute in a comprehensible value like "yes" or "no"

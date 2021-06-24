@@ -24,9 +24,6 @@ class Router
                 $url = preg_replace("#\?[a-zA-Z]+=[0-9a-zA-Z\-]+(&[a-zA-Z]+=[0-9a-zA-Z\-]+)*#", '', $httpRequest->getUrl());
             }
 
-            //origin : $url = preg_replace("#\?[a-zA-Z]+=[0-9a-zA-Z\-]+(&[a-zA-Z]+=[0-9a-zA-Z\-]+)*#", '', $httpRequest->getUrl());
-            //test 1 : $url = preg_replace("#(\?[a-zA-Z]+=[0-9a-zA-Z\-]+(&[a-zA-Z]+=[0-9a-zA-Z\-]+)*)|(\/[a-zA-Z\-0-9]+$)#", '', $httpRequest->getUrl());
-
             $route = preg_match("#^" . $route->path . "$#", $url) && $route->method == $httpRequest->getMethod();
 
             return $route;
