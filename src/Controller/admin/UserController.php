@@ -20,8 +20,7 @@ class UserController extends BaseController
         }
         $userManager = new UserManager('user');
         $users = $userManager->getAll();
-        $translateUsersAdminStatus = new TranslateUsersAdminStatus;
-        $users = $translateUsersAdminStatus->translate($users);
+        $users = TranslateUsersAdminStatus::translate($users);
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
@@ -47,7 +46,6 @@ class UserController extends BaseController
         }
         if($token == $session->get('token'))
         {
-            $userManager = new UserManager('user');
             if($becomeAdmin == 0)
             {
                 $admin = true;
@@ -59,7 +57,8 @@ class UserController extends BaseController
             }
 
             $user = new User();
-            $user->hydrate($user, ['admin' => $admin]);
+            $user->setAdmin($admin);
+            $userManager = new UserManager('user');
             $userManager->update($user, $idUser);
             
         } else

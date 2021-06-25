@@ -8,15 +8,16 @@ use Cocur\Slugify\Slugify;
 use App\Repository\Manager\PostManager;
 use App\Services\DateFormat;
 use App\Services\HandlerPicture;
+use App\Services\HandlerPost;
 use App\Services\PHPSession;
 use Ramsey\Uuid\Uuid;
 
 class PostController extends BaseController
 {
 
-    private const PATH_TO_ADMIN_POSTS = '/admin-posts';
+    protected const PATH_TO_ADMIN_POSTS = '/admin-posts';
     private const ADMIN_POSTS_TEMPLATE = 'admin/adminPosts.html.twig';
-    private const DATE = "Y-m-d H:i:s";
+    protected const DATE = "Y-m-d H:i:s";
     
     /**
      * Form to create a new Post
@@ -39,55 +40,8 @@ class PostController extends BaseController
      */
     public function addPost()
     {
-        $session = new PHPSession;
-		if($session->get('admin') == NULL || !$session->get('admin'))
-        {
-            return $this->redirect(parent::ERROR_403_PATH);
-        }
-
-        $post = new Post();
-        $_POST['date_publication'] = date(self::DATE);
-        $_POST['date_last_update'] = NULL;
-        $post->hydrate($post, $_POST);
-
-        $postManager = new PostManager('post');
-        $titleFree = $postManager->titleIsFree($_POST['title']);
-
-        if($this->isSubmit('newPost')
-        && $this->isValid($post)
-        && $_POST['token'] == $session->get('token')
-        && $titleFree)
-        {
-
-            $session->delete('token');
-
-            $handlerPicture = new HandlerPicture;
-
-            $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], date(self::DATE));
-
-            $slugify = new Slugify();
-            $_POST['slug'] = $slugify->slugify($_POST['title']);
-
-            $postManager = new PostManager('post');
-            unset($_POST['newPost']);
-            unset($_POST['token']);
-            
-            $postManager->insert($_POST);
-
-            if($savePictureSuccess)
-            {
-                $session->set('success', 'Votre nouveau post et son image ont bien été enregistrés.');
-            } else
-            {
-                $session->set('success', 'Votre nouveau post a bien été enregistré.');
-            }
-
-        } else {
-
-            $session->set('fail', 'Votre nouveau post n\'a pas été enregistré, une erreur dans le formulaire a été détectée.');
-        }
-
-        return $this->redirect(self::PATH_TO_ADMIN_POSTS);
+        $handlerAddPost = new HandlerPost();
+        return $handlerAddPost->handlerAddPost();
     }
     
     /**
@@ -103,8 +57,7 @@ class PostController extends BaseController
         $adminPostManager = new PostManager('Post');
         $getAllPosts = $adminPostManager->getAll();
 
-        $dateFormat = new DateFormat;
-        $getAllPosts = $dateFormat->formatListPostsAdmin($getAllPosts);
+        $getAllPosts = DateFormat::formatListPostsAdmin($getAllPosts);
 
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
@@ -126,7 +79,7 @@ class PostController extends BaseController
             return $this->redirect(parent::ERROR_403_PATH);
         }
         $postManager = new PostManager('Post');
-        $id = $postManager->getIdBySlug($_GET['slug']);
+        $id = $postManager->getIdBySlug($_GET['slug']); //une seule requete
         $post = $postManager->getById($id);
 
         $handlerPicture = new HandlerPicture;
@@ -147,51 +100,8 @@ class PostController extends BaseController
      */
     public function updatePost()
     {
-        $session = new PHPSession;
-		if($session->get('admin') == NULL || !$session->get('admin'))
-        {
-            return $this->redirect(parent::ERROR_403_PATH);
-        }
-
-        $post = new Post();
-        $post->hydrate($post, $_POST);
-
-        if($this->isSubmit('editPost')
-        && $this->isValid($post)
-        && $_POST['token'] == $session->get('token')
-        && preg_match('#^[0-9]+$#', $_POST['id'])) {
-
-            $session->delete('token');
-            
-            $post->setDateLastUpdate(date(self::DATE));
-
-            $postManager = new PostManager('post');
-            $post->setDatePublication($postManager->getById($_POST['id'])->getDatePublication());
-
-            $handlerPicture = new HandlerPicture;
-            $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $post->getDatePublication());
-
-            $slugify = new Slugify();
-
-            $_POST['slug'] = $slugify->slugify($_POST['title']);
-
-            $postManager = new PostManager('post');
-            $postManager->update($post, $_POST['id']);
- 
-            if($savePictureSuccess)
-            {
-                $session->set('success', 'Votre post a bien été modifié et votre image a bien été enregistrée.');
-            } else
-            {
-                $session->set('success', 'Votre post a bien été modifié.');
-            }
-            
-        } else {
-
-            $session->set('fail', 'Votre post n\'a pas été modifié, une erreur dans le formulaire a été détectée.');
-        }
-
-        return $this->redirect(self::PATH_TO_ADMIN_POSTS);
+        $handlerPost = new HandlerPost();
+        return $handlerPost->handlerUpdatePost();
     }
 
     /**

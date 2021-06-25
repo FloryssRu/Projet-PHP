@@ -34,11 +34,7 @@
     <h2>Commentaires publiés</h2>
     {% for comment in comments %}
         <h3>
-            {% if comment.avatar %}
-                <img src="/blogphp/public/img/avatars/avatar{{ comment.avatar }}.png" alt="avatar">
-            {% else %}
-                <img src="/blogphp/public/img/avatars/avatar1.png" alt="avatar">
-            {% endif %}
+            <img src="/blogphp/public/img/avatars/avatar{{ comment.avatarNumber }}.png" alt="avatar">
             {{ comment.pseudo }}, {{ comment.date }}
         </h3>
         <p>{{ comment.content }}</p>

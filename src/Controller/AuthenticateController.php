@@ -43,7 +43,6 @@ class AuthenticateController extends BaseController
         {
             unset($user);
             $user = $userManager->findOneUserBy($_POST['pseudo'], $_POST['password']);
-
             
             $session->set('pseudo', $_POST['pseudo']);
             $session->set('idUser', $user->getId());

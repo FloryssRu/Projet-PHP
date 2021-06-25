@@ -27,9 +27,8 @@ class CommentController extends BaseController
         $commentsNotValidated = $commentManager->getCommentNotValidated();
         $commentsValidated = $commentManager->getCommentValidated();
 
-        $dateFormat = new DateFormat;
-        $commentsNotValidated = $dateFormat->formatListComments($commentsNotValidated);
-        $commentsValidated = $dateFormat->formatListComments($commentsValidated);
+        $commentsNotValidated = DateFormat::formatListComments($commentsNotValidated);
+        $commentsValidated = DateFormat::formatListComments($commentsValidated);
 
         return $this->render(self::ADMIN_COMMENTS_TEMPLATE, [
             "commentsNotValidated" => $commentsNotValidated,
@@ -50,7 +49,7 @@ class CommentController extends BaseController
         }
         $commentManager = new CommentManager('comment');
         $comment = new Comment();
-        $comment->hydrate($comment, ['isValidated' => 1]);
+        $comment->setIsValidated(1);
         $commentManager->update($comment, $id);
         $session->set('success', 'Le commentaire a été validé.');
 
@@ -69,7 +68,7 @@ class CommentController extends BaseController
         }
         $commentManager = new CommentManager('comment');
         $comment = new Comment();
-        $comment->hydrate($comment, ['isValidated' => 0]);
+        $comment->setIsValidated(0);
         $commentManager->update($comment, $id);
         $session->set('success', 'Le commentaire a été invalidé.');
 

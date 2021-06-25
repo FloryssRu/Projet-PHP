@@ -9,7 +9,7 @@ class TranslateUsersAdminStatus
      *
      * @param  array $users Containing all the users in the database
      */
-    public function translate(array $users)
+    public static function translate(array $users)
     {
         foreach($users as $user)
         {

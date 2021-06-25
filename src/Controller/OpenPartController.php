@@ -31,26 +31,12 @@ class OpenPartController extends BaseController
             $handlerPicture = new HandlerPicture;
             $picture = $handlerPicture->searchPicture($post->getDatePublication());
 
-            $dateFormat = new DateFormat;
-            if($post->getDateLastUpdate() == NULL)
-            {
-                $post->setDatePublication('Publié ' . $dateFormat->formatToDisplay($post->getDatePublication()));
-            } else
-            {
-                $post->setDateLastUpdate('Mis à jour ' . $dateFormat->formatToDisplay($post->getDateLastUpdate()));
-            }
+            DateFormat::changeFormatDatePost($post);
             
             $commentManager = new CommentManager('comment');
-            $comments = $commentManager->getCommentsByIdPost($id);
+            $comments = $commentManager->getAllCommentsWithAvatars();
+            $comments = DateFormat::formatListComments($comments);
 
-            $userManager = new UserManager('user');
-            foreach($comments as $comment)
-            {
-                $user = new User;
-                $user->setAvatarNumber($userManager->getAvatarByPseudo($comment->getPseudo())->avatar_number);
-                $comment->avatar = $user->getAvatarNumber();
-                $comment->postTitle = $postManager->getById($comment->getIdPost())->getTitle();
-            }
             return $this->render('post.html.twig', [
                 "post" => $post,
                 "picture" => $picture,
@@ -65,8 +51,7 @@ class OpenPartController extends BaseController
     {
         $postManager = new PostManager('post');
         $listPosts = $postManager->getAll();
-        $dateFormat = new DateFormat;
-        $listPosts = $dateFormat->formatListPosts($listPosts);
+        $listPosts = DateFormat::formatListPosts($listPosts);
 
         return $this->render('listPosts.html.twig', [
             'listPosts' => $listPosts
@@ -88,24 +73,19 @@ class OpenPartController extends BaseController
 
         $comment = new Comment();
         $comment->hydrate($comment, $_POST);
+
+        $postManager = new PostManager('post');
+        $post = $postManager->getById($_POST['idPost']);
         
         if($this->isSubmit('newComment') && $this->isValid($comment))
         {
-            $commentManager = new CommentManager('comment');
-
-            $postManager = new PostManager('post');
-            $post = $postManager->getById($_POST['idPost']);
-
             unset($_POST['newComment']);
+            $commentManager = new CommentManager('comment');
             $commentManager->insert($_POST);
             
             $session->set('success', 'Votre commentaire a été envoyé pour validation.');
 
         } else {
-            $postManager = new PostManager('post');
-            $post = $postManager->getById($_POST['idPost']);
-
-            $session = new PHPSession;
             $session->set('fail', 'Votre commentaire a rencontré un problème.');
         }
 
@@ -130,15 +110,8 @@ class OpenPartController extends BaseController
         $user = $userManager->getById($session->get('idUser'));
 
         $commentManager = new CommentManager('comment');
-        $comments = $commentManager->getAllCommentsByPseudo($session->get('pseudo'));
-        
-        $postManager = new PostManager('post');
-        $dateFormat = new DateFormat;
-        foreach($comments as $comment)
-        {
-            $comment->postTitle = $postManager->getById($comment->getIdPost())->getTitle();
-            $comment->setDate($dateFormat->formatToDisplay($comment->getDate()));
-        }
+        $comments = $commentManager->getUserCommentsWithPostTitle($session->get('pseudo'));
+        $comments = DateFormat::formatListComments($comments);
 
         return $this->render('dashboard.html.twig', ["user" => $user, "comments" => $comments]);
     }
@@ -156,12 +129,12 @@ class OpenPartController extends BaseController
 
         if($this->isSubmit('avatarChange')
         && $this->isValid($user)
-        && 0 < $_POST['avatar']
-        && $_POST['avatar'] < 6)
+        && 0 < $_POST['avatarNumber']
+        && $_POST['avatarNumber'] < 6)
         {
             unset($user);
             $user = new User();
-            $user->hydrate($user, ['avatarNumber' => $_POST['avatar']]);
+            $user->hydrate($user, ['avatarNumber' => $_POST['avatarNumber']]);
 
             $userManager = new UserManager('user');
             $userManager->update($user, $session->get('idUser'));

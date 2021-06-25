@@ -20,11 +20,11 @@
 <form action="changer-son-avatar" method="post">
     <p>Sélectionnez l'un des avatars ci-dessous pour vous représenter</p>
     <p>
-        <input type="radio" id="avatar1" name="avatar" value="1"><label for="avatar1"><img src="/blogphp/public/img/avatars/avatar1.png" alt="terre"> (par défaut)</label>
-        <input type="radio" id="avatar2" name="avatar" value="2"><label for="avatar2"><img src="/blogphp/public/img/avatars/avatar2.png" alt="smiley"></label>
-        <input type="radio" id="avatar3" name="avatar" value="3"><label for="avatar3"><img src="/blogphp/public/img/avatars/avatar3.png" alt="vinyle"></label>
-        <input type="radio" id="avatar4" name="avatar" value="4"><label for="avatar4"><img src="/blogphp/public/img/avatars/avatar4.png" alt="personnage"></label>
-        <input type="radio" id="avatar5" name="avatar" value="5"><label for="avatar5"><img src="/blogphp/public/img/avatars/avatar5.png" alt="épée"></label>
+        <input type="radio" id="avatar1" name="avatarNumber" value="1"><label for="avatar1"><img src="/blogphp/public/img/avatars/avatar1.png" alt="terre"> (par défaut)</label>
+        <input type="radio" id="avatar2" name="avatarNumber" value="2"><label for="avatar2"><img src="/blogphp/public/img/avatars/avatar2.png" alt="smiley"></label>
+        <input type="radio" id="avatar3" name="avatarNumber" value="3"><label for="avatar3"><img src="/blogphp/public/img/avatars/avatar3.png" alt="vinyle"></label>
+        <input type="radio" id="avatar4" name="avatarNumber" value="4"><label for="avatar4"><img src="/blogphp/public/img/avatars/avatar4.png" alt="personnage"></label>
+        <input type="radio" id="avatar5" name="avatarNumber" value="5"><label for="avatar5"><img src="/blogphp/public/img/avatars/avatar5.png" alt="épée"></label>
     </p>
     <input type="submit" value="Changer !" name="avatarChange">
 </form>
@@ -49,7 +49,7 @@
     <tbody>
         {% for comment in comments %}
             <tr>
-                <td>{{ comment.postTitle }}</td>
+                <td>{{ comment.title }}</td>
                 <td>{{ comment.content }}</td>
                 <td>{{ comment.date }}</td>
                 {% if comment.isValidated %}
