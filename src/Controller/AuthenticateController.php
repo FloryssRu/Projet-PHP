@@ -39,24 +39,25 @@ class AuthenticateController extends BaseController
         $user = new User();
         $user->hydrate($user, $_POST);
 
-        if(is_object($user) && $this->isSubmit('signUp') && $this->isValid($user) && isset($_POST['pseudo']) && isset($_POST['password']))
+        if($this->isSubmit('signUp') && $this->isValid($user) && isset($_POST['pseudo']) && isset($_POST['password']))
         {
             unset($user);
             $user = $userManager->findOneUserBy($_POST['pseudo'], $_POST['password']);
             
-            $session->set('pseudo', $_POST['pseudo']);
-            $session->set('idUser', $user->getId());
+            if(is_object($user))
+            {
+                $session->set('pseudo', $_POST['pseudo']);
+                $session->set('idUser', $user->getId());
 
-            $isAdmin = $userManager->isAdminById($user->getId());
-            $session->set('admin', $isAdmin);
+                $isAdmin = $userManager->isAdminById($user->getId());
+                $session->set('admin', $isAdmin);
 
-            return $this->redirect('/');
+                return $this->redirect('/');
+            }
 
-        } else
-        {
-            $session->set('fail', 'Vous avez entré un mauvais pseudo ou mot de passe.');
-            return $this->redirect(self::PATH_TO_SIGNUP_PAGE);
         }
+        $session->set('fail', 'Vous avez entré un mauvais pseudo ou mot de passe.');
+        return $this->redirect(self::PATH_TO_SIGNUP_PAGE);
 
     }
 
