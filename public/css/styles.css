@@ -1,0 +1,44 @@
+/* For all pages, in base.html.twig */
+
+.flashMessage {
+    margin: 40px;
+    border: 1px solid black;
+    padding: 30px;
+    color: white;
+}
+
+.success {
+    background-color : #4BA537;
+}
+
+.fail {
+    background-color : #C62B2B;
+}
+
+.closeFlash {
+    float: right;
+    max-height: 30px;
+}
+
+header {
+    background-color: #251313;
+    padding : 20px;
+    height: 50px;
+}
+
+header > nav > ul {
+    list-style: none;
+    display: block;
+    float: right;
+}
+
+header > nav > ul > li {
+    display: block;
+    float: left;
+    padding-left: 15px;
+}
+
+header > nav > ul > li > a {
+    color: white;
+    text-decoration: none;
+}
