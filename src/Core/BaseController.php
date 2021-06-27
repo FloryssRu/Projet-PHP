@@ -74,7 +74,8 @@ class BaseController
 	public function isValid(Object $object): bool
 	{
 		$isValid = true;
-		foreach($object as $value) {
+		$attributes = $object->getAttributes($object);
+		foreach($attributes as $value) {
 			if($value == NULL || !isset($value) || $value == '') {
 				$isValid = false;
 			}

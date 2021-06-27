@@ -21,6 +21,8 @@ class HandlerResetPassword extends AuthenticateController
 
     public function handlerEmailResetPassword(string $email)
     {
+        $session = new PHPSession;
+
         $user = new User();
         $user->hydrate($user, ['email' => $email]);
 
@@ -48,7 +50,7 @@ class HandlerResetPassword extends AuthenticateController
                     $user = $userManager->getById($user->getId());
                     $user->hydrate($user, ['uuid' => $uuid]);
                     $userManager->update($user, $user->getId());
-                    $session = new PHPSession;
+                    
                     $session->set('success', "Un mail de réinitialisation de mot de passe vous a été envoyé.");
 
                     if($session->get('idUser') !== NULL)
@@ -59,31 +61,23 @@ class HandlerResetPassword extends AuthenticateController
                     
                 } else
                 {
-                    $session = new PHPSession;
                     $session->set('fail', "L'email de réinitialisation de mot de passe n'a pas pu être envoyé. Veuillez réécrire votre adresse email.");
                 }
 
             } else
             {
-                $session = new PHPSession;
                 $session->set('fail', "L'email de réinitialisation de mot de passe n'a pas pu être envoyé. Veuillez réécrire votre adresse email.");
             }
             
         } else
         {
-            $session = new PHPSession;
             $session->set('fail', "Veuillez renseigner un email valide.");
         }
-
         return $this->redirect(parent::PATH_TO_FORGOTTEN_PSWD);
     }
 
     public function handlerResetPassword(array $data)
     {
-        foreach($data as $key => $value)
-        {
-            $data[$key] = htmlspecialchars($value);
-        }
         $session = new PHPSession;
 
         $user = new User();
@@ -94,8 +88,9 @@ class HandlerResetPassword extends AuthenticateController
 
         if($this->isValid($user)
         && $this->isSubmit('resetPassword')
-        && $data['uuid'] != NULL
-        && $data['password'] == $data['validPassword']
+        && $data['uuid'] !== NULL
+        && $data['password'] === $data['validPassword']
+        && strlen($data['password']) < 61
         && $data['token'] == $session->get('token')
         && is_int($idUser))
         {
@@ -112,18 +107,22 @@ class HandlerResetPassword extends AuthenticateController
                 $user->setUuid(NULL);
                 $userManager->update($user, $idUser);
 
-                $session = new PHPSession;
                 $session->set('success', "Votre mot de passe a bien été changé.");
-                return $this->redirect(parent::PATH_TO_SIGNUP_PAGE);
+                if($session->get('pseudo') == NULL)
+                {
+                    return $this->redirect(parent::PATH_TO_SIGNUP_PAGE);
+                } else
+                {
+                    return $this->redirect('/dashboard');
+                }
+                
             }
         
-        } elseif($data['password'] != $data['validPassword'])
+        } elseif($data['password'] !== $data['validPassword'])
         {
-            $session = new PHPSession;
             $session->set('fail', "Les mots de passe entrés ne sont pas identiques.");
         } else
         {
-            $session = new PHPSession;
             $session->set('fail', "Votre réinitialisation de mot de passe a rencontré un problème. Veuillez recommencer.");
         }
         return $this->redirect(parent::PATH_TO_PSWD_RESET . $session->get('uuid'));

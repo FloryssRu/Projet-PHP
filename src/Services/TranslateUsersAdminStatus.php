@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-class TranslateUsersAdminStatus //extends BaseController
+class TranslateUsersAdminStatus
 {    
     /**
      * Translate the value of admin attribute in a comprehensible value like "yes" or "no"
      *
      * @param  array $users Containing all the users in the database
      */
-    public function translate(array $users)
+    public static function translate(array $users)
     {
         foreach($users as $user)
         {

@@ -24,4 +24,12 @@ class PostManager extends Manager
 		$req->setFetchMode(\PDO::FETCH_BOUND);
 		return $req->fetch();
 	}
+
+	public function titleIsFree(string $title): bool
+	{
+		$req = $this->database->prepare("SELECT title FROM " . $this->table . " WHERE title = :title");
+		$req->execute(array('title' => $title));
+		$req->setFetchMode(\PDO::FETCH_BOUND);
+		return $req->fetch();
+	}
 }

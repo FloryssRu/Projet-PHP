@@ -29,10 +29,10 @@ class ContactController extends BaseController
         ]);
     }
 
-    public function messageStatut(int $idMessage, int $isProcessed, string $token)
+    public function messageStatut(int $idMessage = NULL, int $isProcessed = NULL, string $token = NULL)
     {
         $session = new PHPSession;
-		if($session->get('admin') == NULL || !$session->get('admin'))
+		if($session->get('admin') == NULL || !$session->get('admin') || !is_int($idMessage) || !is_int($isProcessed) || !is_string($token))
         {
             return $this->redirect('/erreur-403');
         }
@@ -55,10 +55,10 @@ class ContactController extends BaseController
         return $this->redirect('/error-404');
     }
 
-    public function deleteMessage(int $idMessage, string $token)
+    public function deleteMessage(int $idMessage = NULL, string $token = NULL)
     {
         $session = new PHPSession;
-		if($session->get('admin') == NULL || !$session->get('admin'))
+		if($session->get('admin') == NULL || !$session->get('admin') || !is_int($idMessage) || !is_string($token))
         {
             return $this->redirect('/erreur-403');
         }

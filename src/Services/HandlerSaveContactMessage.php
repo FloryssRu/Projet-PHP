@@ -24,7 +24,7 @@ class HandlerSaveContactMessage extends HomeController
         $session = new PHPSession;
 
         $message = new Contact('contact');
-        $message->hydrate($message, $_POST); //qu'y a-t-il dans Post ?
+        $message->hydrate($message, $_POST);
 
         if($this->isSubmit('contactForm')
         && $this->isValid($message)
@@ -32,19 +32,17 @@ class HandlerSaveContactMessage extends HomeController
         && strlen($_POST['lastName']) <= 100
         && strlen($_POST['email'] <= 100)
         && $_POST['mentions'] == 'on'
-        && preg_match('#^[a-zA-Z\.0-9\+]+@[a-zA-Z\.0-9]+\.[a-z]{0,5}$#', $_POST['email']))
+        && preg_match('#^[a-zA-Z\.0-9\+]+@[a-zA-Z\.0-9]+\.[a-z]{0,5}$#', $_POST['email'])
+        && isset($_POST['firstName'])
+        && isset($_POST['lastName'])
+        && isset($_POST['email'])
+        && isset($_POST['title'])
+        && isset($_POST['content']))
         {
             $title = $_POST['title'];
             $content = $_POST['content'];
 
-            $arrayData = [
-                'first_name' => $_POST['firstName'],
-                'last_name' => $_POST['lastName'],
-                'email' => $_POST['email'],
-                'title' => $title,
-                'content' => $content,
-                'is_processed' => 0
-            ];
+            $_POST['is_processed'] = 0;
 
             $cutContent = substr($content, 0, 200);
             if($cutContent != $content)
@@ -59,9 +57,9 @@ class HandlerSaveContactMessage extends HomeController
 
             $titleEmail = 'Nouveau message - Blog de Floryss Rubechi';
             $contentEmail = '<p>Vous venez de recevoir un nouveau message sur le site "Blog de Floryss Rubechi".</p>
-            <p>Titre : <i>' . $title . '</i></p>
+            <p>Titre : <i>' . htmlspecialchars($title) . '</i></p>
             <p>Contenu :</p>
-            <p><i>' . $cutContent . '</i></p>
+            <p><i>' . htmlspecialchars($cutContent) . '</i></p>
             <p>Pour voir la liste des messages reçus, veuillez cliquer sur le lien ci-dessous.</p>
             <p><a href="http://localhost/blogphp/liste-messages">Voir les messages</a></p>';
 
@@ -79,7 +77,10 @@ class HandlerSaveContactMessage extends HomeController
             if($success)
             {
                 $contactManager = new ContactManager('contact');
-                $contactManager->insert($arrayData);
+                
+                unset($_POST['mentions']);
+                unset($_POST['contactForm']);
+                $contactManager->insert($_POST);
                 $session->set('success', 'Votre message a bien été envoyé.');
             } else
             {

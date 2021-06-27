@@ -23,7 +23,7 @@ class DateFormat extends BaseController
      * @param  string $date The date in format "YYYY-MM-DD HH-II-SS"
      * @return string       The date in readable version : "le DD MONTH YYYY, à HHhIIminSS"
      */
-    public function formatToDisplay(string $date)
+    public static function formatToDisplay(string $date)
     {
         $dayAndHour = explode(' ', $date);
         $day = explode('-', $dayAndHour[0]);
@@ -36,7 +36,7 @@ class DateFormat extends BaseController
      * @param  array $listPosts
      * @return array
      */
-    public function formatListPostsAdmin(array $listPosts): array
+    public static function formatListPostsAdmin(array $listPosts): array
     {
         foreach($listPosts as $key => $post)
         {
@@ -45,7 +45,7 @@ class DateFormat extends BaseController
                 $listPosts[$key]->setDateLastUpdate('Ce post n\'a pas été modifié.');
             } else
             {
-                $listPosts[$key]->setDateLastUpdate($this->formatToDisplay($post->getDateLastUpdate()));
+                $listPosts[$key]->setDateLastUpdate(self::formatToDisplay($post->getDateLastUpdate()));
             }
         }
         return $listPosts;
@@ -57,17 +57,17 @@ class DateFormat extends BaseController
      * @param  array $listPosts An array of posts objects
      * @return array
      */
-    public function formatListPosts(array $listPosts): array
+    public static function formatListPosts(array $listPosts): array
     {
         foreach($listPosts as $key => $post)
         {
             
             if($post->getDateLastUpdate() == NULL)
             {
-                $listPosts[$key]->setDatePublication('Publié ' . $this->formatToDisplay($post->getDatePublication()));
+                $listPosts[$key]->setDatePublication('Publié ' . self::formatToDisplay($post->getDatePublication()));
             } else
             {
-                $listPosts[$key]->setDateLastUpdate('Mis à jour ' . $this->formatToDisplay($post->getDateLastUpdate()));
+                $listPosts[$key]->setDateLastUpdate('Mis à jour ' . self::formatToDisplay($post->getDateLastUpdate()));
             }
         }
         return $listPosts;
@@ -79,13 +79,24 @@ class DateFormat extends BaseController
      * @param  array $listComments
      * @return array
      */
-    public function formatListComments(array $listComments): array
+    public static function formatListComments(array $listComments): array
     {
         foreach($listComments as $key => $comment)
         {
-            $listComments[$key]->setDate($this->formatToDisplay($comment->getDate()));
+            $listComments[$key]->setDate(self::formatToDisplay($comment->getDate()));
         }
         return $listComments;
+    }
+
+    public static function changeFormatDatePost(Object $post)
+    {
+        if($post->getDateLastUpdate() == NULL)
+        {
+            $post->setDatePublication('Publié ' . self::formatToDisplay($post->getDatePublication()));
+        } else
+        {
+            $post->setDateLastUpdate('Mis à jour ' . self::formatToDisplay($post->getDateLastUpdate()));
+        }
     }
 
 }

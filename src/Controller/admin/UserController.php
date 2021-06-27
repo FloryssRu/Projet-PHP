@@ -20,8 +20,7 @@ class UserController extends BaseController
         }
         $userManager = new UserManager('user');
         $users = $userManager->getAll();
-        $translateUsersAdminStatus = new TranslateUsersAdminStatus;
-        $users = $translateUsersAdminStatus->translate($users);
+        $users = TranslateUsersAdminStatus::translate($users);
         $uuid = Uuid::uuid4();
         $uuid = $uuid->toString();
         $session->set('token', $uuid);
@@ -38,16 +37,15 @@ class UserController extends BaseController
      * @param  string $token
      * @param  int $becomeAdmin     Is 0 if the user will become an admin, and 1 if the user become a simple user
      */
-    public function changeUserStatut(int $idUser, string $token, int $becomeAdmin)
+    public function changeUserStatut(int $idUser = NULL, string $token = NULL, int $becomeAdmin = NULL)
     {
         $session = new PHPSession;
-		if($session->get('admin') == NULL || !$session->get('admin'))
+		if($session->get('admin') == NULL || !$session->get('admin') || !is_int($idUser) || !is_string($token) || !is_int($becomeAdmin))
         {
             return $this->redirect('/erreur-403');
         }
         if($token == $session->get('token'))
         {
-            $userManager = new UserManager('user');
             if($becomeAdmin == 0)
             {
                 $admin = true;
@@ -59,7 +57,8 @@ class UserController extends BaseController
             }
 
             $user = new User();
-            $user->hydrate($user, ['admin' => $admin]);
+            $user->setAdmin($admin);
+            $userManager = new UserManager('user');
             $userManager->update($user, $idUser);
             
         } else
