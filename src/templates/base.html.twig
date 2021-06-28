@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <link rel="stylesheet" href="/blogphp/public/css/normalize.css">
         <link rel="stylesheet" href="/blogphp/public/css/styles.css">
+        <link rel="shortcut icon" type="image/jpg" href="/blogphp/public/img/favicon.png"/>
         <title>
         
         {% block title %}
@@ -16,7 +17,8 @@
 
     </head>
     <body>
-        <header>  
+        <header>
+            <p id="blogTitle">Blog de Floryss Rubechi</p>
             {% if session.pseudo %}
                 {% if session.admin %}
                     {% include 'navAdmin.html.twig' %}
@@ -45,29 +47,50 @@
             </div>
 
         {% endif %}
-
+        
         {% block body %}
         {% endblock %}
 
-        {% if session.pseudo %}
-            <footer>
-                {% if session.admin %}
-                    {% include 'navAdmin.html.twig' %}
-                    <div class="button">
-                        <p><a href="/blogphp/admin-posts">Partie Admin</a></p>
-                    </div>
-                {% else %}
-                    {% include 'navUserConnected.html.twig' %}
-                {% endif %}
-                <p><a href="/blogphp/mentions-legales">Mentions légales</a></p>
-            </footer>
+        <footer>
+            <div class="width33">
+                <h2>Floryss Rubechi</h2>
+                <img src="/blogphp/public/img/Floryss.jpg" alt="photo de Floryss" id="pictureInFooter">
+                <h3>Contact :</h3>
+                <p class="textCenter">+33 6.95.87.34.83</p>
+                <p class="textCenter">floryss.rubechi@gmail.com</p>
+            </div>
+            <div class="width33">
+                <h2>Réseaux sociaux</h2>
+                <ul>
+                    <li><a href="https://www.linkedin.com/in/floryss-rubechi-44367b195/" target="blank"><img src="/blogphp/public/img/linkedin.png" alt="LinkedIn" class="icon"> Floryss Rubechi</a></li>
+                    <li><a href="https://github.com/FloryssRu" target="blank"><img src="/blogphp/public/img/github.png" alt="GitHub" class="icon"> FloryssRu</a></li>
+                </ul>
+            </div>
 
-        {% else %}
-            <footer>
-                {% include 'navVisitor.html.twig' %}
-                <p><a href="/blogphp/mentions-legales">Mentions légales</a></p>
-            </footer>
-        {% endif %}
+            <div class="width33">
+                <h2>Navigation</h2>
+                {% if session.pseudo %}
+                
+                    {% if session.admin %}
+                        {% include 'navAdmin.html.twig' %}
+                        <div class="button">
+                            <p><a href="/blogphp/admin-posts">Partie Admin</a></p>
+                        </div>
+                    {% else %}
+                        {% include 'navUserConnected.html.twig' %}
+                    {% endif %}
+                    <p><a href="/blogphp/mentions-legales">Mentions légales</a></p>
+                
+                {% else %}
+
+                    <div>
+                        {% include 'navVisitor.html.twig' %}
+                        <p><a href="/blogphp/mentions-legales">Mentions légales</a></p>
+                    </div>
+                
+                {% endif %}
+            </div>
+        </footer>
 
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
