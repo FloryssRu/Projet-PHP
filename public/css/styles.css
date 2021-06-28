@@ -129,8 +129,14 @@ p, a, li, input {
     text-decoration: none;
 }
 
+section {
+    padding: 3%;
+}
+
+
 .buttonRed {
-    width: 200px;
+    display: block;
+    width: 250px;
     padding: 20px;
     margin-top: 50px;
     background-color: #7a3515;
@@ -142,19 +148,11 @@ p, a, li, input {
     cursor: pointer;
 }
 
-input.buttonRed {
-    color: white;
-    width: 20%;
-    margin-left: 40%; /*responsive*/
-}
-
-.buttonRed > a {
+input.buttonRed, .buttonRed > a {
     color: white;
 }
 
-section {
-    padding: 3%;
-}
+
 
 .width50 {
     width: 45%;
@@ -174,7 +172,6 @@ section {
     margin-right: 5%;
 }
 
-
 .textRight {
     text-align: right;
 }
@@ -182,6 +179,18 @@ section {
 .textCenter {
     text-align: center;
 }
+
+.textLeft {
+    text-align: left;
+}
+
+.marginBot50 {
+    margin-bottom : 50px;
+}
+
+
+
+/* Forms */
 
 .divForForm {
     background-color: #c6b7b2;
@@ -191,12 +200,13 @@ section {
     margin-bottom: 5px;
 }
 
+.divForForm > h2.marginBot {
+    margin-bottom: 50px;
+}
+
 .divForForm > p:first-of-type {
     margin-top: 0px;
 }
-
-
-/* Forms */
 
 form {
     margin-top: 50px;
@@ -273,12 +283,21 @@ textarea {
     position: absolute;
     top: 250px; /*responsive*/
     margin-left: 35%;
-    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.8), rgba(255,255,255,0));
+    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1), rgba(255,255,255,0));
 }
 
-.titleAllWidth > h1 {
-    position: relative;
-    top: 100px;
+.titleAllWidth > div#tallGradient {
+    height: 150px;
+    top: 220px; /*responsive*/
+}
+
+.titleAllWidth > div.gradient > h1 {
+    margin-bottom: 0px;
+}
+
+.titleAllWidth > div.gradient > p {
+    margin-top: 5px;
+    text-align: center;
 }
 
 .postInList {
@@ -312,3 +331,29 @@ textarea {
     background-color: #251313
 }
 
+
+/* post page */
+
+.comment {
+    background-color: #251313;
+    color: white;
+    padding: 20px;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.comment > img {
+    float: left;
+}
+
+.comment > h3 {
+    display: block;
+    padding: 10px 0;
+    padding-left: 85px;
+    margin-bottom: 35px;
+}
+
+.comment > p {
+    margin-left: 10px;
+    margin-right: 10px;
+}

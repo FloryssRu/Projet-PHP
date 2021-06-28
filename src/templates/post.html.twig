@@ -6,38 +6,55 @@
 {% endblock %}
 
 {% block body %}
+<section class="titleAllWidth">
+    <img src="/blogphp/{{ picture }}" alt="image du post">
+    <div class="gradient" id="tallGradient">
+        <h1>{{ post.title }}</h1>
+        <p>
+        {% if post.dateLastUpdate %}
+            {{ post.dateLastUpdate }}
+        {% else %}
+            {{ post.datePublication }}
+        {% endif %}
+        </p>
+        <p>Auteur : {{ post.author }}</p>
+    </div>
+</section>
 
-    <h1>{{ post.title }}</h1>
-    {% if post.dateLastUpdate %}
-        <p>{{ post.dateLastUpdate }}</p>
-    {% else %}
-        <p>{{ post.datePublication }}</p>
-    {% endif %}
-    <img src="/blogphp/{{ picture }}" alt="image de présentation">
-    <p>{{ post.heading | raw }}</p>
-    <p>{{ post.content | raw }}</p>
-    <p>{{ post.author }}</p>
+<div class="maincontent">
+    <section>
+        {{ post.heading | raw }}
+    </section>
+    <section>
+        {{ post.content | raw }}
+    </section>
     
-    {% if session.pseudo %}
-        <form action="/blogphp/nouveau-commentaire" method="post">
+    <section class="divForForm marginBot50">
+        {% if session.pseudo %}
             <h2>Laissez un commentaire !</h2>
-            <p><label for="content">Commentaire : </label><textarea id="content" name="content" required></textarea></p>
-            <input type="hidden" value="{{ post.id }}" name="idPost">
-            <input type="submit" value="Envoyer le commentaire" name="newComment">
-        </form>
-    {% else %}
-        <h2>Connectez ou inscrivez-vous pour laisser un commentaire</h2>
-        <p><a href="/blogphp/connexion">Se connecter</a></p>
-        <p><a href="/blogphp/inscription">S'inscrire</a></p>
-    {% endif %}
+            <p class="textCenter">Votre commentaire sera soumis à validation.</p>
+            <form action="/blogphp/nouveau-commentaire" method="post">
+                <p><label for="content">Commentaire * </label><textarea id="content" name="content" required></textarea></p>
+                <input type="hidden" value="{{ post.id }}" name="idPost">
+                <input type="submit" value="Envoyer le commentaire" name="newComment" class="buttonRed">
+            </form>
+        {% else %}
+            <h2 class="marginBot">Connectez ou inscrivez-vous pour laisser un commentaire</h2>
+            <p class="buttonRed"><a href="/blogphp/connexion">Se connecter</a></p>
+            <p class="buttonRed"><a href="/blogphp/inscription">S'inscrire</a></p>
+        {% endif %}
+    </section>
 
-    <h2>Commentaires publiés</h2>
-    {% for comment in comments %}
-        <h3>
-            <img src="/blogphp/public/img/avatars/avatar{{ comment.avatarNumber }}.png" alt="avatar">
-            {{ comment.pseudo }}, {{ comment.date }}
-        </h3>
-        <p>{{ comment.content }}</p>
-    {% endfor %}
+    <section>
+        <h2>Commentaires publiés</h2>
+        {% for comment in comments %}
+            <div class="comment">
+                <img src="/blogphp/public/img/avatars/avatar{{ comment.avatarNumber }}.png" alt="avatar">
+                <h3 class="textLeft">{{ comment.pseudo }}, {{ comment.date }}</h3>
+                <p>{{ comment.content }}</p>
+            </div>
+        {% endfor %}
+    </section>
+</div>
 
 {% endblock %}
