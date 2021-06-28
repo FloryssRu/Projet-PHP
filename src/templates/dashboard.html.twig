@@ -10,58 +10,69 @@
 {% endblock %}
 
 {% block body %}
+<section class="titleAllWidth">
+    <img src="/blogphp/public/img/dashboard.png" alt="image de fond">
+    <div class="gradient" id="smallGradient">
+        <h1>{{ user.pseudo }}</h1>
+        <img src="/blogphp/public/img/avatars/avatar{{ user.avatarNumber }}.png" alt="l'avatar choisi">
+    </div>
+</section>
 
-<h1>Mon tableau de bord</h1>
+<div class="maincontent">
+    <section class="divForForm marginBot50">
+        <h2>Changer d'avatar</h2>
+        <p class="textCenter">Sélectionnez l'un des avatars ci-dessous pour vous représenter</p>
+        <form action="changer-son-avatar" method="post">
+            <p class="textCenter">
+                <input type="radio" id="avatar1" name="avatarNumber" value="1" class="checkbox"><label for="avatar1" class="marginRight"><img src="/blogphp/public/img/avatars/avatar1.png" alt="terre"></label>
+                <input type="radio" id="avatar2" name="avatarNumber" value="2" class="checkbox"><label for="avatar2" class="marginRight"><img src="/blogphp/public/img/avatars/avatar2.png" alt="smiley"></label>
+                <input type="radio" id="avatar3" name="avatarNumber" value="3" class="checkbox"><label for="avatar3" class="marginRight"><img src="/blogphp/public/img/avatars/avatar3.png" alt="vinyle"></label>
+                <input type="radio" id="avatar4" name="avatarNumber" value="4" class="checkbox"><label for="avatar4" class="marginRight"><img src="/blogphp/public/img/avatars/avatar4.png" alt="personnage"></label>
+                <input type="radio" id="avatar5" name="avatarNumber" value="5" class="checkbox"><label for="avatar5"><img src="/blogphp/public/img/avatars/avatar5.png" alt="épée"></label>
+            </p>
+            <input type="submit" value="Changer !" name="avatarChange" class="buttonRed">
+        </form>
+    </section>
 
-<img src="/blogphp/public/img/avatars/avatar{{ user.avatarNumber }}.png" alt="l'avatar choisi">
-<p>{{ user.pseudo }}</p>
+    <section class="divForForm">
+        <h2>Changer mon mot de passe</h2>
+        <p class="textCenter">Cliquez sur le bouton pour changer votre mot de passe.</p>
+        <form action="mot-de-passe-oublie" method="post">
+            <input type="hidden" value="{{ user.email }}" name="email">
+            <input type="submit" name="emailResetPassword" value="Changer mon mot de passe" class="buttonRed">
+        </form>
+    </section>
 
-<h2>Changer d'avatar</h2>
-<form action="changer-son-avatar" method="post">
-    <p>Sélectionnez l'un des avatars ci-dessous pour vous représenter</p>
-    <p>
-        <input type="radio" id="avatar1" name="avatarNumber" value="1"><label for="avatar1"><img src="/blogphp/public/img/avatars/avatar1.png" alt="terre"> (par défaut)</label>
-        <input type="radio" id="avatar2" name="avatarNumber" value="2"><label for="avatar2"><img src="/blogphp/public/img/avatars/avatar2.png" alt="smiley"></label>
-        <input type="radio" id="avatar3" name="avatarNumber" value="3"><label for="avatar3"><img src="/blogphp/public/img/avatars/avatar3.png" alt="vinyle"></label>
-        <input type="radio" id="avatar4" name="avatarNumber" value="4"><label for="avatar4"><img src="/blogphp/public/img/avatars/avatar4.png" alt="personnage"></label>
-        <input type="radio" id="avatar5" name="avatarNumber" value="5"><label for="avatar5"><img src="/blogphp/public/img/avatars/avatar5.png" alt="épée"></label>
-    </p>
-    <input type="submit" value="Changer !" name="avatarChange">
-</form>
+    <section>
+        <h2>Mes commentaires postés</h2>
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th>Nom du post</th>
+                    <th>Mon commentaire</th>
+                    <th>Date</th>
+                    <th>Accepté</th>
+                </tr>
+            </thead>
 
-<h2>Changer mon mot de passe</h2>
-<form action="mot-de-passe-oublie" method="post">
-    <input type="hidden" value="{{ user.email }}" name="email">
-    <input type="submit" name="emailResetPassword" value="Changer mon mot de passe">
-</form>
+            <tbody>
+                {% for comment in comments %}
+                    <tr>
+                        <td>{{ comment.title }}</td>
+                        <td>{{ comment.content }}</td>
+                        <td>{{ comment.date }}</td>
+                        {% if comment.isValidated %}
+                        <td>Commentaire validé</td>
+                        {% else %}
+                        <td>Commentaire en traitement</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
 
-<h2>Mes commentaires postés</h2>
-<table id="myTable">
-    <thead>
-        <tr>
-            <th>Nom du post</th>
-            <th>Mon commentaire</th>
-            <th>Date</th>
-            <th>Accepté</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        {% for comment in comments %}
-            <tr>
-                <td>{{ comment.title }}</td>
-                <td>{{ comment.content }}</td>
-                <td>{{ comment.date }}</td>
-                {% if comment.isValidated %}
-                <td>Commentaire validé</td>
-                {% else %}
-                <td>Commentaire en traitement</td>
-                {% endif %}
-            </tr>
-        {% endfor %}
-    </tbody>
-
-</table>
+        </table>
+    </section>
+</div>
 
 {% endblock %}
 

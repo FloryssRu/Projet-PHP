@@ -11,30 +11,33 @@ Gestion des posts
 
 
 {% block body %}
+<div class="maincontent">
+    <section>
+        <h1>Liste des posts publiés</h1>
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th>Titre du post</th>
+                    <th>Dernière modification</th>
+                    <th>Modifier</th>
+                    <th>Supprimer</th>
+                </tr>
+            </thead>
 
-<h1>Liste des posts publiés</h1>
-<table id="myTable">
-    <thead>
-        <tr>
-            <th>Titre du post</th>
-            <th>Dernière modification</th>
-            <th>Modifier</th>
-            <th>Supprimer</th>
-        </tr>
-    </thead>
+            <tbody>
+                {% for post in allPosts %}
+                    <tr>
+                        <td>{{ post.title }}</td>
+                        <td>{{ post.dateLastUpdate }}</td>
+                        <td><a href="modifier-post?slug={{ post.slug }}">Modifier</a></td>
+                        <td><a href="supprimer-post?slug={{ post.slug }}&token={{ session.token }}" onclick="return confirm('Etes vous sûr de supprimer ce post ?')">Supprimer</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
 
-    <tbody>
-        {% for post in allPosts %}
-            <tr>
-                <td>{{ post.title }}</td>
-                <td>{{ post.dateLastUpdate }}</td>
-                <td><a href="modifier-post?slug={{ post.slug }}">Modifier</a></td>
-                <td><a href="supprimer-post?slug={{ post.slug }}&token={{ session.token }}" onclick="return confirm('Etes vous sûr de supprimer ce post ?')">Supprimer</a></td>
-            </tr>
-        {% endfor %}
-    </tbody>
-
-</table>
+        </table>
+    </section>
+</div>
 
 {% endblock %}
 

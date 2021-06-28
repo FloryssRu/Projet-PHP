@@ -6,15 +6,18 @@ Se connecter
 {% endblock %}
 
 {% block body %}
+<div class="maincontent">
+    <section class="divForForm">
+        <h1>Connectez-vous</h1>
+        <form action="traitement-connexion" method="post">
+            <p><label for="pseudo">Pseudo * </label><input type="text" id="pseudo" name="pseudo" required></p>
+            <p><label for="password">Mot de passe * </label><input type="password" id="password" name="password" required></p>
+            <input type="submit" name="signUp" value="Se connecter" class="buttonRed">
+        </form>
 
-    <h1>Connectez-vous</h1>
-
-    <form action="traitement-connexion" method="post">
-        <p><label for="pseudo">Pseudo * </label><input type="text" id="pseudo" name="pseudo" required></p>
-        <p><label for="password">Mot de passe * </label><input type="password" id="password" name="password" required></p>
-        <input type="submit" name="signUp" value="Se connecter">
-    </form>
-
-    <p><a href="mot-de-passe-oublie">J'ai oublié mon mot de passe</a></p>
-
+        <div>
+            <p class="link"><a href="mot-de-passe-oublie">J'ai oublié mon mot de passe</a></p>
+        </div>
+    </section>
+</div>
 {% endblock %}
