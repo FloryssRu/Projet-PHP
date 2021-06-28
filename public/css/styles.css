@@ -27,7 +27,7 @@ header {
 }
 
 #blogTitle {
-    font-family : "Century Gothic";
+    font-family : "Century Gothic", Arial, sans-serif;
     font-weight: normal;
     font-size: 30px;
     color: white;
@@ -70,6 +70,7 @@ footer {
 footer > div > ul, footer > div > nav > ul {
     margin-top: 30px;
     list-style: none;
+    padding: 0px;
 }
 
 footer > div > ul > li > a, footer > div > nav > ul > li > a, footer > div > p > a {
@@ -85,10 +86,6 @@ footer >> a  {
     margin-top: 10px;
     color: white;
 }*/
-
-footer > div > nav > ul, footer > div > ul {
-    padding: 0px;
-}
 
 footer > div > nav > ul > li {
     margin-top: 15px;
@@ -114,7 +111,7 @@ img.icon {
 /* Used in several pages */
 
 h1, h2, h3 {
-    font-family : "Century Gothic";
+    font-family : "Century Gothic", Arial, sans-serif;
     font-weight: normal;
     text-align: center;
 }
@@ -125,7 +122,7 @@ h1 {
 }
 
 p, a, li, input {
-    font-family : "Lato";
+    font-family : "Lato", Arial, sans-serif;
     text-decoration: none;
 }
 
