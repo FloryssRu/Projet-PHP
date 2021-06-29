@@ -20,20 +20,14 @@
     max-height: 30px;
 }
 
+#close {
+    cursor: pointer;
+}
+
 header {
     background-color: #251313;
     padding : 20px;
     height: 50px;
-}
-
-#blogTitle {
-    font-family : "Century Gothic", Arial, sans-serif;
-    font-weight: normal;
-    font-size: 30px;
-    color: white;
-    float: left;
-    margin-top: 10px;
-    margin-bottom: 0px;
 }
 
 header > nav > ul {
@@ -50,6 +44,20 @@ header > nav > ul > li {
 
 header > nav > ul > li > a {
     color: white;
+}
+
+.forSmartphone {
+    display: none;
+}
+
+#blogTitle {
+    font-family : "Century Gothic", Arial, sans-serif;
+    font-weight: normal;
+    font-size: 30px;
+    color: white;
+    float: left;
+    margin-top: 10px;
+    margin-bottom: 0px;
 }
 
 .maincontent {
@@ -128,7 +136,7 @@ p, a, li, input {
 
 section {
     padding: 3%;
-    position: relative;
+    /*position: relative;*/
 }
 
 
@@ -191,6 +199,10 @@ input.buttonRed {
     margin-right: 50px;
 }
 
+.miniMarginBot {
+    display: block;
+    margin-bottom : 10px;
+}
 
 
 /* Forms */
@@ -233,11 +245,6 @@ textarea {
 .checkbox {
     display: inline;
     width: auto;
-}
-
-.miniMarginBot {
-    display: block;
-    margin-bottom : 10px;
 }
 
 
@@ -295,7 +302,7 @@ textarea {
 
 .titleAllWidth > div#tallGradient {
     height: 150px;
-    top: 150px; /*responsive*/
+    top: 150px;
 }
 
 .titleAllWidth > div#smallGradient {
@@ -412,3 +419,101 @@ textarea {
     clear: both;
     margin-top: 60px;
 }
+
+
+
+
+
+/*smartphones*/
+@media screen and (max-width: 812px) and (min-width: 0px) {
+
+    h1 {
+        font-size: 25px;
+    }
+
+    .maincontent {
+        width: 90%;
+        padding: 2%;
+        margin: 3%;
+    }
+
+    /*menu*/
+    nav {
+        display: none;
+    }
+
+    ul#vertical {
+        background-color: #251313;
+        float: right;
+        padding: 10px;
+        position: absolute;
+        right: 0px;
+        z-index: 10;
+        /*top: 50px; Le jquery ne marche plus si je le mets !!*/
+    }
+
+    ul#vertical > li {
+        float: none;
+        margin: 10px;
+        padding: 0;
+    }
+
+    .forSmartphone {
+        display: block;
+    }
+
+    #menu {
+        float: right;
+        width: 15%;
+        margin-top: 5px;
+        max-width: 70px;
+    }
+
+    /*footer*/
+    .notForSmartphone {
+        display: none;
+    }
+
+    .width33 {
+        width: 100%;
+        float: none;
+    }
+
+    .width33:first-of-type {
+        margin-bottom: 50px;
+    }
+
+    footer {
+        height: 570px;
+    }
+
+    /* listposts page */
+    .titleAllWidth {
+        height: auto;
+    }
+
+    .titleAllWidth > img {
+        top: 0px;
+    }
+
+    /*post page*/
+    div.comment > h3 {
+        height: 70px;
+        line-height: 35px;
+        margin: 0px;
+        padding-top: 0px;
+        max-width: 200px;
+    }
+}
+
+
+
+
+
+/*tablettes*/
+@media screen and (min-width: 813px) and (max-width: 1279px) {
+    body {
+        background-color: red;
+    }
+}
+

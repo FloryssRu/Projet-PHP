@@ -69,6 +69,7 @@ class Manager
 	public function getAll(): array
 	{
 		$req = $this->database->prepare("SELECT * FROM " . $this->table);
+		$req->execute();
 		return $this->finishQuery($req);
 		
 	}
@@ -153,7 +154,6 @@ class Manager
 
 	protected function finishQuery($req)
 	{
-		$req->execute();
 		$req->setFetchMode(\PDO::FETCH_CLASS, self::PATH_TO_ENTITIES . $this->object, []);
 		$result = $req->fetchAll();
 		foreach($result as $object)
