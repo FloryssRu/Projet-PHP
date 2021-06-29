@@ -12,7 +12,7 @@ Liste des messages reçus
 
 {% block body %}
 <div class="maincontent">
-    <section>
+    <section class="notForSmartphone">
         <h1>Liste des messages</h1>
         <table id="myTable">
             <thead>
@@ -46,6 +46,12 @@ Liste des messages reçus
                 {% endfor %}
             </tbody>
         </table>
+    </section>
+
+    <section class="forSmartphone">
+        <h1>Liste des messages</h1>
+        <p>La liste des messages reçus n'est pas accessible sur smartphone ou tablette.</p>
+        <p>Veuillez passer en "version pour ordinateur" ou changer de support.</p>
     </section>
 </div>
 {% endblock %}

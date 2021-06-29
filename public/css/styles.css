@@ -5,6 +5,8 @@
     border: 1px solid black;
     padding: 30px;
     color: white;
+    position: absolute;
+    z-index: 20;
 }
 
 .success {
@@ -179,29 +181,27 @@ input.buttonRed {
     margin-right: 5%;
 }
 
-.textRight {
-    text-align: right;
-}
+.textRight { text-align: right; }
 
-.textCenter {
-    text-align: center;
-}
+.textCenter { text-align: center; }
 
-.textLeft {
-    text-align: left;
-}
+.textLeft { text-align: left; }
 
-.marginBot50 {
-    margin-bottom : 50px;
-}
+.marginBot50 { margin-bottom : 50px; }
 
-.marginRight {
-    margin-right: 50px;
-}
+.marginRight { margin-right: 50px; }
 
 .miniMarginBot {
     display: block;
     margin-bottom : 10px;
+}
+
+.floatLeft {
+    float: left;
+}
+
+.clear {
+    clear: both;
 }
 
 
@@ -296,7 +296,7 @@ textarea {
     width: 100%;
     height: 100px;
     position: absolute;
-    top: 200px; /*responsive*/
+    top: 200px;
     background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0), rgba(255,255,255,1), rgba(255,255,255,0), rgba(255,255,255,0));
 }
 
@@ -307,7 +307,7 @@ textarea {
 
 .titleAllWidth > div#smallGradient {
     height: 52px;
-    top: 140px; /*responsive*/
+    top: 140px;
 }
 .titleAllWidth > div#smallGradient > h1 {
     margin-top: 5px;
@@ -433,7 +433,8 @@ textarea {
 
     .maincontent {
         width: 90%;
-        padding: 2%;
+        padding-left: 2%;
+        padding-right: 2%;
         margin: 3%;
     }
 
@@ -487,6 +488,38 @@ textarea {
         height: 570px;
     }
 
+    /* forms */
+    .width50 {
+        width: 100%;
+        float: none;
+    }
+
+    .width33:first-of-type, .width33:nth-child(2) {
+        margin-right: 0px;
+    }
+
+    /* home page */
+    #myCV {
+        height: 500px;
+    }
+
+    #myCV > div:first-of-type {
+        display: inline-block;
+        width: 100%;
+        margin-top: 30px;
+    }
+
+    #myCV > div:first-of-type > img {
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+    }
+
+    #myCV > div:last-of-type {
+        width: 100%;
+        float: none;
+    }
+
     /* listposts page */
     .titleAllWidth {
         height: auto;
@@ -503,6 +536,20 @@ textarea {
         margin: 0px;
         padding-top: 0px;
         max-width: 200px;
+    }
+
+    /* admin pages*/
+    .xlargecontainer {
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .xlargecontainer > section {
+        padding-left: 5px;
+        padding-right: 5px;
     }
 }
 
