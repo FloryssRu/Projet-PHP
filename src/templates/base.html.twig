@@ -73,9 +73,7 @@
                 
                     {% if session.admin %}
                         {% include 'navAdmin.html.twig' %}
-                        <div class="button">
-                            <p><a href="/blogphp/admin-posts">Partie Admin</a></p>
-                        </div>
+                        <p><a href="/blogphp/admin-posts">Partie Admin</a></p>
                     {% else %}
                         {% include 'navUserConnected.html.twig' %}
                     {% endif %}

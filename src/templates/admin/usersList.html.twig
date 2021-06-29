@@ -11,34 +11,36 @@ Liste des utilisateurs
 
 
 {% block body %}
+<div class="maincontent">
+    <section>
+        <h1>Liste des utilisateurs</h1>
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th>Pseudo</th>
+                    <th>Email</th>
+                    <th>Statut</th>
+                    <th>Changer le statut</th>
+                </tr>
+            </thead>
 
-<h1>Liste des utilisateurs</h1>
-<table id="myTable">
-    <thead>
-        <tr>
-            <th>Pseudo</th>
-            <th>Email</th>
-            <th>Statut</th>
-            <th>Changer le statut</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.pseudo }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.adminToShow }}</td>
-                {% if user.admin %}
-                    <td><a href="changer-statut?idUser={{ user.id }}&token={{ token }}&becomeAdmin=1" onclick="return confirm('Etes vous sûr de passer cet admin en simple utilisateur ?')">Retirer des admins</a></td>
-                {% else %}
-                    <td><a href="changer-statut?idUser={{ user.id }}&token={{ token }}&becomeAdmin=0" onclick="return confirm('Etes vous sûr de passer cet utilisateur en admin ?')">Passer en admin</a></td>
-                {% endif %}
-            </tr>
-        {% endfor %}
-    </tbody>
-
-</table>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.pseudo }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.adminToShow }}</td>
+                        {% if user.admin %}
+                            <td><a href="changer-statut?idUser={{ user.id }}&token={{ token }}&becomeAdmin=1" onclick="return confirm('Etes vous sûr de passer cet admin en simple utilisateur ?')">Retirer des admins</a></td>
+                        {% else %}
+                            <td><a href="changer-statut?idUser={{ user.id }}&token={{ token }}&becomeAdmin=0" onclick="return confirm('Etes vous sûr de passer cet utilisateur en admin ?')">Passer en admin</a></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</div>
 
 {% endblock %}
 

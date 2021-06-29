@@ -47,13 +47,17 @@
 
     <section>
         <h2>Commentaires publiés</h2>
-        {% for comment in comments %}
-            <div class="comment">
-                <img src="/blogphp/public/img/avatars/avatar{{ comment.avatarNumber }}.png" alt="avatar">
-                <h3 class="textLeft">{{ comment.pseudo }}, {{ comment.date }}</h3>
-                <p>{{ comment.content }}</p>
-            </div>
-        {% endfor %}
+        {% if comments %}
+            {% for comment in comments %}
+                <div class="comment">
+                    <img src="/blogphp/public/img/avatars/avatar{{ comment.avatarNumber }}.png" alt="avatar">
+                    <h3 class="textLeft">{{ comment.pseudo }}, {{ comment.date }}</h3>
+                    <p>{{ comment.content }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="textCenter">Aucun commentaire publié.</p>
+        {% endif %}
     </section>
 </div>
 

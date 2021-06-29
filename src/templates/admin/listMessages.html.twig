@@ -11,42 +11,43 @@ Liste des messages reçus
 
 
 {% block body %}
+<div class="maincontent">
+    <section>
+        <h1>Liste des messages</h1>
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th>Nom de l'envoyaeur</th>
+                    <th>Email de l'envoyeur</th>
+                    <th>Titre</th>
+                    <th>Message complet</th>
+                    <th>Statut actuel</th>
+                    <th>Changer de statut</th>
+                    <th>Supprimer le message</th>
+                </tr>
+            </thead>
 
-<h1>Liste des messages</h1>
-<table id="myTable">
-    <thead>
-        <tr>
-            <th>Nom de l'envoyaeur</th>
-            <th>Email de l'envoyeur</th>
-            <th>Titre</th>
-            <th>Message complet</th>
-            <th>Statut actuel</th>
-            <th>Changer de statut</th>
-            <th>Supprimer le message</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        {% for message in listMessages %}
-            <tr>
-                <td>{{ message.firstName }} {{ message.lastName }}</td>
-                <td>{{ message.email }}</td>
-                <td>{{ message.title }}</td>
-                <td>{{ message.content }}</td>
-                {% if message.isProcessed %}
-                    <td style="color: green;">Message traité</td>
-                    <td><a href="message-changement-statut?idMessage={{ message.id }}&isProcessed=0&token={{ token }}" onclick="return confirm('Etes vous sûr de passer ce message en statut non traité ?')">Passer en non-traité</a></td>
-                {% else %}
-                    <td style="color: red;">Message non traité</td>
-                    <td><a href="message-changement-statut?idMessage={{ message.id }}&isProcessed=1e&token={{ token }}" onclick="return confirm('Etes vous sûr de passer ce message en statut traité ?')">Passer en traité</a></td>
-                {% endif %}
-                <td><a href="supprimer-message?idMessage={{ message.id }}&token={{ token }}" onclick="return confirm('Etes vous sûr de supprimer ce message ?')">Supprimer</a></td>
-            </tr>
-        {% endfor %}
-    </tbody>
-
-</table>
-
+            <tbody>
+                {% for message in listMessages %}
+                    <tr>
+                        <td>{{ message.firstName }} {{ message.lastName }}</td>
+                        <td>{{ message.email }}</td>
+                        <td>{{ message.title }}</td>
+                        <td>{{ message.content }}</td>
+                        {% if message.isProcessed %}
+                            <td style="color: green;">Message traité</td>
+                            <td><a href="message-changement-statut?idMessage={{ message.id }}&isProcessed=0&token={{ token }}" onclick="return confirm('Etes vous sûr de passer ce message en statut non traité ?')">Passer en non-traité</a></td>
+                        {% else %}
+                            <td style="color: red;">Message non traité</td>
+                            <td><a href="message-changement-statut?idMessage={{ message.id }}&isProcessed=1e&token={{ token }}" onclick="return confirm('Etes vous sûr de passer ce message en statut traité ?')">Passer en traité</a></td>
+                        {% endif %}
+                        <td><a href="supprimer-message?idMessage={{ message.id }}&token={{ token }}" onclick="return confirm('Etes vous sûr de supprimer ce message ?')">Supprimer</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</div>
 {% endblock %}
 
 

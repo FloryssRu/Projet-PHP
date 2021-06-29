@@ -54,10 +54,29 @@ class CommentManager extends Manager
 	 *
 	 * @return array
 	 */
-	public function getAllCommentsWithAvatars()
+	public function getAllCommentsWithAvatars(int $idPost)
 	{
-		$req = $this->database->prepare("SELECT comment.*, user.avatar_number as avatarNumber FROM comment INNER JOIN user ON user.pseudo = comment.pseudo ORDER BY date DESC");
-		return $this->finishQuery($req);
+		$req = $this->database->prepare("SELECT comment.*, user.avatar_number as avatarNumber FROM comment INNER JOIN user ON user.pseudo = comment.pseudo WHERE comment.id_post= :idPost ORDER BY date DESC");
+		$req->execute(['idPost' => $idPost]);
+		$req->setFetchMode(\PDO::FETCH_CLASS, self::PATH_TO_ENTITIES . $this->object, []);
+		$result = $req->fetchAll();
+		foreach($result as $object)
+		{
+			foreach($object as $attribute => $value)
+			{
+				if(preg_match('#^[a-z]+(_[a-z]+)+$#', $attribute))
+				{
+					$method = 'set' . preg_replace('#_#', '', ucwords($attribute, '_'));
+
+            		if(method_exists($object, $method))
+            		{
+            		    $object->$method($value);
+            		}
+					unset($object->$attribute);
+				}
+			}
+		}
+		return $result;
 	}
 	
 	/**

@@ -26,7 +26,7 @@ Liste des Posts
                 {% endif %}
             </p>
             {{ post.heading | raw }}
-            <p class="buttonRed"><a href="post/{{ post.slug }}">Lire ce post</a></p>
+            <a href="post/{{ post.slug }}"><p class="buttonRed">Lire ce post</p></a>
         </section>
     {% endfor %}
 

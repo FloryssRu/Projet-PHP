@@ -34,7 +34,7 @@ class OpenPartController extends BaseController
             DateFormat::changeFormatDatePost($post);
             
             $commentManager = new CommentManager('comment');
-            $comments = $commentManager->getAllCommentsWithAvatars();
+            $comments = $commentManager->getAllCommentsWithAvatars($id);
             $comments = DateFormat::formatListComments($comments);
 
             return $this->render('post.html.twig', [

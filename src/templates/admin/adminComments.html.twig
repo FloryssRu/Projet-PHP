@@ -11,57 +11,62 @@ Gestion des posts
 
 
 {% block body %}
+<div class="maincontent">
+    <section>
+        <h1>Liste des commentaires</h1>
 
-<h1>Liste des commentaires</h1>
+        <h2>Liste des commentaires non-validés</h2>
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th>Pseudo</th>
+                    <th>Commentaire</th>
+                    <th>Date</th>
+                    <th>Valider</th>
+                </tr>
+            </thead>
 
-<h2>Liste des commentaires non-validés</h2>
-<table id="myTable">
-    <thead>
-        <tr>
-            <th>Pseudo</th>
-            <th>Commentaire</th>
-            <th>Date</th>
-            <th>Valider</th>
-        </tr>
-    </thead>
+            <tbody>
+                {% for comment in commentsNotValidated %}
+                    <tr>
+                        <td>{{ comment.pseudo }}</td>
+                        <td>{{ comment.content }}</td>
+                        <td>{{ comment.date }}</td>
+                        <td><a href="valider-commentaire?idComment={{ comment.id }}" onclick="return confirm('Etes vous sûr de valider ce commentaire ?')">Valider</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
 
-    <tbody>
-        {% for comment in commentsNotValidated %}
-            <tr>
-                <td>{{ comment.pseudo }}</td>
-                <td>{{ comment.content }}</td>
-                <td>{{ comment.date }}</td>
-                <td><a href="valider-commentaire?idComment={{ comment.id }}" onclick="return confirm('Etes vous sûr de valider ce commentaire ?')">Valider</a></td>
-            </tr>
-        {% endfor %}
-    </tbody>
+        </table>
+    </section>
 
-</table>
+    <section>
+        <h2>Liste des commentaires validés</h2>
 
-<h2>Liste des commentaires validés</h2>
+        <table id="myTable2">
+            <thead>
+                <tr>
+                    <th>Pseudo</th>
+                    <th>Commentaire</th>
+                    <th>Date</th>
+                    <th>Invalider</th>
+                </tr>
+            </thead>
 
-<table id="myTable2">
-    <thead>
-        <tr>
-            <th>Pseudo</th>
-            <th>Commentaire</th>
-            <th>Date</th>
-            <th>Invalider</th>
-        </tr>
-    </thead>
+            <tbody>
+                {% for comment in commentsValidated %}
+                    <tr>
+                        <td>{{ comment.pseudo }}</td>
+                        <td>{{ comment.content }}</td>
+                        <td>{{ comment.date }}</td>
+                        <td><a href="invalider-commentaire?idComment={{ comment.id }}" onclick="return confirm('Etes vous sûr d invalider ce commentaire ?')">Invalider</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
 
-    <tbody>
-        {% for comment in commentsValidated %}
-            <tr>
-                <td>{{ comment.pseudo }}</td>
-                <td>{{ comment.content }}</td>
-                <td>{{ comment.date }}</td>
-                <td><a href="invalider-commentaire?idComment={{ comment.id }}" onclick="return confirm('Etes vous sûr d invalider ce commentaire ?')">Invalider</a></td>
-            </tr>
-        {% endfor %}
-    </tbody>
-
-</table>
+        </table>
+    </section>
+</div>
 
 {% endblock %}
 

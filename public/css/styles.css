@@ -55,7 +55,7 @@ header > nav > ul > li > a {
 .maincontent {
     margin-left: 10%;
     margin-top: 0px;
-    width: 70%;
+    width: 70%; /*reponsive*/
     padding: 5%;
     padding-top: 50px;
 }
@@ -63,7 +63,7 @@ header > nav > ul > li > a {
 footer {
     background-color: #251313;
     padding : 20px;
-    height: 400px;
+    height: 430px;
     color: white;
 }
 
@@ -128,6 +128,7 @@ p, a, li, input {
 
 section {
     padding: 3%;
+    position: relative;
 }
 
 
@@ -143,9 +144,10 @@ section {
     margin-left: auto;
     margin-right: auto;
     cursor: pointer;
+    color: white;
 }
 
-input.buttonRed, .buttonRed > a {
+input.buttonRed {
     color: white;
 }
 
@@ -233,6 +235,11 @@ textarea {
     width: auto;
 }
 
+.miniMarginBot {
+    display: block;
+    margin-bottom : 10px;
+}
+
 
 /* For home page */
 
@@ -279,22 +286,21 @@ textarea {
 }
 
 .titleAllWidth > div.gradient {
-    width: 30%;
+    width: 100%;
     height: 100px;
     position: absolute;
-    top: 250px; /*responsive*/
-    margin-left: 35%;
-    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,1), rgba(255,255,255,0));
+    top: 200px; /*responsive*/
+    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0), rgba(255,255,255,1), rgba(255,255,255,0), rgba(255,255,255,0));
 }
 
 .titleAllWidth > div#tallGradient {
     height: 150px;
-    top: 220px; /*responsive*/
+    top: 150px; /*responsive*/
 }
 
 .titleAllWidth > div#smallGradient {
     height: 52px;
-    top: 190px; /*responsive*/
+    top: 140px; /*responsive*/
 }
 .titleAllWidth > div#smallGradient > h1 {
     margin-top: 5px;
@@ -331,7 +337,7 @@ textarea {
 .postInList:nth-child(3n+1) {
     border: 3px solid #251313;
 }
-.postInList:nth-child(3n+1) > p.buttonRed {
+.postInList:nth-child(3n+1) > a > p.buttonRed {
     background-color: #c6b7b2
 }
 
@@ -342,7 +348,7 @@ textarea {
 .postInList:nth-child(3n) {
     border: 3px solid #7a3515;
 }
-.postInList:nth-child(3n) > p.buttonRed {
+.postInList:nth-child(3n) > a > p.buttonRed {
     background-color: #251313
 }
 
@@ -386,8 +392,23 @@ textarea {
     background-color: #251313;
     border-radius: 25px;
     text-align: center;
+    color: white;
 }
 
-.link > a {
-    color: white;
+/* add and edit post pages */
+
+#imgEditPost {
+    max-width: 200px;
+    float: left;
+    display: block;
+    margin-right: 20px;
+}
+
+#picture {
+    width: auto;
+}
+
+.clean {
+    clear: both;
+    margin-top: 60px;
 }
