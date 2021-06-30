@@ -58,7 +58,7 @@ class CommentManager extends Manager
 	 */
 	public function getAllCommentsWithAvatars(int $idPost)
 	{
-		$req = $this->database->prepare("SELECT comment.*, user.avatar_number as avatarNumber FROM comment INNER JOIN user ON user.pseudo = comment.pseudo WHERE comment.id_post= :idPost ORDER BY date DESC");
+		$req = $this->database->prepare("SELECT comment.*, user.avatar_number as avatarNumber FROM comment INNER JOIN user ON user.pseudo = comment.pseudo WHERE comment.id_post= :idPost AND comment.is_validated = 1 ORDER BY date DESC");
 		$req->execute(['idPost' => $idPost]);
 		return $this->finishQuery($req);
 	}

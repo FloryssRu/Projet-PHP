@@ -155,6 +155,7 @@ section {
     margin-right: auto;
     cursor: pointer;
     color: white;
+    clear:both;
 }
 
 input.buttonRed {
@@ -196,8 +197,8 @@ input.buttonRed {
     margin-bottom : 10px;
 }
 
-.floatLeft {
-    float: left;
+.inlineBlock {
+    display: inline-block;
 }
 
 .clear {
@@ -425,7 +426,14 @@ textarea {
 
 
 /*smartphones*/
-@media screen and (max-width: 812px) and (min-width: 0px) {
+@media screen and (max-width: 812px) {
+
+    .forSmartphone {
+        display: block;
+    }
+    .notForSmartphone {
+        display: none;
+    }
 
     h1 {
         font-size: 25px;
@@ -450,17 +458,13 @@ textarea {
         position: absolute;
         right: 0px;
         z-index: 10;
-        /*top: 50px; Le jquery ne marche plus si je le mets !!*/
+        top: 70px;
     }
 
     ul#vertical > li {
         float: none;
         margin: 10px;
         padding: 0;
-    }
-
-    .forSmartphone {
-        display: block;
     }
 
     #menu {
@@ -471,10 +475,6 @@ textarea {
     }
 
     /*footer*/
-    .notForSmartphone {
-        display: none;
-    }
-
     .width33 {
         width: 100%;
         float: none;
@@ -557,10 +557,78 @@ textarea {
 
 
 
-/*tablettes*/
+/*tablets*/
 @media screen and (min-width: 813px) and (max-width: 1279px) {
-    body {
-        background-color: red;
+
+    .forTablet {
+        display: block;
     }
+    .notForTablet {
+        display: none;
+    }
+
+    nav {
+        display: none;
+    }
+
+    ul#vertical {
+        background-color: #251313;
+        float: right;
+        padding: 10px;
+        position: absolute;
+        right: 0px;
+        z-index: 10;
+        top: 70px;
+    }
+
+    ul#vertical > li {
+        float: none;
+        margin: 10px;
+        padding: 0;
+    }
+
+    #menu {
+        float: right;
+        width: 15%;
+        margin-top: 5px;
+        max-width: 70px;
+    }
+
+    /*footer*/
+    footer {
+        padding: 0;
+    }
+
+    .width33 {
+        width: 46%;
+        margin-left: 2%;
+        margin-right: 2%;
+        padding: 0;
+        float: left;
+    }
+
+    .width33:first-of-type, .width33:nth-child(2) {
+        margin-right: 2%;
+    }
+
+    /* home page */
+    #myCV {
+        height: 230px;
+    }
+
+    #myCV > div:first-of-type {
+        width: 40%;
+    }
+    
+    #myCV > div:last-of-type {
+        width: 60%;
+    }
+
+    /* for listposts page */
+    .titleAllWidth {
+        height: 310px;
+    }
+
+
 }
 
