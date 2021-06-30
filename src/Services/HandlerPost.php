@@ -96,7 +96,7 @@ class HandlerPost extends PostController
 
             $slugify = new Slugify();
 
-            $_POST['slug'] = $slugify->slugify($_POST['title']);
+            $post->setSlug($slugify->slugify($_POST['title']));
 
             $postManager->update($post, $_POST['id']);
  
