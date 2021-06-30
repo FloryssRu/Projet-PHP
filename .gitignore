@@ -1,3 +1,4 @@
 /vendor/
 /config/config.json
 /config/emailConfig.json
+sonar-project.properties
