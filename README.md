@@ -1,4 +1,4 @@
-Hello ! My name is Floryss Rubechi and I am a student at Openclassrooms. As part of my studies I have created this professional blog with PHP.
+Hello ! I am a student at Openclassrooms. As part of my studies I have created this professional blog with PHP.
 
 
 
