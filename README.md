@@ -19,7 +19,7 @@ If you don't have a local server, install one in your computer that contains apa
 
 ) In the same folder, copy emailConfigSample.json and name it emailConfig.json. In it, change the data to correspond to your email adress, password and smtp service (to send email).
 
-) vérifier que dans php.ini que " SMTP = smtp.gmail.com " et " sendmail_from = floryss.devweb@gmail.com "
+) vérifier que dans php.ini que " SMTP = smtp.gmail.com " et " sendmail_from = youremail@email.com "
 
 
 
