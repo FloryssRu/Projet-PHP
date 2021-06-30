@@ -1,5 +1,15 @@
+.forSmartphone {
+    display: none;
+}
+
+.forTablet {
+    display: none;
+}
+
+
 /* For all pages, in base.html.twig */
 
+/* flash messages */
 .flashMessage {
     margin: 40px;
     border: 1px solid black;
@@ -20,12 +30,10 @@
 .closeFlash {
     float: right;
     max-height: 30px;
-}
-
-#close {
     cursor: pointer;
 }
 
+/* header */
 header {
     background-color: #251313;
     padding : 20px;
@@ -34,7 +42,6 @@ header {
 
 header > nav > ul {
     list-style: none;
-    display: block;
     float: right;
 }
 
@@ -48,28 +55,27 @@ header > nav > ul > li > a {
     color: white;
 }
 
-.forSmartphone {
-    display: none;
-}
-
+/* title of my blog (in header) */
 #blogTitle {
     font-family : "Century Gothic", Arial, sans-serif;
     font-weight: normal;
     font-size: 30px;
     color: white;
     float: left;
-    margin-top: 10px;
+    margin-top: 7px;
     margin-bottom: 0px;
 }
 
+/* main content block */
 .maincontent {
     margin-left: 10%;
     margin-top: 0px;
-    width: 70%; /*reponsive*/
+    width: 70%;
     padding: 5%;
     padding-top: 50px;
 }
 
+/* footer */
 footer {
     background-color: #251313;
     padding : 20px;
@@ -77,13 +83,17 @@ footer {
     color: white;
 }
 
-footer > div > ul, footer > div > nav > ul {
+footer > div > ul, footer > div > nav > ul { /*CSS4 : footer >> ul*/
     margin-top: 30px;
     list-style: none;
     padding: 0px;
 }
 
-footer > div > ul > li > a, footer > div > nav > ul > li > a, footer > div > p > a {
+footer > div > nav > ul > li, footer > div > ul > li { /*CSS4 : footer >> li*/
+    margin-top: 15px;
+}
+
+footer > div > ul > li > a, footer > div > nav > ul > li > a, footer > div > p > a { /*CSS4 : footer >> a*/
     color: white;
 }
 
@@ -91,34 +101,19 @@ footer > div > ul > li > a {
     font-size: 20px;
 }
 
-/* C'est sensé marcher comme ça avec CSS4...
-footer >> a  {
-    margin-top: 10px;
-    color: white;
-}*/
-
-footer > div > nav > ul > li {
-    margin-top: 15px;
-}
-
-footer > div > ul > li {
-    margin-top: 25px;
-}
-
 #pictureInFooter {
     display: block;
     height: 200px;
     margin-left: auto;
-    margin-right:auto;
+    margin-right: auto;
 }
 
-/*Links in footer*/
 img.icon {
     height: 20px;
 }
 
 
-/* Used in several pages */
+/* general styles of html tags */
 
 h1, h2, h3 {
     font-family : "Century Gothic", Arial, sans-serif;
@@ -142,6 +137,8 @@ section {
 }
 
 
+/* general classes */
+
 .buttonRed {
     display: block;
     width: 250px;
@@ -158,17 +155,10 @@ section {
     clear:both;
 }
 
-input.buttonRed {
-    color: white;
-}
-
-
-
 .width50 {
     width: 45%;
     float: left;
 }
-
 .width50:nth-of-type(2n+1) {
     margin-right: 10%;
 }
@@ -177,7 +167,6 @@ input.buttonRed {
     width: 30%;
     float: left;
 }
-
 .width33:first-of-type, .width33:nth-child(2) {
     margin-right: 5%;
 }
@@ -188,22 +177,20 @@ input.buttonRed {
 
 .textLeft { text-align: left; }
 
-.marginBot50 { margin-bottom : 50px; }
+.marginTop60 { margin-top: 60px; }
 
 .marginRight { margin-right: 50px; }
+
+.marginBot50 { margin-bottom : 50px; }
 
 .miniMarginBot {
     display: block;
     margin-bottom : 10px;
 }
 
-.inlineBlock {
-    display: inline-block;
-}
+.inlineBlock { display: inline-block; }
 
-.clear {
-    clear: both;
-}
+.clear { clear: both; }
 
 
 /* Forms */
@@ -249,7 +236,7 @@ textarea {
 }
 
 
-/* For home page */
+/* For home page (first block for my CV) */
 
 #myCV {
     background-color: #c6b7b2;
@@ -278,7 +265,7 @@ textarea {
 }
 
 
-/* For list posts page */
+/* for the title block (in listpost, post and dashboard pages) */
 
 .titleAllWidth {
     width: 100%;
@@ -329,6 +316,9 @@ textarea {
     text-align: center;
 }
 
+
+/* For list posts page */
+
 .postInList {
     margin-top: 20px;
 }
@@ -367,7 +357,6 @@ textarea {
     background-color: #251313;
     color: white;
     padding: 20px;
-    padding-top: 20px;
     margin-top: 20px;
 }
 
@@ -376,8 +365,7 @@ textarea {
 }
 
 .comment > h3 {
-    display: block;
-    padding: 10px 0;
+    padding: 10px;
     padding-left: 85px;
     margin-bottom: 35px;
 }
@@ -387,14 +375,14 @@ textarea {
     margin-right: 10px;
 }
 
-/* sign up & sign in pages */
+
+/* link to change password (sign up page) */
 
 .link {
     margin-top: 40px;
-    display: block;
-    height: 30px;
-    line-height: 30px;
-    width: 220px;
+    height: 50px;
+    line-height: 50px;
+    width: 250px;
     margin-left: auto;
     margin-right: auto;
     background-color: #251313;
@@ -402,6 +390,7 @@ textarea {
     text-align: center;
     color: white;
 }
+
 
 /* add and edit post pages */
 
@@ -416,16 +405,11 @@ textarea {
     width: auto;
 }
 
-.clean {
-    clear: both;
-    margin-top: 60px;
-}
 
 
 
 
-
-/*smartphones*/
+/* smartphones */
 @media screen and (max-width: 812px) {
 
     .forSmartphone {
@@ -435,6 +419,7 @@ textarea {
         display: none;
     }
 
+    /* general settings */
     h1 {
         font-size: 25px;
     }
@@ -446,7 +431,7 @@ textarea {
         margin: 3%;
     }
 
-    /*menu*/
+    /* nav */
     nav {
         display: none;
     }
@@ -474,7 +459,7 @@ textarea {
         max-width: 70px;
     }
 
-    /*footer*/
+    /* footer */
     .width33 {
         width: 100%;
         float: none;
@@ -520,7 +505,7 @@ textarea {
         float: none;
     }
 
-    /* listposts page */
+    /* title block (listpost, post and dashboard pages) */
     .titleAllWidth {
         height: auto;
     }
@@ -529,7 +514,7 @@ textarea {
         top: 0px;
     }
 
-    /*post page*/
+    /* post page */
     div.comment > h3 {
         height: 70px;
         line-height: 35px;
@@ -538,7 +523,7 @@ textarea {
         max-width: 200px;
     }
 
-    /* admin pages*/
+    /* admin pages */
     .xlargecontainer {
         width: 100%;
         margin-left: 0px;
@@ -567,6 +552,7 @@ textarea {
         display: none;
     }
 
+    /* nav */
     nav {
         display: none;
     }
@@ -594,7 +580,7 @@ textarea {
         max-width: 70px;
     }
 
-    /*footer*/
+    /* footer */
     footer {
         padding: 0;
     }
@@ -606,7 +592,6 @@ textarea {
         padding: 0;
         float: left;
     }
-
     .width33:first-of-type, .width33:nth-child(2) {
         margin-right: 2%;
     }
@@ -628,7 +613,6 @@ textarea {
     .titleAllWidth {
         height: 310px;
     }
-
 
 }
 

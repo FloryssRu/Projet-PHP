@@ -32,7 +32,7 @@ Modifier un post
             <p>Image actuelle</p>
             <p><label for="picture">Changer l'image du post (Formats acceptés : .jpg, .png et .gif, taille max 3Mo)</label><input type="file" name="picture" id="picture"></p>
 
-            <p class="clean"><label for="author">Auteur *</label><input type="text" name="author" id="author" value="{{ post.author }}" required></p>
+            <p class="clear marginTop60"><label for="author">Auteur *</label><input type="text" name="author" id="author" value="{{ post.author }}" required></p>
             <input type="hidden" name="id" value="{{ post.id }}">
             <input type="hidden" name="token" value="{{ session.token }}">
             <input type="submit" value="Modifier le post" name="editPost" class="buttonRed">
