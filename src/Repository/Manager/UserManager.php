@@ -22,9 +22,9 @@ class UserManager extends Manager
     public function getPseudoByIdUser(int $idUser)
     {
         $req = $this->database->prepare(
-			"SELECT * FROM " . $this->table . " WHERE id = " . $idUser
+			"SELECT * FROM " . $this->table . " WHERE id = :idUser"
 		);
-		$req->execute();
+		$req->execute(['idUser' => $idUser]);
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		return $req->fetchAll();
     }
@@ -73,9 +73,9 @@ class UserManager extends Manager
 	public function getPseudo(string $pseudo)
 	{
 		$req = $this->database->prepare(
-			"SELECT pseudo FROM " . $this->table . " WHERE pseudo = \"" . $pseudo . "\""
+			"SELECT pseudo FROM " . $this->table . " WHERE pseudo = :pseudo"
 		);
-		$req->execute();
+		$req->execute(['pseudo' => $pseudo]);
 		return $req->fetch();
 	}
 
@@ -88,9 +88,9 @@ class UserManager extends Manager
 	public function getidByUuid(string $uuid)
 	{
 		$req = $this->database->prepare(
-			self::SELECT_ID_FROM . $this->table . " WHERE uuid = '" . $uuid . "'"
+			self::SELECT_ID_FROM . $this->table . " WHERE uuid = :uuid"
 		);
-		$req->execute();
+		$req->execute(['uuid' => $uuid]);
 		
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
@@ -127,9 +127,9 @@ class UserManager extends Manager
 	public function isAdminById(int $idUser): bool
 	{
 		$req = $this->database->prepare(
-			"SELECT admin FROM " . $this->table . " WHERE id = '" . $idUser . "'"
+			"SELECT admin FROM " . $this->table . " WHERE id = :idUser"
 		);
-		$req->execute();
+		$req->execute(['idUser' => $idUser]);
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
 		if ($user->getAdmin() == 1) {
@@ -148,13 +148,12 @@ class UserManager extends Manager
 
 	public function getAvatarByPseudo(string $pseudo)
 	{
-		$req = $this->database->query(
+		$req = $this->database->prepare(
 			"SELECT avatar_number FROM "
 			. $this->table
-			. " WHERE pseudo = '"
-			. $pseudo
-			. "'"
+			. " WHERE pseudo = :pseudo"
 		);
+		$req->execute(['pseudo' => $pseudo]);
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		return $req->fetch();
 	}

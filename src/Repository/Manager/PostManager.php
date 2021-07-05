@@ -6,6 +6,8 @@ use App\Repository\Manager;
 
 class PostManager extends Manager
 {
+	private const WHERE_SLUG = " WHERE slug = :slug";
+
 	public function __construct($object)
 	{
         parent::__construct("post", $object);
@@ -20,7 +22,7 @@ class PostManager extends Manager
 	public function thisSlugExists(string $slug): bool
 	{
 		$req = $this->database->prepare(
-			"SELECT slug FROM " . $this->table . " WHERE slug = :slug"
+			"SELECT slug FROM " . $this->table . self::WHERE_SLUG
 		);
 		$req->execute(['slug' => $slug]);
 		$req->setFetchMode(\PDO::FETCH_BOUND);
@@ -46,7 +48,7 @@ class PostManager extends Manager
 	public function getIdBySlug(string $slug): int
 	{
 		$req = $this->database->prepare(
-			"SELECT id FROM " . $this->table . " WHERE slug = :slug"
+			"SELECT id FROM " . $this->table . self::WHERE_SLUG
 		);
 		$req->execute(['slug' => $slug]);
 		return $req->fetch()['id'];
@@ -55,7 +57,7 @@ class PostManager extends Manager
 	public function getBySlug(string $slug): Object
 	{
 		$req = $this->database->prepare(
-			"SELECT * FROM " . $this->table . " WHERE slug = :slug"
+			"SELECT * FROM " . $this->table . self::WHERE_SLUG
 		);
 		$req->execute(['slug' => $slug]);
 		$req->setFetchMode(\PDO::FETCH_CLASS, self::PATH_TO_ENTITIES . $this->object);
