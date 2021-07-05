@@ -13,8 +13,8 @@ class Route
 	private string $method;
 	private array $param;
 	private array $manager;
-	
-	public function __construct(object $route)
+
+	public function __construct(Object $route)
 	{
 		$this->path = $route->path;
 		$this->controller = $route->controller;
@@ -23,27 +23,27 @@ class Route
 		$this->param = $route->param;
 		$this->manager = $route->manager;
 	}
-		
+
 	public function getPath(): string
 	{
 		return $this->path;
 	}
-		
+
 	public function getController(): string
 	{
 		return $this->controller;
 	}
-		
+
 	public function getAction(): string
 	{
 		return $this->action;
 	}
-		
+
 	public function getMethod(): string
 	{
 		return $this->method;
 	}
-		
+
 	public function getParam(): array
 	{
 		return $this->param;
@@ -56,42 +56,30 @@ class Route
 
 	public function run($httpRequest)
 	{
-
 		$controller = null;
 		$controllerName = 'App\Controller\\' . $this->controller . 'Controller';
-		
-        if(class_exists($controllerName))
-        {
+
+        if (class_exists($controllerName)) {
             $controller = new $controllerName($httpRequest);
 
-            if(method_exists($controller, $this->action))
-            {
+            if (method_exists($controller, $this->action)) {
 				$controller->{$this->action}(...$httpRequest->getParam());
+            } else {
+                throw new ActionNotFoundException();
             }
-            else
-            {
-                throw new ActionNotFoundException;
-            }
-        }
-        else
-        {
+        } else {
             $controllerName = 'App\Controller\admin\\' . $this->controller . 'Controller';
-			if(class_exists($controllerName))
-			{
+
+			if (class_exists($controllerName)) {
 				$controller = new $controllerName($httpRequest);
 
-				if(method_exists($controller, $this->action))
-				{
+				if (method_exists($controller, $this->action)) {
 					$controller->{$this->action}(...$httpRequest->getParam());
+				} else {
+					throw new ActionNotFoundException();
 				}
-				else
-				{
-					throw new ActionNotFoundException;
-				}
-			}
-			else
-			{
-				throw new ControllerNotFoundException;
+			} else {
+				throw new ControllerNotFoundException();
 			}
         }
 	}

@@ -18,21 +18,21 @@ class OpenPartController extends BaseController
 
 	public function showPost(string $slug = NULL)
     {
-        if(!is_string($slug) || $slug == NULL)
-        {
+        if (!is_string($slug) || $slug == NULL) {
             return $this->redirect('/erreur-404');
         }
+
         $postManager = new PostManager('post');
-        if($postManager->thisSlugExists($slug))
-        {
+
+        if ($postManager->thisSlugExists($slug)) {
             $id = $postManager->getIdBySlug($slug);
             $post = $postManager->getById($id);
 
-            $handlerPicture = new HandlerPicture;
+            $handlerPicture = new HandlerPicture();
             $picture = $handlerPicture->searchPicture($post->getDatePublication());
 
             DateFormat::changeFormatDatePost($post);
-            
+
             $commentManager = new CommentManager('comment');
             $comments = $commentManager->getAllCommentsWithAvatars($id);
             $comments = DateFormat::formatListComments($comments);
@@ -43,7 +43,6 @@ class OpenPartController extends BaseController
                 "comments" => $comments
             ]);
         }
-
         return $this->redirect(self::URL_ERROR_404);
     }
 
@@ -60,9 +59,8 @@ class OpenPartController extends BaseController
 
     public function newComment()
     {
-        $session = new PHPSession;
-        if($session->get('pseudo') == NULL)
-        {
+        $session = new PHPSession();
+        if ($session->get('pseudo') == NULL) {
             $session->set('fail', 'Connectez-vous pour poster un commentaire.');
             return $this->redirect('/connexion');
         }
@@ -76,22 +74,19 @@ class OpenPartController extends BaseController
 
         $postManager = new PostManager('post');
         $post = $postManager->getById($_POST['idPost']);
-        
-        if($this->isSubmit('newComment') && $this->isValid($comment))
-        {
+
+        if ($this->isSubmit('newComment') && $this->isValid($comment)) {
             unset($_POST['newComment']);
             $commentManager = new CommentManager('comment');
             $commentManager->insert($_POST);
-            
-            $session->set('success', 'Votre commentaire a été envoyé pour validation.');
 
+            $session->set('success', 'Votre commentaire a été envoyé pour validation.');
         } else {
             $session->set('fail', 'Votre commentaire a rencontré un problème.');
         }
-
         return $this->redirect('/post/' . $post->getSlug());
     }
-    
+
     /**
      * Displays the page of user's dashboard
      *
@@ -101,8 +96,7 @@ class OpenPartController extends BaseController
     public function showDashboard()
     {
         $session = new PHPSession();
-        if($session->get('pseudo') == null)
-        {
+        if ($session->get('pseudo') == null) {
             return $this->redirect(self::URL_ERROR_404);
         }
 
@@ -119,19 +113,19 @@ class OpenPartController extends BaseController
     public function changeAvatar()
     {
         $session = new PHPSession();
-        if($session->get('pseudo') == null)
-        {
+        if ($session->get('pseudo') == null) {
             return $this->redirect(self::URL_ERROR_404);
         }
 
         $user = new User();
         $user->hydrate($user, $_POST);
 
-        if($this->isSubmit('avatarChange')
-        && $this->isValid($user)
-        && 0 < $_POST['avatarNumber']
-        && $_POST['avatarNumber'] < 6)
-        {
+        if (
+            $this->isSubmit('avatarChange')
+            && $this->isValid($user)
+            && 0 < $_POST['avatarNumber']
+            && $_POST['avatarNumber'] < 6
+        ) {
             unset($user);
             $user = new User();
             $user->hydrate($user, ['avatarNumber' => $_POST['avatarNumber']]);
@@ -140,8 +134,7 @@ class OpenPartController extends BaseController
             $userManager->update($user, $session->get('idUser'));
 
             $session->set('success', 'Votre avatar a bien été changé.');
-        } else 
-        {
+        } else {
             $session->set('fail', 'Une erreur dans le formulaire a été détectée.');
         }
         return $this->redirect('/dashboard');

@@ -16,5 +16,4 @@ class Redirection implements RedirectionInterface
         header("Location:/blogphp" . $path);
 		exit();
     }
-
 }

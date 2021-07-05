@@ -13,7 +13,6 @@ class BaseController
 	private $param;
 	private $config;
 	protected $twig;
-
 	protected const ERROR_403_PATH = '/erreur-403';
 
 	public function __construct($httpRequest)
@@ -27,11 +26,10 @@ class BaseController
 		$loader = new FilesystemLoader(TEMPLATE_DIR . '//');
 		$this->twig = new Environment($loader, ['debug' => true]);
 	}
-		
+
 	protected function render($filename, $array = [])
 	{
-		if(file_exists(TEMPLATE_DIR . '//' . $filename))
-		{
+		if (file_exists(TEMPLATE_DIR . '//' . $filename)) {
 			extract($this->param);
 
 			$this->twig->addGlobal('session', $_SESSION);
@@ -40,8 +38,7 @@ class BaseController
 			$response = new Response($content);
 			return $response->send();
 
-		} else
-		{
+		} else {
 			throw new Exceptions\ViewNotFoundException();
 		}
 	}
@@ -51,7 +48,7 @@ class BaseController
 		$redirection = new Redirection($path);
 		return $redirection->redirect($path);
 	}
-	
+
 	/**
 	 * Verify that a form has been submitted
 	 *
@@ -60,11 +57,11 @@ class BaseController
 	 */
 	public function isSubmit(string $buttonSubmit)
 	{
-		if(isset($_POST[$buttonSubmit])) {
+		if (isset($_POST[$buttonSubmit])) {
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Verify that all fileds are not empty and are valid
 	 *
@@ -75,19 +72,17 @@ class BaseController
 	{
 		$isValid = true;
 		$attributes = $object->getAttributes($object);
-		foreach($attributes as $value) {
-			if($value == NULL || !isset($value) || $value == '') {
+		foreach ($attributes as $value) {
+			if ($value == NULL || !isset($value) || $value == '') {
 				$isValid = false;
 			}
 		}
-		
 		return $isValid;
 	}
-		
+
 	public function bindManager()
 	{
-		foreach($this->httpRequest->getRoute()->getManager() as $manager)
-			{
+		foreach ($this->httpRequest->getRoute()->getManager() as $manager) {
 				$this->$manager = new $manager($this->config->database);
 			}
 	}

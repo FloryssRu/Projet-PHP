@@ -1,7 +1,5 @@
 <?php
 
-namespace App\Entity;
-
 /**
  * File User class
  *
@@ -11,6 +9,8 @@ namespace App\Entity;
  *
  * @since 1.0
  */
+
+namespace App\Entity;
 
 class User extends Entity
 {
@@ -100,8 +100,7 @@ class User extends Entity
 
     public function getAttributes(Object $object)
     {
-        foreach($object as $attribute => $value)
-        {
+        foreach ($object as $attribute => $value) {
             $array[$attribute] = $value;
         }
         return $array;

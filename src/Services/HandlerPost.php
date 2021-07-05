@@ -22,8 +22,7 @@ class HandlerPost extends PostController
     public function handlerAddPost()
     {
         $session = new PHPSession();
-		if($session->get('admin') == NULL || !$session->get('admin'))
-        {
+		if ($session->get('admin') == NULL || !$session->get('admin')) {
             return parent::redirect(parent::ERROR_403_PATH);
         }
         $post = new Post();
@@ -34,11 +33,12 @@ class HandlerPost extends PostController
         $postManager = new PostManager('post');
         $titleNotFree = $postManager->titleIsFree($_POST['title']);
 
-        if(parent::isSubmit('newPost')
-        && parent::isValid($post)
-        && $_POST['token'] == $session->get('token')
-        && !$titleNotFree)
-        {
+        if (
+            parent::isSubmit('newPost')
+            && parent::isValid($post)
+            && $_POST['token'] == $session->get('token')
+            && !$titleNotFree
+        ) {
             $session->delete('token');
 
             $handlerPicture = new HandlerPicture();
@@ -52,11 +52,9 @@ class HandlerPost extends PostController
             
             $postManager->insert($_POST);
 
-            if($savePictureSuccess)
-            {
+            if ($savePictureSuccess) {
                 $session->set('success', 'Votre nouveau post et son image ont bien été enregistrés.');
-            } else
-            {
+            } else {
                 $session->set('success', 'Votre nouveau post a bien été enregistré.');
             }
 
@@ -64,26 +62,25 @@ class HandlerPost extends PostController
 
             $session->set('fail', 'Votre nouveau post n\'a pas été enregistré, une erreur dans le formulaire a été détectée.');
         }
-
         return $this->redirect(parent::PATH_TO_ADMIN_POSTS);
     }
 
     public function handlerUpdatePost()
     {
-        $session = new PHPSession;
-		if($session->get('admin') == NULL || !$session->get('admin'))
-        {
+        $session = new PHPSession();
+		if ($session->get('admin') == NULL || !$session->get('admin')) {
             return $this->redirect(parent::ERROR_403_PATH);
         }
 
         $post = new Post();
         $post->hydrate($post, $_POST);
 
-        if($this->isSubmit('editPost')
-        && $this->isValid($post)
-        && $_POST['token'] == $session->get('token')
-        && preg_match('#^[0-9]+$#', $_POST['id'])) {
-
+        if (
+            $this->isSubmit('editPost')
+            && $this->isValid($post)
+            && $_POST['token'] == $session->get('token')
+            && preg_match('#^[0-9]+$#', $_POST['id'])
+        ) {
             $session->delete('token');
             
             $post->setDateLastUpdate(date(self::DATE));
@@ -91,7 +88,7 @@ class HandlerPost extends PostController
             $postManager = new PostManager('post');
             $post->setDatePublication($postManager->getById($_POST['id'])->getDatePublication());
 
-            $handlerPicture = new HandlerPicture;
+            $handlerPicture = new HandlerPicture();
             $savePictureSuccess = $handlerPicture->savePicture($_FILES['picture'], $post->getDatePublication());
 
             $slugify = new Slugify();
@@ -100,19 +97,14 @@ class HandlerPost extends PostController
 
             $postManager->update($post, $_POST['id']);
  
-            if($savePictureSuccess)
-            {
+            if ($savePictureSuccess) {
                 $session->set('success', 'Votre post a bien été modifié et votre image a bien été enregistrée.');
-            } else
-            {
+            } else {
                 $session->set('success', 'Votre post a bien été modifié.');
             }
-            
         } else {
-
             $session->set('fail', 'Votre post n\'a pas été modifié, une erreur dans le formulaire a été détectée.');
         }
-
         return $this->redirect(self::PATH_TO_ADMIN_POSTS);
     }
 }

@@ -15,7 +15,7 @@ class HandlerPicture extends PostController
     {
 
     }
-    
+
     /**
      * Save a picture in the directory public/img and create its name with the post's date of publication
      *
@@ -24,18 +24,15 @@ class HandlerPicture extends PostController
      */
     public function savePicture($picture, string $name)
     {
-        if($picture !== NULL && $picture['error'] == 0 && $picture['size'] <= 3000000)
-        {
+        if ($picture !== NULL && $picture['error'] == 0 && $picture['size'] <= 3000000) {
             $infosfichier = pathinfo($picture['name']);
             $extension_upload = $infosfichier['extension'];
             $extensions_autorisees = array('jpg', 'png', 'gif');
-            if(in_array($extension_upload, $extensions_autorisees))
-            {
+            if (in_array($extension_upload, $extensions_autorisees)) {
                 $picture['name'] = str_replace([':','-',' '], '_', $name) . '.' . $extension_upload;
                 move_uploaded_file($picture['tmp_name'], '../public/img/' . $picture['name']);
                 return true;
-            } elseif (!in_array($extension_upload, $extensions_autorisees))
-            {
+            } elseif (!in_array($extension_upload, $extensions_autorisees)) {
                 $session = new PHPSession();
                 $session->set('fail', "Le fichier n'a pas pu être ajouté car son extension n'est pas acceptée.");
             }
@@ -45,21 +42,15 @@ class HandlerPicture extends PostController
     public function searchPicture(string $date_publication)
     {
         $extensions = ['.jpg', '.png', '.gif'];
-        foreach($extensions as $extension)
-        {
+        foreach ($extensions as $extension) {
             $pathToPicture = '../public/img/' . str_replace([':', '-', ' '], '_', $date_publication) . $extension;
-            if(file_exists($pathToPicture))
-            {
+            if (file_exists($pathToPicture)) {
                 $picture = 'public/img/' . str_replace([':', '-', ' '], '_', $date_publication) . $extension;
             }
         }
-
-        if(!isset($picture))
-        {
+        if (!isset($picture)) {
             $picture = 'public/img/' . 'default.jpg';
         }
-
         return $picture;
     }
-    
 }

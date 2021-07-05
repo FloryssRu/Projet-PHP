@@ -10,7 +10,6 @@ use App\Services\HandlerSignIn;
 use App\Services\PHPSession;
 use Ramsey\Uuid\Uuid;
 
-
 class AuthenticateController extends BaseController
 {
     protected const PATH_TO_SIGNUP_PAGE = "/connexion";
@@ -21,16 +20,14 @@ class AuthenticateController extends BaseController
     {
         return $this->render('signUp.html.twig');
     }
-    
+
     /**
      * Connects the user if the pair of username and password is valid, else sends an error message
      */
     public function signUp()
     {
-        $session = new PHPSession;
-
-        if($session->get('pseudo') !== NULL)
-        {
+        $session = new PHPSession();
+        if ($session->get('pseudo') !== NULL) {
             $session->set('fail', 'Vous êtes déjà connecté à un compte.');
             return $this->redirect(self::PATH_TO_SIGNUP_PAGE);
         }
@@ -39,13 +36,16 @@ class AuthenticateController extends BaseController
         $user = new User();
         $user->hydrate($user, $_POST);
 
-        if($this->isSubmit('signUp') && $this->isValid($user) && isset($_POST['pseudo']) && isset($_POST['password']))
-        {
+        if (
+            $this->isSubmit('signUp')
+            && $this->isValid($user)
+            && isset($_POST['pseudo'])
+            && isset($_POST['password'])
+        ) {
             unset($user);
             $user = $userManager->findOneUserBy($_POST['pseudo'], $_POST['password']);
             
-            if(is_object($user))
-            {
+            if (is_object($user)) {
                 $session->set('pseudo', $_POST['pseudo']);
                 $session->set('idUser', $user->getId());
 
@@ -54,24 +54,22 @@ class AuthenticateController extends BaseController
 
                 return $this->redirect('/');
             }
-
         }
         $session->set('fail', 'Vous avez entré un mauvais pseudo ou mot de passe.');
         return $this->redirect(self::PATH_TO_SIGNUP_PAGE);
-
     }
 
     public function signInForm()
     {
         return $this->render('signIn.html.twig');
     }
-    
+
     /**
      * Calls a sub-function to test if the fields are filled in correctly to register the visitor
      */
     public function signIn()
     {
-        $handlerSignIn = new HandlerSignIn;
+        $handlerSignIn = new HandlerSignIn();
         return $handlerSignIn->tryToSignIn($_POST);
     }
 
@@ -84,7 +82,7 @@ class AuthenticateController extends BaseController
         $session->set('success', 'Vous avez bien été déconnecté.');
         return $this->redirect('/');
     }
-    
+
     /**
      * Validates the user's email, identifying the user by the uuid
      *
@@ -92,27 +90,23 @@ class AuthenticateController extends BaseController
      */
     public function validEmail(string $uuid = NULL)
     {
-        if($uuid == NULL)
-        {
+        if ($uuid == NULL) {
             return $this->redirect('/erreur-404');
         }
         $userManager = new UserManager('user');
         $idUser = $userManager->getIdByUuid($uuid);
-        if(preg_match('#[0-9]+#', $idUser))
-        {
+        if (preg_match('#[0-9]+#', $idUser)) {
             $user = new User();
             $user->hydrate($user, ['emailValidated' => 1, 'uuid' => NULL]);
             $userManager->update($user, $idUser);
-            $session = new PHPSession;
+            $session = new PHPSession();
             $session->set('success', 'Votre email a bien été confirmé.');
             return $this->redirect('/');
-        } else
-        {
+        } else {
             return $this->redirect('/erreur404');
         }
-        
     }
-    
+
     /**
      * Leads to the form to enter your email address and change your password
      */
@@ -120,16 +114,18 @@ class AuthenticateController extends BaseController
 	{
 		return $this->render('emailToResetPassword.html.twig');
 	}
-    
+
     /**
-     * Calls functions to check if the email is in the database, generates a uuid, assigns it to the user and generates a password reset email.
+     * Calls functions to check if the email is in the database,
+     * generates a uuid, assigns it to the user
+     * and generates a password reset email.
      */
     public function sendEmailResetPassword()
     {
-        $handlerResetPassword = new HandlerResetPassword;
+        $handlerResetPassword = new HandlerResetPassword();
         $handlerResetPassword->handlerEmailResetPassword($_POST['email']);
     }
-	
+
 	/**
 	 * Shows the form to change your password
 	 *
@@ -137,11 +133,10 @@ class AuthenticateController extends BaseController
 	 */
 	public function changePasswordForm(string $uuid = NULL)
 	{
-        if($uuid == NULL)
-        {
+        if ($uuid == NULL) {
             return $this->redirect('/erreur-404');
         }
-        $session = new PHPSession;
+        $session = new PHPSession();
         $session->set('uuid', $uuid);
         $token = Uuid::uuid4();
         $token = $token->toString();
@@ -150,14 +145,13 @@ class AuthenticateController extends BaseController
             'uuid' => $uuid
         ]);
 	}
-    
+
     /**
      * Processes the password change form
      */
     public function resetPassword()
     {
-        $handlerResetPassword = new HandlerResetPassword;
+        $handlerResetPassword = new HandlerResetPassword();
         $handlerResetPassword->handlerResetPassword($_POST);
     }
-
 }

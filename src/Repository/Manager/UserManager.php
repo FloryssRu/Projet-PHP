@@ -6,14 +6,13 @@ use App\Repository\Manager;
 
 class UserManager extends Manager
 {
-
 	private const SELECT_ID_FROM = "SELECT id FROM ";
 
 	public function __construct($object)
 	{
         parent::__construct("user", $object);
 	}
-    
+
     /**
      * Get pseudo of a user with his id
      *
@@ -22,12 +21,14 @@ class UserManager extends Manager
      */
     public function getPseudoByIdUser(int $idUser)
     {
-        $req = $this->database->prepare("SELECT * FROM " . $this->table . " WHERE id = " . $idUser);
+        $req = $this->database->prepare(
+			"SELECT * FROM " . $this->table . " WHERE id = " . $idUser
+		);
 		$req->execute();
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		return $req->fetchAll();
     }
-	
+
 	/**
 	 * Test if a match exist with the login and the password send
 	 *
@@ -37,17 +38,18 @@ class UserManager extends Manager
 	 */
 	public function findOneUserBy(string $pseudo, string $password)
 	{
-		$req = $this->database->prepare("SELECT id, password FROM " . $this->table . " WHERE pseudo = :pseudo");
+		$req = $this->database->prepare(
+			"SELECT id, password FROM " . $this->table . " WHERE pseudo = :pseudo"
+		);
 		$req->execute(["pseudo" => $pseudo]);
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
 
-		if(password_verify($password, $user->getPassword()))
-		{
+		if (password_verify($password, $user->getPassword())) {
 			return $user;
 		}
 	}
-	
+
 	/**
 	 * Test if an email is in the database. Return false if it's not, else true.
 	 *
@@ -56,7 +58,9 @@ class UserManager extends Manager
 	 */
 	public function getEmail(string $email)
 	{
-		$req = $this->database->prepare("SELECT email FROM " . $this->table . " WHERE email = :email");
+		$req = $this->database->prepare(
+			"SELECT email FROM " . $this->table . " WHERE email = :email"
+		);
 		$req->execute(["email" => $email]);
 		return $req->fetch();
 	}
@@ -68,11 +72,13 @@ class UserManager extends Manager
 	 */
 	public function getPseudo(string $pseudo)
 	{
-		$req = $this->database->prepare("SELECT pseudo FROM " . $this->table . " WHERE pseudo = \"" . $pseudo . "\"");
+		$req = $this->database->prepare(
+			"SELECT pseudo FROM " . $this->table . " WHERE pseudo = \"" . $pseudo . "\""
+		);
 		$req->execute();
 		return $req->fetch();
 	}
-	
+
 	/**
 	 * Find a user id from a uuid
 	 *
@@ -81,17 +87,18 @@ class UserManager extends Manager
 	 */
 	public function getidByUuid(string $uuid)
 	{
-		$req = $this->database->prepare(self::SELECT_ID_FROM . $this->table . " WHERE uuid = '" . $uuid . "'");
+		$req = $this->database->prepare(
+			self::SELECT_ID_FROM . $this->table . " WHERE uuid = '" . $uuid . "'"
+		);
 		$req->execute();
 		
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
-		if($user)
-		{
+		if ($user) {
 			return $user->getId();
 		}
 	}
-	
+
 	/**
 	 * Find the user's id from their email address. (password reset)
 	 *
@@ -100,16 +107,17 @@ class UserManager extends Manager
 	 */
 	public function getIdByEmail(string $email)
 	{
-		$req = $this->database->prepare(self::SELECT_ID_FROM . $this->table . " WHERE email = :email");
+		$req = $this->database->prepare(
+			self::SELECT_ID_FROM . $this->table . " WHERE email = :email"
+		);
 		$req->execute(['email' => $email]);
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
-		if(!is_bool($req))
-		{
+		if (!is_bool($req)) {
 			return $user;
 		}
 	}
-	
+
 	/**
 	 * Return if a user is an admin (true if yes, false if no)
 	 *
@@ -118,26 +126,35 @@ class UserManager extends Manager
 	 */
 	public function isAdminById(int $idUser): bool
 	{
-		$req = $this->database->prepare("SELECT admin FROM " . $this->table . " WHERE id = '" . $idUser . "'");
+		$req = $this->database->prepare(
+			"SELECT admin FROM " . $this->table . " WHERE id = '" . $idUser . "'"
+		);
 		$req->execute();
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		$user = $req->fetch();
-		if($user->getAdmin() == 1)
-		{
+		if ($user->getAdmin() == 1) {
 			return true;
 		} 
 		return false;
 	}
-	
+
 	public function getAdminsEmails()
     {
-        $req = $this->database->query("SELECT email FROM " . $this->table . " WHERE admin = 1");
+        $req = $this->database->query(
+			"SELECT email FROM " . $this->table . " WHERE admin = 1"
+		);
 		return $req->fetchAll(\PDO::FETCH_COLUMN);
     }
 
 	public function getAvatarByPseudo(string $pseudo)
 	{
-		$req = $this->database->query("SELECT avatar_number FROM " . $this->table . " WHERE pseudo = '" . $pseudo . "'");
+		$req = $this->database->query(
+			"SELECT avatar_number FROM "
+			. $this->table
+			. " WHERE pseudo = '"
+			. $pseudo
+			. "'"
+		);
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
 		return $req->fetch();
 	}

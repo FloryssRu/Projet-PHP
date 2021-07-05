@@ -8,7 +8,7 @@ class SignInFailedException extends \Exception
 
     public function __construct(string $error)
     {
-		$this->error = $error;
+	    $this->error = $error;
     }
 
     public function getMoreDetail()

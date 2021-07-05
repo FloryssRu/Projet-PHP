@@ -4,7 +4,6 @@ namespace App\Services;
 
 class PHPSession
 {
-    
     /**
      * Verify that a session is already started, else start the session
      *
@@ -12,13 +11,11 @@ class PHPSession
      */
     private function startSession(): void
     {
-        if(session_status() == PHP_SESSION_NONE)
-        {
+        if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
-        
     }
-    
+
     /**
      * Retrieves a value in the Session
      *
@@ -28,13 +25,12 @@ class PHPSession
     public function get(string $key, $default = NULL)
     {
         $this->startSession();
-        if(array_key_exists($key, $_SESSION)) {
+        if (array_key_exists($key, $_SESSION)) {
             return $_SESSION[$key];
         }
-
         return $default;
     }
-    
+
     /**
      * Add a value in the Session
      *
@@ -47,7 +43,7 @@ class PHPSession
         $this->startSession();
         $_SESSION[$key] = $value;
     }
-    
+
     /**
      * Delete a Session value
      *
@@ -59,5 +55,4 @@ class PHPSession
         $this->startSession();
         unset($_SESSION[$key]);
     }
-
 }

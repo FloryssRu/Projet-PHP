@@ -8,7 +8,7 @@ class Manager
 	protected $object;
 	protected object $database;
 	protected const PATH_TO_ENTITIES = 'App\Entity\\';
-		
+
 	public function __construct($table, $object)
 	{
 		$this->table = $table;
@@ -18,7 +18,7 @@ class Manager
 		$datasource = $config->database;
 		$this->database = Database::getInstance($datasource);
 	}
-			
+
 	/**
 	 * Retrieves the row that matches the id
 	 *
@@ -27,40 +27,25 @@ class Manager
 	 */
 	public function getById($id): Object
 	{
-		$req = $this->database->prepare("SELECT * FROM " . $this->table . " WHERE id = :id");
+		$req = $this->database->prepare(
+			"SELECT * FROM " . $this->table . " WHERE id = :id"
+		);
 		$req->execute(array('id' => $id));
 		$req->setFetchMode(\PDO::FETCH_CLASS, self::PATH_TO_ENTITIES . $this->object);
 		$objectResult = $req->fetch();
-		foreach($objectResult as $attribute => $value)
-		{
-			if(preg_match('#^[a-z]+(_[a-z]+)+$#', $attribute))
-			{
+		foreach ($objectResult as $attribute => $value) {
+			if (preg_match('#^[a-z]+(_[a-z]+)+$#', $attribute)) {
 				$method = 'set' . preg_replace('#_#', '', ucwords($attribute, '_'));
 
-        		if(method_exists($objectResult, $method))
-        		{
+        		if (method_exists($objectResult, $method)) {
         		    $objectResult->$method($value);
         		}
 				unset($objectResult->$attribute);
 			}
 		}
-		
 		return $objectResult;
 	}
 
-	/**
-	 * Retrieves the id that matches the slug
-	 *
-	 * @param  string $slug
-	 * @return int
-	 */
-	public function getIdBySlug($slug): int
-	{
-		$req = $this->database->prepare("SELECT id FROM " . $this->table . " WHERE slug = :slug");
-		$req->execute(array('slug' => $slug));
-		return $req->fetch()['id'];
-	}
-			
 	/**
 	 * Retrieves all the row that are in the table
 	 *
@@ -71,41 +56,45 @@ class Manager
 		$req = $this->database->prepare("SELECT * FROM " . $this->table);
 		$req->execute();
 		return $this->finishQuery($req);
-		
 	}
-	
+
 	/**
 	 * Insert a new line in a table
 	 *
-	 * @param  object $params Associative array that contains the field names as keys and the values to be inserted as values
+	 * @param  object $params Associative array that contains
+	 * the field names as keys and the values to be inserted as values
 	 * @return void
 	 */
 	public function insert(array $arrayData): void
 	{
-		foreach($arrayData as $key => $value) {
+		foreach ($arrayData as $key => $value) {
 			$key = preg_replace('/(?=[A-Z])/', '_', $key);
 			$key = strtolower($key);
 			$fieldNames[] = $key;
 
-			if($value === NULL)
-			{
+			if ($value === NULL) {
 				$valuesToInsert[] = 'NULL';
-			} else
-			{
-				if(is_string($value))
-				{
+			} else {
+				if (is_string($value)) {
 					$value = addslashes($value);
 					$valuesToInsert[] = '"' . $value . '"';
-				} else
-				{
+				} else {
 					$valuesToInsert[] = $value;
 				}
 			}
 		}
-		$req = $this->database->prepare("INSERT INTO " . $this->table . "(" . implode(', ', $fieldNames) . ") VALUES (" . implode(', ', $valuesToInsert) . ")");
+		$req = $this->database->prepare(
+			"INSERT INTO "
+			. $this->table
+			. "("
+			. implode(', ', $fieldNames)
+			. ") VALUES ("
+			. implode(', ', $valuesToInsert)
+			. ")"
+		);
 		$req->execute();
 	}
-	
+
 	/**
 	 * Update a line in the table targeted by its id
 	 *
@@ -118,21 +107,18 @@ class Manager
 		$sql = "UPDATE " . $this->table . ' SET ';
 		$arrayData = $object->getAttributes($object);
 
-		foreach($arrayData as $attribute => $value) {
+		foreach ($arrayData as $attribute => $value) {
 			$attribute = preg_replace('/(?=[A-Z])/', '_', $attribute);
 			$attribute = strtolower($attribute);
 
-			if($value == NULL)
-			{
+			if ($value == NULL) {
 				$values[] = $attribute . ' = NULL ';
-			} else
-			{
+			} else {
 				$values[] = $attribute . ' = "' . $value . '" ';
 			}
 		}
 
 		$sql .= implode(', ', $values);
-
 		$sql .= 'WHERE id = :id';
 		$req = $this->database->prepare($sql);
 		$req->bindParam(':id', $id);
@@ -147,7 +133,9 @@ class Manager
 	 */
 	public function delete($id)
 	{
-		$req = $this->database->prepare("DELETE FROM " . $this->table . " WHERE id=" . $id);
+		$req = $this->database->prepare(
+			"DELETE FROM " . $this->table . " WHERE id=" . $id
+		);
 		$req->execute();
 		$req->closeCursor();
 	}
@@ -156,16 +144,12 @@ class Manager
 	{
 		$req->setFetchMode(\PDO::FETCH_CLASS, self::PATH_TO_ENTITIES . $this->object, []);
 		$result = $req->fetchAll();
-		foreach($result as $object)
-		{
-			foreach($object as $attribute => $value)
-			{
-				if(preg_match('#^[a-z]+(_[a-z]+)+$#', $attribute))
-				{
+		foreach ($result as $object) {
+			foreach ($object as $attribute => $value) {
+				if (preg_match('#^[a-z]+(_[a-z]+)+$#', $attribute)) {
 					$method = 'set' . preg_replace('#_#', '', ucwords($attribute, '_'));
 
-            		if(method_exists($object, $method))
-            		{
+            		if (method_exists($object, $method)) {
             		    $object->$method($value);
             		}
 					unset($object->$attribute);
@@ -174,5 +158,4 @@ class Manager
 		}
 		return $result;
 	}
-	
 }

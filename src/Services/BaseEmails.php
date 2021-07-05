@@ -6,7 +6,7 @@ use App\Controller\AuthenticateController;
 use PHPMailer\PHPMailer\PHPMailer;
 
 class BaseEmails extends AuthenticateController
-{    
+{   
     /**
      * Is empty because the mother class has a construct function and we don't want to use it for this class.
      *
@@ -32,7 +32,7 @@ class BaseEmails extends AuthenticateController
         $mail->isSendmail();
         $mail->Host = $emailConfig->smtp;
         $mail->Port = 465;
-        $mail->SMTPSecure = 'tls';   
+        $mail->SMTPSecure = 'tls';
         $mail->SMTPAuth = true;
         $mail->Username = $emailConfig->emailOrigin;
         $mail->Password = $emailConfig->password;

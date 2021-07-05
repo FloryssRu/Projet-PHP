@@ -14,7 +14,6 @@ class NoRouteFoundException extends \Exception
 
 	public function getMoreDetail()
 	{
-		$return = 'Route "' . $this->httpRequest->getUrl() . '" has not been found with method "' . $this->httpRequest->getMethod() . '"';
-		return $return;
+		return 'Route "' . $this->httpRequest->getUrl() . '" has not been found with method "' . $this->httpRequest->getMethod() . '"';
 	}
 }

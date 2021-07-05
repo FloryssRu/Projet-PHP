@@ -11,15 +11,16 @@ class Database extends PDO
 	
 	private function __construct(object $datasource)
 	{
-		$this->database = new PDO('mysql:dbname=' . $datasource->dbname . ';host=' . $datasource->host,
-							  					 $datasource->user,
-												 $datasource->password);
+		$this->database = new PDO(
+			'mysql:dbname=' . $datasource->dbname
+			. ';host=' . $datasource->host, $datasource->user,
+			$datasource->password
+		);
 	}
 
 	public static function getInstance($datasource)
 	{
-		if(empty(self::$instance))
-		{
+		if (empty(self::$instance)) {
 			self::$instance = new Database($datasource);
 		}
 		return self::$instance->database;
