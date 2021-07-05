@@ -7,6 +7,7 @@ use App\Repository\Manager;
 class UserManager extends Manager
 {
 	private const SELECT_ID_FROM = "SELECT id FROM ";
+	private const WHERE_PSEUDO = " WHERE pseudo = :pseudo";
 
 	public function __construct($object)
 	{
@@ -39,7 +40,7 @@ class UserManager extends Manager
 	public function findOneUserBy(string $pseudo, string $password)
 	{
 		$req = $this->database->prepare(
-			"SELECT id, password FROM " . $this->table . " WHERE pseudo = :pseudo"
+			"SELECT id, password FROM " . $this->table . self::WHERE_PSEUDO
 		);
 		$req->execute(["pseudo" => $pseudo]);
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
@@ -73,7 +74,7 @@ class UserManager extends Manager
 	public function getPseudo(string $pseudo)
 	{
 		$req = $this->database->prepare(
-			"SELECT pseudo FROM " . $this->table . " WHERE pseudo = :pseudo"
+			"SELECT pseudo FROM " . $this->table . self::WHERE_PSEUDO
 		);
 		$req->execute(['pseudo' => $pseudo]);
 		return $req->fetch();
@@ -151,7 +152,7 @@ class UserManager extends Manager
 		$req = $this->database->prepare(
 			"SELECT avatar_number FROM "
 			. $this->table
-			. " WHERE pseudo = :pseudo"
+			. self::WHERE_PSEUDO
 		);
 		$req->execute(['pseudo' => $pseudo]);
 		$req->setFetchMode(\PDO::FETCH_CLASS, parent::PATH_TO_ENTITIES . $this->object);
