@@ -41,8 +41,16 @@ Gestion des commentaires
                         <td>{{ comment.pseudo }}</td>
                         <td>{{ comment.content | u.truncate(43, "...") }}</td>
                         <td class="notForSmartphone">{{ comment.date }}</td>
-                        <td class="textCenter"><a href="/blogphp/consulter-commentaire?idComment={{ comment.id }}">Lire</a></td>
-                        <td class="textCenter"><a href="valider-commentaire?idComment={{ comment.id }}" onclick="return confirm('Etes vous sûr de valider ce commentaire ?')">Valider</a></td>
+                        <td class="textCenter">
+                            <a href="/blogphp/consulter-commentaire?idComment={{ comment.id }}">
+                                <img src="/blogphp/public/img/icons/see.png" alt="lire" class="adminIcons">
+                            </a>
+                        </td>
+                        <td class="textCenter">
+                            <a href="valider-commentaire?idComment={{ comment.id }}" onclick="return confirm('Etes vous sûr de valider ce commentaire ?')">
+                                <img src="/blogphp/public/img/icons/valid.png" alt="valider" class="adminIcons">
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -70,8 +78,16 @@ Gestion des commentaires
                         <td>{{ comment.pseudo }}</td>
                         <td>{{ comment.content }}</td>
                         <td class="notForSmartphone">{{ comment.date }}</td>
-                        <td class="textCenter"><a href="/blogphp/consulter-commentaire?idComment={{ comment.id }}">Lire</a></td>
-                        <td class="textCenter"><a href="invalider-commentaire?idComment={{ comment.id }}" onclick="return confirm('Etes vous sûr d invalider ce commentaire ?')">Invalider</a></td>
+                        <td class="textCenter">
+                            <a href="/blogphp/consulter-commentaire?idComment={{ comment.id }}">
+                                <img src="/blogphp/public/img/icons/see.png" alt="lire" class="adminIcons">
+                            </a>
+                        </td>
+                        <td class="textCenter">
+                            <a href="invalider-commentaire?idComment={{ comment.id }}" onclick="return confirm('Etes vous sûr d invalider ce commentaire ?')">
+                                <img src="/blogphp/public/img/icons/invalid.png" alt="invalider" class="adminIcons">
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

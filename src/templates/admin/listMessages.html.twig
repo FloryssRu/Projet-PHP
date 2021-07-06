@@ -44,14 +44,30 @@ Liste des messages reçus
                         <td>{{ message.title }}</td>
                         <td>{{ message.content | u.truncate(43, "...") }}</td>
                         {% if message.isProcessed %}
-                            <td class="textGreen">Message traité</td>
-                            <td class="notForSmartphone notForTablet"><a href="message-changement-statut?idMessage={{ message.id }}&isProcessed=0&token={{ token }}" onclick="return confirm('Etes vous sûr de passer ce message en statut non traité ?')">Passer en non-traité</a></td>
+                            <td class="textGreen textCenter">Message traité</td>
+                            <td class="notForSmartphone notForTablet textCenter">
+                                <a href="message-changement-statut?idMessage={{ message.id }}&isProcessed=0&token={{ token }}" onclick="return confirm('Etes vous sûr de passer ce message en statut non traité ?')">
+                                    <img src="/blogphp/public/img/icons/invalid.png" alt="passer en non-traité" class="adminIcons">
+                                </a>
+                            </td>
                         {% else %}
-                            <td class="textRed">Message non traité</td>
-                            <td class="notForSmartphone notForTablet"><a href="message-changement-statut?idMessage={{ message.id }}&isProcessed=1e&token={{ token }}" onclick="return confirm('Etes vous sûr de passer ce message en statut traité ?')">Passer en traité</a></td>
+                            <td class="textRed textCenter">Message non traité</td>
+                            <td class="notForSmartphone notForTablet textCenter">
+                                <a href="message-changement-statut?idMessage={{ message.id }}&isProcessed=1e&token={{ token }}" onclick="return confirm('Etes vous sûr de passer ce message en statut traité ?')">
+                                    <img src="/blogphp/public/img/icons/valid.png" alt="passer en traité" class="adminIcons">
+                                </a>
+                            </td>
                         {% endif %}
-                        <td><a href="/blogphp/consulter-message?idMessage={{ message.id }}&token={{ token }}">Lire</a></td>
-                        <td class="notForSmartphone notForTablet"><a href="supprimer-message?idMessage={{ message.id }}&token={{ token }}" onclick="return confirm('Etes vous sûr de supprimer ce message ?')">Supprimer</a></td>
+                        <td class="textCenter">
+                            <a href="/blogphp/consulter-message?idMessage={{ message.id }}&token={{ token }}">
+                                <img src="/blogphp/public/img/icons/see.png" alt="lire" class="adminIcons">
+                            </a>
+                        </td>
+                        <td class="notForSmartphone notForTablet textCenter">
+                            <a href="supprimer-message?idMessage={{ message.id }}&token={{ token }}" onclick="return confirm('Etes vous sûr de supprimer ce message ?')">
+                                <img src="/blogphp/public/img/icons/delete.png" alt="supprimer" class="adminIcons">
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

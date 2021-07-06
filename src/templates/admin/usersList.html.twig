@@ -37,11 +37,19 @@ Liste des utilisateurs
                     <tr>
                         <td>{{ user.pseudo }}</td>
                         <td>{{ user.email }}</td>
-                        <td>{{ user.adminToShow }}</td>
+                        <td class="textCenter">{{ user.adminToShow }}</td>
                         {% if user.admin %}
-                            <td><a href="changer-statut?idUser={{ user.id }}&token={{ token }}&becomeAdmin=1" onclick="return confirm('Etes vous sûr de passer cet admin en simple utilisateur ?')">Retirer des admins</a></td>
+                            <td class="textCenter">
+                                <a href="changer-statut?idUser={{ user.id }}&token={{ token }}&becomeAdmin=1" onclick="return confirm('Etes vous sûr de passer cet admin en simple utilisateur ?')">
+                                    <img src="/blogphp/public/img/icons/unset_admin.png" alt="retirer des admins" class="adminIcons">
+                                </a>
+                            </td>
                         {% else %}
-                            <td><a href="changer-statut?idUser={{ user.id }}&token={{ token }}&becomeAdmin=0" onclick="return confirm('Etes vous sûr de passer cet utilisateur en admin ?')">Passer en admin</a></td>
+                            <td class="textCenter">
+                                <a href="changer-statut?idUser={{ user.id }}&token={{ token }}&becomeAdmin=0" onclick="return confirm('Etes vous sûr de passer cet utilisateur en admin ?')">
+                                    <img src="/blogphp/public/img/icons/set_admin.png" alt="passer en admin" class="adminIcons">
+                                </a>
+                            </td>
                         {% endif %}
                     </tr>
                 {% endfor %}

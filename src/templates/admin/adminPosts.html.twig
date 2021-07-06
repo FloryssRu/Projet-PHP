@@ -37,8 +37,16 @@ Gestion des posts
                     <tr>
                         <td>{{ post.title }}</td>
                         <td>{{ post.dateLastUpdate }}</td>
-                        <td><a href="modifier-post?slug={{ post.slug }}">Modifier</a></td>
-                        <td><a href="supprimer-post?slug={{ post.slug }}&token={{ session.token }}" onclick="return confirm('Etes vous sûr de supprimer ce post ?')">Supprimer</a></td>
+                        <td class="textCenter">
+                            <a href="modifier-post?slug={{ post.slug }}">
+                                <img src="/blogphp/public/img/icons/edit.png" alt="modifier" class="adminIcons">
+                            </a>
+                        </td>
+                        <td class="textCenter">
+                            <a href="supprimer-post?slug={{ post.slug }}&token={{ session.token }}" onclick="return confirm('Etes vous sûr de supprimer ce post ?')">
+                                <img src="/blogphp/public/img/icons/delete.png" alt="supprimer" class="adminIcons">
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

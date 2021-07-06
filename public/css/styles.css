@@ -155,6 +155,10 @@ section {
     clear:both;
 }
 
+.adminIcons {
+    max-height: 20px;
+}
+
 .width50 {
     width: 45%;
     float: left;
