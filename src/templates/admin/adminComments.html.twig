@@ -9,7 +9,7 @@ Administrer les commentaires | Blog de Floryss Rubechi
 {% endblock %}
 
 {% block title %}
-Gestion des posts
+Gestion des commentaires
 {% endblock %}
 
 {% block css %}
@@ -29,7 +29,8 @@ Gestion des posts
                 <tr>
                     <th>Pseudo</th>
                     <th>Commentaire</th>
-                    <th>Date</th>
+                    <th class="notForSmartphone">Date</th>
+                    <th>Voir le commentaire</th>
                     <th>Valider</th>
                 </tr>
             </thead>
@@ -38,9 +39,10 @@ Gestion des posts
                 {% for comment in commentsNotValidated %}
                     <tr>
                         <td>{{ comment.pseudo }}</td>
-                        <td>{{ comment.content }}</td>
-                        <td>{{ comment.date }}</td>
-                        <td><a href="valider-commentaire?idComment={{ comment.id }}" onclick="return confirm('Etes vous sûr de valider ce commentaire ?')">Valider</a></td>
+                        <td>{{ comment.content | u.truncate(43, "...") }}</td>
+                        <td class="notForSmartphone">{{ comment.date }}</td>
+                        <td class="textCenter"><a href="/blogphp/consulter-commentaire?idComment={{ comment.id }}">Lire</a></td>
+                        <td class="textCenter"><a href="valider-commentaire?idComment={{ comment.id }}" onclick="return confirm('Etes vous sûr de valider ce commentaire ?')">Valider</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -57,6 +59,7 @@ Gestion des posts
                     <th>Pseudo</th>
                     <th>Commentaire</th>
                     <th>Date</th>
+                    <th>Voir le commentaire</th>
                     <th>Invalider</th>
                 </tr>
             </thead>
@@ -66,8 +69,9 @@ Gestion des posts
                     <tr>
                         <td>{{ comment.pseudo }}</td>
                         <td>{{ comment.content }}</td>
-                        <td>{{ comment.date }}</td>
-                        <td><a href="invalider-commentaire?idComment={{ comment.id }}" onclick="return confirm('Etes vous sûr d invalider ce commentaire ?')">Invalider</a></td>
+                        <td class="notForSmartphone">{{ comment.date }}</td>
+                        <td class="textCenter"><a href="/blogphp/consulter-commentaire?idComment={{ comment.id }}">Lire</a></td>
+                        <td class="textCenter"><a href="invalider-commentaire?idComment={{ comment.id }}" onclick="return confirm('Etes vous sûr d invalider ce commentaire ?')">Invalider</a></td>
                     </tr>
                 {% endfor %}
             </tbody>

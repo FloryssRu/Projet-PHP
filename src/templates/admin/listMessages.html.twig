@@ -19,19 +19,20 @@ Liste des messages reçus
 
 
 {% block body %}
-<div class="maincontent">
-    <section class="notForSmartphone notForTablet">
+<div class="maincontent xlargecontainer">
+    <section>
         <h1>Liste des messages</h1>
         <table id="myTable">
             <thead>
                 <tr>
-                    <th>Nom de l'envoyaeur</th>
-                    <th>Email de l'envoyeur</th>
+                    <th>Nom de l'envoyeur</th>
+                    <th class="notForSmartphone notForTablet">Email de l'envoyeur</th>
                     <th>Titre</th>
-                    <th>Message complet</th>
+                    <th>Message</th>
                     <th>Statut actuel</th>
-                    <th>Changer de statut</th>
-                    <th>Supprimer le message</th>
+                    <th class="notForSmartphone notForTablet">Changer de statut</th>
+                    <th>Lire le message</th>
+                    <th class="notForSmartphone notForTablet">Supprimer le message</th>
                 </tr>
             </thead>
 
@@ -39,27 +40,22 @@ Liste des messages reçus
                 {% for message in listMessages %}
                     <tr>
                         <td>{{ message.firstName }} {{ message.lastName }}</td>
-                        <td>{{ message.email }}</td>
+                        <td class="notForSmartphone notForTablet">{{ message.email }}</td>
                         <td>{{ message.title }}</td>
-                        <td>{{ message.content }}</td>
+                        <td>{{ message.content | u.truncate(43, "...") }}</td>
                         {% if message.isProcessed %}
-                            <td style="color: green;">Message traité</td>
-                            <td><a href="message-changement-statut?idMessage={{ message.id }}&isProcessed=0&token={{ token }}" onclick="return confirm('Etes vous sûr de passer ce message en statut non traité ?')">Passer en non-traité</a></td>
+                            <td class="textGreen">Message traité</td>
+                            <td class="notForSmartphone notForTablet"><a href="message-changement-statut?idMessage={{ message.id }}&isProcessed=0&token={{ token }}" onclick="return confirm('Etes vous sûr de passer ce message en statut non traité ?')">Passer en non-traité</a></td>
                         {% else %}
-                            <td style="color: red;">Message non traité</td>
-                            <td><a href="message-changement-statut?idMessage={{ message.id }}&isProcessed=1e&token={{ token }}" onclick="return confirm('Etes vous sûr de passer ce message en statut traité ?')">Passer en traité</a></td>
+                            <td class="textRed">Message non traité</td>
+                            <td class="notForSmartphone notForTablet"><a href="message-changement-statut?idMessage={{ message.id }}&isProcessed=1e&token={{ token }}" onclick="return confirm('Etes vous sûr de passer ce message en statut traité ?')">Passer en traité</a></td>
                         {% endif %}
-                        <td><a href="supprimer-message?idMessage={{ message.id }}&token={{ token }}" onclick="return confirm('Etes vous sûr de supprimer ce message ?')">Supprimer</a></td>
+                        <td><a href="/blogphp/consulter-message?idMessage={{ message.id }}&token={{ token }}">Lire</a></td>
+                        <td class="notForSmartphone notForTablet"><a href="supprimer-message?idMessage={{ message.id }}&token={{ token }}" onclick="return confirm('Etes vous sûr de supprimer ce message ?')">Supprimer</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-    </section>
-
-    <section class="forSmartphone forTablet">
-        <h1>Liste des messages</h1>
-        <p class="textCenter">La liste des messages reçus n'est pas accessible sur smartphone ou tablette.</p>
-        <p class="textCenter">Veuillez passer en "version pour ordinateur" ou changer de support.</p>
     </section>
 </div>
 {% endblock %}

@@ -38,7 +38,11 @@ Modifier un post
 
             <img src="{{ picture }}" alt="image actuellement associée à ce post" id="imgEditPost">
             <p>Image actuelle</p>
-            <p><label for="picture">Changer l'image du post (Formats acceptés : .jpg, .png et .gif, taille max 3Mo)</label><input type="file" name="picture" id="picture"></p>
+            <p>
+                <label for="picture">Changer l'image du post (Formats acceptés : .jpg, .png et .gif, taille max 3Mo)</label>
+                <br>
+                <input type="file" name="picture" id="picture">
+            </p>
 
             <p class="clear marginTop60"><label for="author">Auteur *</label><input type="text" name="author" id="author" value="{{ post.author }}" required></p>
             <input type="hidden" name="id" value="{{ post.id }}">

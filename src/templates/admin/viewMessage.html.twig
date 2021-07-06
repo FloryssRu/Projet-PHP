@@ -1,0 +1,41 @@
+{% extends "base.html.twig" %}
+
+{% block metatitle %}
+Message envoyé par {{ message.firstName }} {{ message.lastName }} | Blog de Floryss Rubechi
+{% endblock %}
+
+{% block metadescription %}
+
+{% endblock %}
+
+{% block title %}
+Lire un message reçu
+{% endblock %}
+
+{% block css %}
+<link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+{% endblock %}
+
+
+
+{% block body %}
+<div class="maincontent xlargecontainer">
+    <section>
+        <h1>Message envoyé par {{ message.firstName }} {{ message.lastName }}</h1>
+        <div class="textCenter">
+            <h2>{{ message.title }}</h2>
+            <p class="marginBot50 italic"> " {{ message.content }} "</p>
+            <p class="marginBot50">Email de {{ message.firstName }} {{ message.lastName }} : {{ message.email }}</p>
+            {% if message.isProcessed %}
+                <p class="textGreen">Ce message a été traité.</p>
+                <p><a href="message-changement-statut?idMessage={{ message.id }}&isProcessed=0&token={{ token }}" onclick="return confirm('Etes vous sûr de passer ce message en statut non traité ?')">Passer en non-traité</a></p>
+            {% else %}
+                <p class="textRed">Ce message n'a pas encore été traité.</p>
+                <p><a href="message-changement-statut?idMessage={{ message.id }}&isProcessed=1e&token={{ token }}" onclick="return confirm('Etes vous sûr de passer ce message en statut traité ?')">Passer en traité</a></p>
+            {% endif %}
+            <p><a href="/blogphp/liste-messages">Revenir à la liste des messages</a></p>
+        </div>
+    </section>
+</div>
+
+{% endblock %}

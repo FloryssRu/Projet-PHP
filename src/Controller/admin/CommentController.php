@@ -69,4 +69,21 @@ class CommentController extends BaseController
 
         return $this->redirect('/admin-commentaires');
     }
+
+    public function viewComment(int $idComment)
+    {
+        $session = new PHPSession();
+		if ($session->get('admin') == NULL || !$session->get('admin')) {
+            return $this->redirect(parent::ERROR_403_PATH);
+        }
+
+        $commentManager = new CommentManager('comment');
+        $comment = $commentManager->getById($idComment);
+        $comment = DateFormat::changeFormatDateComment($comment);
+
+        return $this->render('admin/viewComment.html.twig', [
+            'idComment' => $idComment,
+            'comment' => $comment
+        ]);
+    }
 }

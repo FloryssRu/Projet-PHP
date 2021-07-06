@@ -87,4 +87,10 @@ class DateFormat extends BaseController
             $post->setDateLastUpdate('Mis à jour ' . self::formatToDisplay($post->getDateLastUpdate()));
         }
     }
+
+    public static function changeFormatDateComment(Object $comment)
+    {
+        $comment->setDate(self::formatToDisplay($comment->getDate()));
+        return $comment;
+    }
 }

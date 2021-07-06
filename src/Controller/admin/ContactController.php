@@ -4,6 +4,7 @@ namespace App\Controller\admin;
 
 use App\Core\BaseController;
 use App\Repository\Manager\ContactManager;
+use App\Services\DateFormat;
 use App\Services\PHPSession;
 use Ramsey\Uuid\Uuid;
 
@@ -78,5 +79,27 @@ class ContactController extends BaseController
             return $this->redirect('/liste-messages');
         }
         return $this->redirect('/error-404');
+    }
+
+    public function viewMessage(int $idMessage = NULL, string $token = NULL)
+    {
+        $session = new PHPSession();
+		if (
+            $session->get('admin') == NULL
+            || !$session->get('admin')
+            || !is_int($idMessage)
+            || !is_string($token)
+        ) {
+            return $this->redirect(parent::ERROR_403_PATH);
+        }
+        
+        $contactManager = new ContactManager('contact');
+        $message = $contactManager->getById($idMessage);
+
+        return $this->render('admin/viewMessage.html.twig', [
+            'idMessage' => $idMessage,
+            'message' => $message,
+            'token' => $token
+        ]);
     }
 }

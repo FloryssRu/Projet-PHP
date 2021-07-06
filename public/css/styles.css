@@ -177,7 +177,17 @@ section {
 
 .textLeft { text-align: left; }
 
+.textRed { color:#C62B2B; }
+
+.textGreen { color:#4BA537; }
+
+.italic { font-style : italic; }
+
+.boldInThisDiv { font-weight: bold; }
+
 .marginTop60 { margin-top: 60px; }
+
+.marginTop70Laptop { margin-top: 70px; }
 
 .marginRight { margin-right: 50px; }
 
@@ -188,7 +198,21 @@ section {
     margin-bottom : 10px;
 }
 
-.inlineBlock { display: inline-block; }
+.flexContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: space-around;
+}
+
+.flexContainer > p {
+    margin: 17px;
+}
+
+.flexContainer > p > label {
+    margin: 0px;
+}
 
 .clear { clear: both; }
 
@@ -418,6 +442,9 @@ textarea {
     .notForSmartphone {
         display: none;
     }
+    .marginTop70Laptop {
+        margin: auto;
+    }
 
     /* general settings */
     h1 {
@@ -508,6 +535,7 @@ textarea {
     /* title block (listpost, post and dashboard pages) */
     .titleAllWidth {
         height: auto;
+        max-height: 270px;
     }
 
     .titleAllWidth > img {
@@ -520,7 +548,6 @@ textarea {
         line-height: 35px;
         margin: 0px;
         padding-top: 0px;
-        max-width: 200px;
     }
 
     /* admin pages */
@@ -550,6 +577,9 @@ textarea {
     }
     .notForTablet {
         display: none;
+    }
+    .marginTop70Laptop {
+        margin: auto;
     }
 
     /* nav */
@@ -613,6 +643,8 @@ textarea {
     .titleAllWidth {
         height: 310px;
     }
-
+    .titleAllWidth > img {
+        top: 0px;
+    }
 }
 
