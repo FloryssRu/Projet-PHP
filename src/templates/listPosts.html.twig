@@ -5,7 +5,7 @@ Liste des articles | Blog de Floryss Rubechi
 {% endblock %}
 
 {% block metadescription %}
-
+Liste des articles publiés sur le blog de Floryss Rubechi : choisissez votre prochaine lecture !
 {% endblock %}
 
 {% block title %}
@@ -21,7 +21,6 @@ Liste des Posts
 </section>
 
 <div class="maincontent">
-
     {% for post in listPosts %}
         <section class="postInList">
             <h2>{{ post.title }}</h2>
@@ -36,7 +35,5 @@ Liste des Posts
             <a href="post/{{ post.slug }}"><p class="buttonRed">Lire ce post</p></a>
         </section>
     {% endfor %}
-
 </div>
-
 {% endblock %}
