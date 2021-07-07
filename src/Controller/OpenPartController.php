@@ -140,6 +140,25 @@ class OpenPartController extends BaseController
         return $this->redirect('/dashboard');
     }
 
+    public function viewComment(int $idComment)
+    {
+        $session = new PHPSession();
+        $admin = true;
+		if ($session->get('admin') == NULL || !$session->get('admin')) {
+            $admin = false;
+        }
+
+        $commentManager = new CommentManager('comment');
+        $comment = $commentManager->getById($idComment);
+        $comment = DateFormat::changeFormatDateComment($comment);
+
+        return $this->render('viewComment.html.twig', [
+            'idComment' => $idComment,
+            'comment' => $comment,
+            'admin' => $admin
+        ]);
+    }
+
     public function mentions()
     {
         return $this->render('mentions.html.twig');

@@ -74,6 +74,7 @@ Dashboard
                     <th>Mon commentaire</th>
                     <th>Date</th>
                     <th>Accepté</th>
+                    <th>Lire</th>
                 </tr>
             </thead>
 
@@ -81,13 +82,18 @@ Dashboard
                 {% for comment in comments %}
                     <tr>
                         <td>{{ comment.title }}</td>
-                        <td>{{ comment.content }}</td>
+                        <td>{{ comment.content | slice(0,100) }} [...]</td>
                         <td>{{ comment.date }}</td>
                         {% if comment.isValidated %}
-                        <td>Commentaire validé</td>
+                        <td class="textCenter">Commentaire validé</td>
                         {% else %}
-                        <td>Commentaire en traitement</td>
+                        <td class="textCenter">Commentaire en traitement</td>
                         {% endif %}
+                        <td class="textCenter">
+                            <a href="/blogphp/consulter-commentaire?idComment={{ comment.id }}">
+                                <img src="/blogphp/public/img/icons/see.png" alt="lire" class="adminIcons">
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

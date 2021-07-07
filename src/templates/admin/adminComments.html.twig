@@ -39,7 +39,7 @@ Gestion des commentaires
                 {% for comment in commentsNotValidated %}
                     <tr>
                         <td>{{ comment.pseudo }}</td>
-                        <td>{{ comment.content | u.truncate(43, "...") }}</td>
+                        <td>{{ comment.content | slice(0, 100) }} [...]</td>
                         <td class="notForSmartphone">{{ comment.date }}</td>
                         <td class="textCenter">
                             <a href="/blogphp/consulter-commentaire?idComment={{ comment.id }}">
@@ -76,7 +76,7 @@ Gestion des commentaires
                 {% for comment in commentsValidated %}
                     <tr>
                         <td>{{ comment.pseudo }}</td>
-                        <td>{{ comment.content }}</td>
+                        <td>{{ comment.content | slice(0, 100) }} [...]</td>
                         <td class="notForSmartphone">{{ comment.date }}</td>
                         <td class="textCenter">
                             <a href="/blogphp/consulter-commentaire?idComment={{ comment.id }}">

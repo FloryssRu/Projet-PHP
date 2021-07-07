@@ -6,7 +6,6 @@ use App\Core\Response\Redirection;
 use App\Core\Response\Response;
 use Twig\Loader\FilesystemLoader;
 use Twig\Environment;
-use Twig\Extra\String\StringExtension;
 
 class BaseController
 {
@@ -26,7 +25,6 @@ class BaseController
 		$this->bindManager();
 		$loader = new FilesystemLoader(TEMPLATE_DIR . '//');
 		$this->twig = new Environment($loader, ['debug' => true]);
-		$this->twig->addExtension(new StringExtension());
 	}
 
 	protected function render($filename, $array = [])

@@ -42,7 +42,7 @@ Liste des messages reçus
                         <td>{{ message.firstName }} {{ message.lastName }}</td>
                         <td class="notForSmartphone notForTablet">{{ message.email }}</td>
                         <td>{{ message.title }}</td>
-                        <td>{{ message.content | u.truncate(43, "...") }}</td>
+                        <td>{{ message.content | slice(0, 100) }} [...]</td>
                         {% if message.isProcessed %}
                             <td class="textGreen textCenter">Message traité</td>
                             <td class="notForSmartphone notForTablet textCenter">

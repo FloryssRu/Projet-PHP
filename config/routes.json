@@ -88,7 +88,7 @@
 },
 {
 	"path" : "/blogphp/consulter-commentaire",
-	"controller" : "Comment",
+	"controller" : "OpenPart",
 	"action" : "viewComment",
 	"method" : "GET",
 	"param" : [

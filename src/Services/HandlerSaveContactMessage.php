@@ -64,10 +64,9 @@ class HandlerSaveContactMessage extends HomeController
             <p><a href="http://localhost/blogphp/liste-messages">Voir les messages</a></p>';
 
             $success = true;
-
+            
             foreach ($adminsEmails as $email) {
                 $mail = $baseEmails->sendEmail($email, $titleEmail, $contentEmail);
-                $mail->send();
                 if (!$mail->send()) {
                     $success = false;
                 }
