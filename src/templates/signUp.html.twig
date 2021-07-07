@@ -1,20 +1,30 @@
 {% extends "base.html.twig" %}
 
+{% block metatitle %}
+Se connecter | Blog de Floryss Rubechi
+{% endblock %}
+
+{% block metadescription %}
+Connectez-vous à votre compte du Blog de Floryss Rubechi.
+{% endblock %}
 
 {% block title %}
 Se connecter
 {% endblock %}
 
 {% block body %}
+<div class="maincontent">
+    <section class="divForForm">
+        <h1>Connectez-vous</h1>
+        <form action="traitement-connexion" method="post">
+            <p><label for="pseudo">Pseudo * </label><input type="text" id="pseudo" name="pseudo" required></p>
+            <p><label for="password">Mot de passe * </label><input type="password" id="password" name="password" required></p>
+            <input type="submit" name="signUp" value="Se connecter" class="buttonRed">
+        </form>
 
-    <h1>Connectez-vous</h1>
-
-    <form action="traitement-connexion" method="post">
-        <p><label for="pseudo">Pseudo * </label><input type="text" id="pseudo" name="pseudo" required></p>
-        <p><label for="password">Mot de passe * </label><input type="password" id="password" name="password" required></p>
-        <input type="submit" name="signUp" value="Se connecter">
-    </form>
-
-    <p><a href="mot-de-passe-oublie">J'ai oublié mon mot de passe</a></p>
-
+        <div>
+            <a href="mot-de-passe-oublie"><p class="link">J'ai oublié mon mot de passe</p></a>
+        </div>
+    </section>
+</div>
 {% endblock %}

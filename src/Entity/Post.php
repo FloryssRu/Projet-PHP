@@ -1,7 +1,5 @@
 <?php
 
-namespace App\Entity;
-
 /**
  * File Post class
  *
@@ -11,6 +9,8 @@ namespace App\Entity;
  *
  * @since 1.0
  */
+
+namespace App\Entity;
 
 class Post extends Entity
 {
@@ -22,7 +22,7 @@ class Post extends Entity
     private string $heading;
     private string $content;
     private string $author;
-    
+
     public function getId(): ?int
     {
         return $this->id;
@@ -118,11 +118,9 @@ class Post extends Entity
 
     public function getAttributes(Object $object)
     {
-        foreach($object as $attribute => $value)
-        {
+        foreach ($object as $attribute => $value) {
             $array[$attribute] = $value;
         }
         return $array;
     }
-
 }

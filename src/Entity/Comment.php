@@ -1,7 +1,5 @@
 <?php
 
-namespace App\Entity;
-
 /**
  * File Comment class
  *
@@ -12,9 +10,10 @@ namespace App\Entity;
  * @since 1.0
  */
 
+namespace App\Entity;
+
 class Comment extends Entity
 {
-
     private int $id;
     private string $pseudo;
     private string $content;
@@ -79,8 +78,7 @@ class Comment extends Entity
 
     public function getAttributes(Object $object)
     {
-        foreach($object as $attribute => $value)
-        {
+        foreach ($object as $attribute => $value) {
             $array[$attribute] = $value;
         }
         return $array;

@@ -1,5 +1,13 @@
 {% extends "base.html.twig" %}
 
+{% block metatitle %}
+Administrer les utilisateurs | Blog de Floryss Rubechi
+{% endblock %}
+
+{% block metadescription %}
+Partie administration : liste des comptes d'utilisateurs du site, voir les statuts, changer leur statut en administrateur.
+{% endblock %}
+
 {% block title %}
 Liste des utilisateurs
 {% endblock %}
@@ -11,34 +19,44 @@ Liste des utilisateurs
 
 
 {% block body %}
+<div class="maincontent xlargecontainer">
+    <section>
+        <h1>Liste des utilisateurs</h1>
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th>Pseudo</th>
+                    <th>Email</th>
+                    <th>Statut</th>
+                    <th>Changer le statut</th>
+                </tr>
+            </thead>
 
-<h1>Liste des utilisateurs</h1>
-<table id="myTable">
-    <thead>
-        <tr>
-            <th>Pseudo</th>
-            <th>Email</th>
-            <th>Statut</th>
-            <th>Changer le statut</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.pseudo }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.adminToShow }}</td>
-                {% if user.admin %}
-                    <td><a href="changer-statut?idUser={{ user.id }}&token={{ token }}&becomeAdmin=1" onclick="return confirm('Etes vous sûr de passer cet admin en simple utilisateur ?')">Retirer des admins</a></td>
-                {% else %}
-                    <td><a href="changer-statut?idUser={{ user.id }}&token={{ token }}&becomeAdmin=0" onclick="return confirm('Etes vous sûr de passer cet utilisateur en admin ?')">Passer en admin</a></td>
-                {% endif %}
-            </tr>
-        {% endfor %}
-    </tbody>
-
-</table>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.pseudo }}</td>
+                        <td>{{ user.email }}</td>
+                        <td class="textCenter">{{ user.adminToShow }}</td>
+                        {% if user.admin %}
+                            <td class="textCenter">
+                                <a href="changer-statut?idUser={{ user.id }}&token={{ token }}&becomeAdmin=1" onclick="return confirm('Etes vous sûr de passer cet admin en simple utilisateur ?')">
+                                    <img src="/blogphp/public/img/icons/unset_admin.png" alt="retirer des admins" class="adminIcons">
+                                </a>
+                            </td>
+                        {% else %}
+                            <td class="textCenter">
+                                <a href="changer-statut?idUser={{ user.id }}&token={{ token }}&becomeAdmin=0" onclick="return confirm('Etes vous sûr de passer cet utilisateur en admin ?')">
+                                    <img src="/blogphp/public/img/icons/set_admin.png" alt="passer en admin" class="adminIcons">
+                                </a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</div>
 
 {% endblock %}
 

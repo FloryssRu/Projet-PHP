@@ -11,7 +11,6 @@ use Ramsey\Uuid\Nonstandard\Uuid;
 
 class HandlerSignIn extends AuthenticateController
 {
-    
     /**
      * Is empty because the mother class has a construct function and we don't want to use it for this class.
      *
@@ -19,7 +18,7 @@ class HandlerSignIn extends AuthenticateController
      */
     public function __construct()
     {
-        
+
     }
 
     /**
@@ -39,21 +38,24 @@ class HandlerSignIn extends AuthenticateController
         $user = new User();
         $user->hydrate($user, $data);
 
-        if($data['password'] === $data['passwordValid']
-        && $this->isValid($user)
-        && $this->isSubmit('signIn')
-        && isset($data['mentionsAccepted'])
-        && strlen($data['pseudo']) <= 100
-        && strlen($data['password']) <= 50
-        && strlen($data['email']) <= 100
-        && preg_match('#^[a-zA-Z\.0-9\+]+@[a-zA-Z\.0-9]+\.[a-z]{0,5}$#', $data['email'])
-        && !$isEmailOccupied
-        && !$isPseudoOccupied
-        && isset($data['pseudo'])
-        && isset($data['password'])
-        && isset($data['passwordValid'])
-        && !preg_match("#[<>':=\/$();&]+#", $_POST['pseudo']))
-        {
+        $session = new PHPSession();
+
+        if (
+            $data['password'] === $data['passwordValid']
+            && $this->isValid($user)
+            && $this->isSubmit('signIn')
+            && isset($data['mentionsAccepted'])
+            && strlen($data['pseudo']) <= 100
+            && strlen($data['password']) <= 50
+            && strlen($data['email']) <= 100
+            && preg_match('#^[a-zA-Z\.0-9\+]+@[a-zA-Z\.0-9]+\.[a-z]{0,5}$#', $data['email'])
+            && !$isEmailOccupied
+            && !$isPseudoOccupied
+            && isset($data['pseudo'])
+            && isset($data['password'])
+            && isset($data['passwordValid'])
+            && !preg_match("#[<>':=\/$();&]+#", $_POST['pseudo'])
+        ) {
             $uuid = Uuid::uuid4();
             $uuid = $uuid->toString();
             $password = password_hash(htmlspecialchars($data['password']), PASSWORD_DEFAULT);
@@ -64,12 +66,11 @@ class HandlerSignIn extends AuthenticateController
             $data['email_validated'] = 0;
             $data['uuid'] = $uuid;
 
-            $baseEmails = new BaseEmails;
+            $baseEmails = new BaseEmails();
             $mail = $baseEmails->sendEmail($data['email'], 'Valider votre email - Blog de Floryss Rubechi', '<p>Vous vous êtes inscrit sur le Blog de Floryss Rubechi.</p>
             <p>Pour valider votre adresse email et terminer votre inscritpion, veuillez cliquer sur le lien ci-dessous</p>
             <p><a href="http://localhost/blogphp/validation-email?uuid=' . $uuid . '">Valider mon email !</a></p>');
 
-            $session = new PHPSession;
             $session->set('pseudo', $data['pseudo']);
             
             if (!$mail->send()) {
@@ -86,15 +87,13 @@ class HandlerSignIn extends AuthenticateController
                 return $this->redirect('/');
             }
 
-        } else
-        {
+        } else {
             $problem = $this->findSignInProblem($data, $user, $isEmailOccupied);
-            $session = new PHPSession;
             $session->set('fail', $problem);
             return $this->redirect('/inscription');
         }
 	}
-    
+
     /**
      * Finds the problem that caused the registration fail and returns the appropriate message
      *
@@ -105,41 +104,29 @@ class HandlerSignIn extends AuthenticateController
      */
     private function findSignInProblem(array $data, Object $user, $isEmailOccupied): string
     {
-        if($data['password'] !== $data['passwordValid'])
-        {
+        if ($data['password'] !== $data['passwordValid']) {
             $error = 'Vous n\'avez pas écrit deux fois le même mot de passe.';
-        } elseif(!$this->isValid($user))
-        {
+        } elseif (!$this->isValid($user)) {
             $error = 'Un ou plusieurs champs sont vides.';
-        } elseif(!$this->isSubmit('signIn'))
-        {
+        } elseif (!$this->isSubmit('signIn')) {
             $error = 'Le formulaire n\'a pas été soumis.';
-        } elseif(!isset($data['mentionsAccepted']))
-        {
+        } elseif (!isset($data['mentionsAccepted'])) {
             $error = 'Vous n\'avez pas accepté les mentions.';
-        } elseif(strlen($data['pseudo']) > 100)
-        {
+        } elseif (strlen($data['pseudo']) > 100) {
             $error = 'Votre pseudo est trop long. 100 caractères max';
-        } elseif(strlen($data['password']) > 50)
-        {
+        } elseif (strlen($data['password']) > 50) {
             $error = 'Votre mot de passe est trop long. 50 caractères max';
-        } elseif(strlen($data['email']) > 100)
-        {
+        } elseif (strlen($data['email']) > 100) {
             $error = 'Votre email est trop long. 100 caractères max';
-        } elseif(!preg_match('#^[a-zA-Z\.1-9\+]+@[a-zA-Z\.1-9]+\.[a-z]{0,5}$#', $data['email']))
-        {
+        } elseif (!preg_match('#^[a-zA-Z\.1-9\+]+@[a-zA-Z\.1-9]+\.[a-z]{0,5}$#', $data['email'])) {
             $error = 'Le format de l\'email n\'est pas valide.';
-        } elseif(!is_bool($isEmailOccupied))
-        {
+        } elseif (!is_bool($isEmailOccupied)) {
             $error = 'Votre inscription a échoué.';
-        } elseif(is_bool($data['pseudo']))
-        {
+        } elseif (is_bool($data['pseudo'])) {
             $error = 'Choisissez un autre pseudo.';
-        } elseif (preg_match("#[<>':=\/$();&]*#", $_POST['pseudo']))
-        {
+        } elseif (preg_match("#[<>':=\/$();&]*#", $_POST['pseudo'])) {
             $error = 'Votre pseudo contient des caractères interdits.';
-        } else
-        {
+        } else {
             $error = 'Une erreur est survenue.';
         }
         $exception = new SignInFailedException($error);

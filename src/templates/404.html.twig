@@ -1,14 +1,23 @@
 {% extends "base.html.twig" %}
 
+{% block metatitle %}
+Erreur 404 | Blog de Floryss Rubechi
+{% endblock %}
+
+{% block metadescription %}
+Cette page n'existe pas.
+{% endblock %}
 
 {% block title %}
 Erreur 404
 {% endblock %}
 
 {% block body %}
-
-    <h1>Erreur 404 - Page non trouvée</h1>
-
-    <p>La page que vous cherchez n'existe pas.</p>
-
+<div class="maincontent">
+    <section>
+        <h1>Erreur 404 - Page non trouvée</h1>
+        <p class="textCenter">La page que vous cherchez n'existe pas.</p>
+        <p class="buttonRed"><a href="/blogphp/">Retourner à l'accueil</a></p>
+    </section>
+</div>
 {% endblock %}

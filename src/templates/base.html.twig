@@ -2,10 +2,16 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+        <meta name="title" content="{% block metatitle %}{% endblock %}">
+        <meta name="description" content="{% block metadescription %}{% endblock %}">
+        <link rel="stylesheet" href="/blogphp/public/css/normalize.css">
+        <link rel="stylesheet" href="/blogphp/public/css/styles.css">
+        <link rel="shortcut icon" type="image/jpg" href="/blogphp/public/img/favicon.png"/>
         <title>
         
-        {% block title %}
-        {% endblock %}
+            {% block title %}
+            {% endblock %}
 
         </title>
 
@@ -14,11 +20,24 @@
 
     </head>
     <body>
+        <header>
+            <p id="blogTitle">Blog de Floryss Rubechi</p>
+            {% if session.pseudo %}
+                {% if session.admin %}
+                    {% include 'navAdmin.html.twig' %}
+                {% else %}
+                    {% include 'navUserConnected.html.twig' %}
+                {% endif %}
+            {% else %}
+                {% include 'navVisitor.html.twig' %}
+            {% endif %}
+        </header>
 
         {% if session.success %}
 
             <div class="flashMessage success" id="flashMessage">
-                {{ session.success }}
+                <img src="/blogphp/public/img/cross.png" alt="fermer" class="closeFlash" id="close">
+                <p>{{ session.success }}</p>
             </div>
 
         {% endif %}
@@ -26,50 +45,55 @@
         {% if session.fail %}
 
             <div class="flashMessage fail" id="flashMessage">
-                {{ session.fail }}
+                <img src="/blogphp/public/img/cross.png" alt="fermer" class="closeFlash" id="close">
+                <p>{{ session.fail }}</p>
             </div>
 
         {% endif %}
-    
         
-        {% if session.pseudo %}
-            <header>
-                {% if session.admin %}
-                    {% include 'navAdmin.html.twig' %}
-                {% else %}
-                    {% include 'navUserConnected.html.twig' %}
-                {% endif %}
-            </header>
-
-        {% else %}
-            <header>
-                {% include 'navVisitor.html.twig' %}
-            </header>
-        {% endif %}
-
         {% block body %}
         {% endblock %}
 
-        {% if session.pseudo %}
-            <footer>
-                {% if session.admin %}
-                    {% include 'navAdmin.html.twig' %}
-                    <div class="button">
+        <footer>
+            <div class="width33">
+                <h2>Floryss Rubechi</h2>
+                <img src="/blogphp/public/img/Floryss.jpg" alt="photo de Floryss" id="pictureInFooter">
+                <h3>Contact :</h3>
+                <p class="textCenter">+33 6.95.87.34.83</p>
+                <p class="textCenter">floryss.rubechi@gmail.com</p>
+            </div>
+            <div class="width33">
+                <h2>Réseaux sociaux</h2>
+                <ul>
+                    <li><a href="https://www.linkedin.com/in/floryss-rubechi-44367b195/" target="blank"><img src="/blogphp/public/img/linkedin.png" alt="LinkedIn" class="icon"> Floryss Rubechi</a></li>
+                    <li><a href="https://github.com/FloryssRu" target="blank"><img src="/blogphp/public/img/github.png" alt="GitHub" class="icon"> FloryssRu</a></li>
+                </ul>
+            </div>
+
+            <div class="width33 notForSmartphone notForTablet">
+                <h2>Navigation</h2>
+                {% if session.pseudo %}
+                
+                    {% if session.admin %}
+                        {% include 'navAdmin.html.twig' %}
                         <p><a href="/blogphp/admin-posts">Partie Admin</a></p>
-                    </div>
+                    {% else %}
+                        {% include 'navUserConnected.html.twig' %}
+                    {% endif %}
+                    <p><a href="/blogphp/mentions-legales">Mentions légales</a></p>
+                
                 {% else %}
-                    {% include 'navUserConnected.html.twig' %}
+
+                    {% include 'navVisitor.html.twig' %}
+                    <p><a href="/blogphp/mentions-legales">Mentions légales</a></p>
+                
                 {% endif %}
-                <p><a href="/blogphp/mentions-legales">Mentions légales</a></p>
-            </footer>
+            </div>
+        </footer>
 
-        {% else %}
-            <footer>
-                {% include 'navVisitor.html.twig' %}
-                <p><a href="/blogphp/mentions-legales">Mentions légales</a></p>
-            </footer>
-        {% endif %}
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="/blogphp/public/js/jquery.js"></script>
         {% block js %}
         {% endblock %}
 

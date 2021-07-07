@@ -11,11 +11,9 @@ class Entity
      */
     public function hydrate(Object $object, array $data)
     {
-        foreach ($data as $key => $value)
-        {
+        foreach ($data as $key => $value) {
             $method = 'set' . ucfirst($key);
-            if (method_exists($object, $method))
-            {
+            if (method_exists($object, $method)) {
                 $object->$method($value);
             }
         }

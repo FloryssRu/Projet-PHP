@@ -8,8 +8,7 @@ class ErrorController extends BaseController
 {
 	public function Show($exception = NULL)
 	{
-        if($exception == NULL)
-        {
+        if ($exception == NULL) {
             return $this->redirect('/erreur-404');
         }
 		$this->addParam("exception", $exception);
@@ -28,4 +27,3 @@ class ErrorController extends BaseController
         return $this->render('404.html.twig');
     }
 }
-	

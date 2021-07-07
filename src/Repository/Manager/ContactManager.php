@@ -13,8 +13,10 @@ class ContactManager extends Manager
 
     public function changeStatutMessage(int $id, bool $isProcessed)
     {
-        $req = $this->database->prepare("UPDATE " . $this->table . " SET is_processed = :isProcessed  WHERE id = :id");
-		$req->execute(array('id' => $id, 'isProcessed' => $isProcessed));
+        $req = $this->database->prepare(
+            "UPDATE " . $this->table . " SET is_processed = :isProcessed  WHERE id = :id"
+        );
+		$req->execute(['id' => $id, 'isProcessed' => $isProcessed]);
 		return true;
     }
 }

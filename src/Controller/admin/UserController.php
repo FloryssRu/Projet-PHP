@@ -13,9 +13,8 @@ class UserController extends BaseController
 {
     public function listUsers()
     {
-        $session = new PHPSession;
-		if($session->get('admin') == NULL || !$session->get('admin'))
-        {
+        $session = new PHPSession();
+		if ($session->get('admin') == NULL || !$session->get('admin')) {
             return $this->redirect('/erreur-403');
         }
         $userManager = new UserManager('user');
@@ -35,23 +34,28 @@ class UserController extends BaseController
      *
      * @param  int $idUser
      * @param  string $token
-     * @param  int $becomeAdmin     Is 0 if the user will become an admin, and 1 if the user become a simple user
+     * @param  int $becomeAdmin Is 0 if the user will become an admin, and 1 if the user become a simple user
      */
-    public function changeUserStatut(int $idUser = NULL, string $token = NULL, int $becomeAdmin = NULL)
-    {
-        $session = new PHPSession;
-		if($session->get('admin') == NULL || !$session->get('admin') || !is_int($idUser) || !is_string($token) || !is_int($becomeAdmin))
-        {
+    public function changeUserStatut(
+        int $idUser = NULL,
+        string $token = NULL,
+        int $becomeAdmin = NULL
+    ) {
+        $session = new PHPSession();
+		if (
+            $session->get('admin') == NULL
+            || !$session->get('admin')
+            || !is_int($idUser)
+            || !is_string($token)
+            || !is_int($becomeAdmin)
+        ) {
             return $this->redirect('/erreur-403');
         }
-        if($token == $session->get('token'))
-        {
-            if($becomeAdmin == 0)
-            {
+        if ($token == $session->get('token')) {
+            if ($becomeAdmin == 0) {
                 $admin = true;
                 $session->set('success', "L'utilisateur est passé en statut administrateur.");
-            } else
-            {
+            } else {
                 $admin = false;
                 $session->set('success', "L'utilisateur est passé en statut simple utilisateur.");
             }
@@ -60,12 +64,9 @@ class UserController extends BaseController
             $user->setAdmin($admin);
             $userManager = new UserManager('user');
             $userManager->update($user, $idUser);
-            
-        } else
-        {
+        } else {
             $session->set('fail', "La transmission d'information a échoué.");
         }
         return $this->redirect('/liste-utilisateurs');
     }
-
 }

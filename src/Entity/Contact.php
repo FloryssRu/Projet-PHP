@@ -1,7 +1,5 @@
 <?php
 
-namespace App\Entity;
-
 /**
  * File Contact class
  *
@@ -12,9 +10,10 @@ namespace App\Entity;
  * @since 1.0
  */
 
+namespace App\Entity;
+
 class Contact extends Entity
 {
-
     private int $id;
     private string $firstName;
     private string $lastName;
@@ -96,8 +95,7 @@ class Contact extends Entity
 
     public function getAttributes(Object $object)
     {
-        foreach($object as $attribute => $value)
-        {
+        foreach ($object as $attribute => $value) {
             $array[$attribute] = $value;
         }
         return $array;

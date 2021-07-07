@@ -1,5 +1,13 @@
 {% extends "base.html.twig" %}
 
+{% block metatitle %}
+Créer un nouveau post | Blog de Floryss Rubechi
+{% endblock %}
+
+{% block metadescription %}
+Partie administration : ajouter un nouvel article, ajouter un titre, un chapô, un contenu, un nom d'auteur et optionnellement une image liée à l'article.
+{% endblock %}
+
 {% block title %}
 Nouveau Post
 {% endblock %}
@@ -17,17 +25,22 @@ Nouveau Post
 {% endblock %}
 
 {% block body %}
-
-<h1>Formulaire pour ajouter un nouveau Post</h1>
-<form action="ajout-post" method="post" enctype="multipart/form-data">
-    <label for="title">Titre</label><input type="text" name="title" id="title" required>
-	<label for="heading">Chapô</label><textarea id="heading" name="heading"></textarea>
-    <label for="content">Contenu de l'article</label><textarea id="content" name="content"></textarea>
-    <label for="picture">Ajouter une image au post (optionnel) Formats acceptés : .jpg, .png et .gif, Taille max 3Mo</label><input type="file" name="picture" id="picture">
-    <label for="author">Auteur</label><input type="text" name="author" id="author" required>
-    <input type="hidden" name="token" value="{{ session.token }}">
-	<input type="submit" value="Ajouter le post" name="newPost">
-</form>
-
+<div class="maincontent">
+    <section class="divForForm">
+        <h1>Nouveau Post</h1>
+        <form action="ajout-post" method="post" enctype="multipart/form-data">
+            <p><label for="title">Titre</label><input type="text" name="title" id="title" required></p>
+            <p><label for="heading" class="miniMarginBot">Chapô</label><textarea id="heading" name="heading"></textarea></p>
+            <p><label for="content" class="miniMarginBot">Contenu de l'article</label><textarea id="content" name="content"></textarea></p>
+            <p>
+                <label for="picture">Ajouter une image au post (Formats acceptés : .jpg, .png et .gif, Taille max 3Mo)</label><br>
+                <input type="file" name="picture" id="picture">
+            </p>
+            <p><label for="author">Auteur</label><input type="text" name="author" id="author" required></p>
+            <input type="hidden" name="token" value="{{ session.token }}">
+            <input type="submit" value="Ajouter le post" name="newPost"  class="buttonRed">
+        </form>
+    </section>
+</div>
 
 {% endblock %}

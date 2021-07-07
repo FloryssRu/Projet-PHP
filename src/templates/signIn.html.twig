@@ -1,20 +1,30 @@
 {% extends "base.html.twig" %}
 
+{% block metatitle %}
+S'inscrire | Blog de Floryss Rubechi
+{% endblock %}
+
+{% block metadescription %}
+Créez un compte sur le Blog de Floryss Rubechi afin d'avoir accès à toutes les fonctionnalités : commentez et personnalisez votre avatar !
+{% endblock %}
+
 {% block title %}
 S'inscrire
 {% endblock %}
 
 {% block body %}
+<div class="maincontent">
+    <section class="divForForm">
+        <h1>Inscrivez-vous</h1>
 
-    <h1>Inscrivez-vous</h1>
-
-    <form action="traitement-inscription" method="post">
-        <p><label for="pseudo">Pseudo * </label><input type="text" id="pseudo" name="pseudo" required></p>
-        <p><label for="password">Mot de passe * </label><input type="password" id="password" name="password" required></p>
-        <p><label for="password-valid">Validation du mot de passe * </label><input type="password" id="password-valid" name="passwordValid" required></p>
-        <p><label for="email">Email * </label><input type="mail" id="email" name="email" required></p>
-        <p><input type="checkbox" name="mentionsAccepted" required> En envoyant ce formulaire, j'accepte la collecte de mes données personnelles conformément aux <a href="/blogphp/mentions-legales">mentions légales</a> du site. *</p>
-        <input type="submit" name="signIn" value="S'incrire">
-    </form>
-
+        <form action="traitement-inscription" method="post">
+            <p><label for="pseudo">Pseudo * </label><input type="text" id="pseudo" name="pseudo" required></p>
+            <p><label for="email">Email * </label><input type="mail" id="email" name="email" required></p>
+            <p class="width50"><label for="password">Mot de passe * </label><input type="password" id="password" name="password" required></p>
+            <p class="width50"><label for="password-valid">Validation du mot de passe * </label><input type="password" id="password-valid" name="passwordValid" required></p>
+            <p><input type="checkbox" name="mentionsAccepted" class="checkbox" required> En envoyant ce formulaire, j'accepte la collecte de mes données personnelles conformément aux <a href="/blogphp/mentions-legales">mentions légales</a> du site. *</p>
+            <input type="submit" name="signIn" value="S'incrire" class="buttonRed">
+        </form>
+    </section>
+</div>
 {% endblock %}

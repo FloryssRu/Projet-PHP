@@ -10,7 +10,6 @@ use App\Services\PHPSession;
 
 class CommentController extends BaseController
 {
-
     private const ADMIN_COMMENTS_TEMPLATE = 'admin/adminComments.html.twig';
         
     /**
@@ -18,9 +17,8 @@ class CommentController extends BaseController
      */
     public function adminComment()
     {
-        $session = new PHPSession;
-		if($session->get('admin') == NULL || !$session->get('admin'))
-        {
+        $session = new PHPSession();
+		if ($session->get('admin') == NULL || !$session->get('admin')) {
             return $this->redirect(parent::ERROR_403_PATH);
         }
         $commentManager = new CommentManager('Comment');
@@ -34,7 +32,6 @@ class CommentController extends BaseController
             "commentsNotValidated" => $commentsNotValidated,
             "commentsValidated" => $commentsValidated
         ]);
-
     }
     
     /**
@@ -42,9 +39,8 @@ class CommentController extends BaseController
      */
     public function validComment(int $id = NULL)
     {
-        $session = new PHPSession;
-        if($session->get('admin') == NULL || !$session->get('admin') || !is_int($id))
-        {
+        $session = new PHPSession();
+        if ($session->get('admin') == NULL || !$session->get('admin') || !is_int($id)) {
             return $this->redirect(parent::ERROR_403_PATH);
         }
         $commentManager = new CommentManager('comment');
@@ -61,9 +57,8 @@ class CommentController extends BaseController
      */
     public function invalidComment(int $id = NULL)
     {
-        $session = new PHPSession;
-		if($session->get('admin') == NULL || !$session->get('admin') || !is_int($id))
-        {
+        $session = new PHPSession();
+		if ($session->get('admin') == NULL || !$session->get('admin') || !is_int($id)) {
             return $this->redirect(parent::ERROR_403_PATH);
         }
         $commentManager = new CommentManager('comment');
@@ -74,5 +69,4 @@ class CommentController extends BaseController
 
         return $this->redirect('/admin-commentaires');
     }
-    
 }

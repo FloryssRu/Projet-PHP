@@ -1,14 +1,23 @@
 {% extends "base.html.twig" %}
 
+{% block metatitle %}
+Erreur 403 | Blog de Floryss Rubechi
+{% endblock %}
+
+{% block metadescription %}
+Vous n'avez pas les droits pour accéder à cette page.
+{% endblock %}
 
 {% block title %}
 Erreur 403
 {% endblock %}
 
 {% block body %}
-
-    <h1>Erreur 403 - Accès refusé</h1>
-
-    <p>Vous ne pouvez pas accéder à cette page.</p>
-
+<div class="maincontent">
+    <section>
+        <h1>Erreur 403 - Accès refusé</h1>
+        <p class="textCenter">Vous ne pouvez pas accéder à cette page.</p>
+        <a href="/blogphp/"><p class="buttonRed">Retourner à l'accueil</p></a>
+    </section>
+</div>
 {% endblock %}

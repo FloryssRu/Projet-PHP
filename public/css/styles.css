@@ -1,0 +1,654 @@
+.forSmartphone {
+    display: none;
+}
+
+.forTablet {
+    display: none;
+}
+
+
+/* For all pages, in base.html.twig */
+
+/* flash messages */
+.flashMessage {
+    margin: 40px;
+    border: 1px solid black;
+    padding: 30px;
+    color: white;
+    position: absolute;
+    z-index: 20;
+}
+
+.success {
+    background-color : #4BA537;
+}
+
+.fail {
+    background-color : #C62B2B;
+}
+
+.closeFlash {
+    float: right;
+    max-height: 30px;
+    cursor: pointer;
+}
+
+/* header */
+header {
+    background-color: #251313;
+    padding : 20px;
+    height: 50px;
+}
+
+header > nav > ul {
+    list-style: none;
+    float: right;
+}
+
+header > nav > ul > li {
+    display: block;
+    float: left;
+    padding-left: 15px;
+}
+
+header > nav > ul > li > a {
+    color: white;
+}
+
+/* title of my blog (in header) */
+#blogTitle {
+    font-family : "Century Gothic", Arial, sans-serif;
+    font-weight: normal;
+    font-size: 30px;
+    color: white;
+    float: left;
+    margin-top: 7px;
+    margin-bottom: 0px;
+}
+
+/* main content block */
+.maincontent {
+    margin-left: 10%;
+    margin-top: 0px;
+    width: 70%;
+    padding: 5%;
+    padding-top: 50px;
+}
+
+/* footer */
+footer {
+    background-color: #251313;
+    padding : 20px;
+    height: 430px;
+    color: white;
+}
+
+footer > div > ul, footer > div > nav > ul { /*CSS4 : footer >> ul*/
+    margin-top: 30px;
+    list-style: none;
+    padding: 0px;
+}
+
+footer > div > nav > ul > li, footer > div > ul > li { /*CSS4 : footer >> li*/
+    margin-top: 15px;
+}
+
+footer > div > ul > li > a, footer > div > nav > ul > li > a, footer > div > p > a { /*CSS4 : footer >> a*/
+    color: white;
+}
+
+footer > div > ul > li > a {
+    font-size: 20px;
+}
+
+#pictureInFooter {
+    display: block;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+img.icon {
+    height: 20px;
+}
+
+
+/* general styles of html tags */
+
+h1, h2, h3 {
+    font-family : "Century Gothic", Arial, sans-serif;
+    font-weight: normal;
+    text-align: center;
+}
+
+h1 {
+    font-size: 35px;
+    margin-bottom: 50px;
+}
+
+p, a, li, input {
+    font-family : "Lato", Arial, sans-serif;
+    text-decoration: none;
+}
+
+section {
+    padding: 3%;
+    /*position: relative;*/
+}
+
+
+/* general classes */
+
+.buttonRed {
+    display: block;
+    width: 250px;
+    padding: 20px;
+    margin-top: 50px;
+    background-color: #7a3515;
+    border: none;
+    border-radius: 30px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    cursor: pointer;
+    color: white;
+    clear:both;
+}
+
+.adminIcons {
+    max-height: 20px;
+}
+
+.width50 {
+    width: 45%;
+    float: left;
+}
+.width50:nth-of-type(2n+1) {
+    margin-right: 10%;
+}
+
+.width33 {
+    width: 30%;
+    float: left;
+}
+.width33:first-of-type, .width33:nth-child(2) {
+    margin-right: 5%;
+}
+
+.textRight { text-align: right; }
+
+.textCenter { text-align: center; }
+
+.textLeft { text-align: left; }
+
+.textRed { color:#C62B2B; }
+
+.textGreen { color:#4BA537; }
+
+.italic { font-style : italic; }
+
+.boldInThisDiv { font-weight: bold; }
+
+.marginTop60 { margin-top: 60px; }
+
+.marginTop70Laptop { margin-top: 70px; }
+
+.marginRight { margin-right: 50px; }
+
+.marginBot50 { margin-bottom : 50px; }
+
+.miniMarginBot {
+    display: block;
+    margin-bottom : 10px;
+}
+
+.flexContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: space-around;
+}
+
+.flexContainer > p {
+    margin: 17px;
+}
+
+.flexContainer > p > label {
+    margin: 0px;
+}
+
+.clear { clear: both; }
+
+
+/* Forms */
+
+.divForForm {
+    background-color: #c6b7b2;
+}
+
+.divForForm > h2 {
+    margin-bottom: 5px;
+}
+
+.divForForm > h2.marginBot {
+    margin-bottom: 50px;
+}
+
+.divForForm > p:first-of-type {
+    margin-top: 0px;
+}
+
+form {
+    margin-top: 50px;
+    margin-left: 5%;
+    width: 90%;
+}
+
+label {
+    margin-left: 10px;
+}
+
+input, textarea {
+    margin-top: 10px;
+    width: 100%;
+}
+
+textarea {
+    height: 100px;
+}
+
+.checkbox {
+    display: inline;
+    width: auto;
+}
+
+
+/* For home page (first block for my CV) */
+
+#myCV {
+    background-color: #c6b7b2;
+}
+
+#myCV > div:first-of-type {
+    display: inline-block;
+    width: 20%;
+}
+
+#myCV > div:first-of-type > img {
+    width: 200px;
+}
+
+#myCV > div:last-of-type {
+    width: 80%;
+    float: right;
+}
+
+#myCV > div > h2 {
+    margin-top: 50px; /*responsive*/
+}
+
+#pictureOfMe {
+    max-width: 100%;
+}
+
+
+/* for the title block (in listpost, post and dashboard pages) */
+
+.titleAllWidth {
+    width: 100%;
+    padding: 0px;
+    height: 400px;
+    overflow: hidden;
+}
+
+.titleAllWidth > img {
+    width: 100%;
+    position: relative;
+    top: -200px;
+}
+
+.titleAllWidth > div.gradient {
+    width: 100%;
+    height: 100px;
+    position: absolute;
+    top: 200px;
+    background: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0), rgba(255,255,255,1), rgba(255,255,255,0), rgba(255,255,255,0));
+}
+
+.titleAllWidth > div#tallGradient {
+    height: 150px;
+    top: 150px;
+}
+
+.titleAllWidth > div#smallGradient {
+    height: 52px;
+    top: 140px;
+}
+.titleAllWidth > div#smallGradient > h1 {
+    margin-top: 5px;
+}
+.titleAllWidth > div#smallGradient > img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;
+}
+
+.titleAllWidth > div.gradient > h1 {
+    margin-bottom: 0px;
+}
+
+.titleAllWidth > div.gradient > p {
+    margin-top: 5px;
+    text-align: center;
+}
+
+
+/* For list posts page */
+
+.postInList {
+    margin-top: 20px;
+}
+
+.postInList > h2 {
+    margin-bottom: 5px;
+}
+
+.postInList > p:first-of-type {
+    margin-top: 0px;
+    margin-bottom: 40px;
+}
+
+.postInList:nth-child(3n+1) {
+    border: 3px solid #251313;
+}
+.postInList:nth-child(3n+1) > a > p.buttonRed {
+    background-color: #c6b7b2
+}
+
+.postInList:nth-child(3n+2) {
+    border: 3px solid #c6b7b2;
+}
+
+.postInList:nth-child(3n) {
+    border: 3px solid #7a3515;
+}
+.postInList:nth-child(3n) > a > p.buttonRed {
+    background-color: #251313
+}
+
+
+/* post page */
+
+.comment {
+    background-color: #251313;
+    color: white;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.comment > img {
+    float: left;
+}
+
+.comment > h3 {
+    padding: 10px;
+    padding-left: 85px;
+    margin-bottom: 35px;
+}
+
+.comment > p {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+
+/* link to change password (sign up page) */
+
+.link {
+    margin-top: 40px;
+    height: 50px;
+    line-height: 50px;
+    width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #251313;
+    border-radius: 25px;
+    text-align: center;
+    color: white;
+}
+
+
+/* add and edit post pages */
+
+#imgEditPost {
+    max-width: 200px;
+    float: left;
+    display: block;
+    margin-right: 20px;
+}
+
+#picture {
+    width: auto;
+}
+
+
+
+
+
+/* smartphones */
+@media screen and (max-width: 812px) {
+
+    .forSmartphone {
+        display: block;
+    }
+    .notForSmartphone {
+        display: none;
+    }
+    .marginTop70Laptop {
+        margin: auto;
+    }
+
+    /* general settings */
+    h1 {
+        font-size: 25px;
+    }
+
+    .maincontent {
+        width: 90%;
+        padding-left: 2%;
+        padding-right: 2%;
+        margin: 3%;
+    }
+
+    /* nav */
+    nav {
+        display: none;
+    }
+
+    ul#vertical {
+        background-color: #251313;
+        float: right;
+        padding: 10px;
+        position: absolute;
+        right: 0px;
+        z-index: 10;
+        top: 70px;
+    }
+
+    ul#vertical > li {
+        float: none;
+        margin: 10px;
+        padding: 0;
+    }
+
+    #menu {
+        float: right;
+        width: 15%;
+        margin-top: 5px;
+        max-width: 70px;
+    }
+
+    /* footer */
+    .width33 {
+        width: 100%;
+        float: none;
+    }
+
+    .width33:first-of-type {
+        margin-bottom: 50px;
+    }
+
+    footer {
+        height: 570px;
+    }
+
+    /* forms */
+    .width50 {
+        width: 100%;
+        float: none;
+    }
+
+    .width33:first-of-type, .width33:nth-child(2) {
+        margin-right: 0px;
+    }
+
+    /* home page */
+    #myCV {
+        height: 500px;
+    }
+
+    #myCV > div:first-of-type {
+        display: inline-block;
+        width: 100%;
+        margin-top: 30px;
+    }
+
+    #myCV > div:first-of-type > img {
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+    }
+
+    #myCV > div:last-of-type {
+        width: 100%;
+        float: none;
+    }
+
+    /* title block (listpost, post and dashboard pages) */
+    .titleAllWidth {
+        height: auto;
+        max-height: 270px;
+    }
+
+    .titleAllWidth > img {
+        top: 0px;
+    }
+
+    /* post page */
+    div.comment > h3 {
+        height: 70px;
+        line-height: 35px;
+        margin: 0px;
+        padding-top: 0px;
+    }
+
+    /* admin pages */
+    .xlargecontainer {
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .xlargecontainer > section {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+
+
+
+
+
+/*tablets*/
+@media screen and (min-width: 813px) and (max-width: 1279px) {
+
+    .forTablet {
+        display: block;
+    }
+    .notForTablet {
+        display: none;
+    }
+    .marginTop70Laptop {
+        margin: auto;
+    }
+
+    /* nav */
+    nav {
+        display: none;
+    }
+
+    ul#vertical {
+        background-color: #251313;
+        float: right;
+        padding: 10px;
+        position: absolute;
+        right: 0px;
+        z-index: 10;
+        top: 70px;
+    }
+
+    ul#vertical > li {
+        float: none;
+        margin: 10px;
+        padding: 0;
+    }
+
+    #menu {
+        float: right;
+        width: 15%;
+        margin-top: 5px;
+        max-width: 70px;
+    }
+
+    /* footer */
+    footer {
+        padding: 0;
+    }
+
+    .width33 {
+        width: 46%;
+        margin-left: 2%;
+        margin-right: 2%;
+        padding: 0;
+        float: left;
+    }
+    .width33:first-of-type, .width33:nth-child(2) {
+        margin-right: 2%;
+    }
+
+    /* home page */
+    #myCV {
+        height: 230px;
+    }
+
+    #myCV > div:first-of-type {
+        width: 40%;
+    }
+    
+    #myCV > div:last-of-type {
+        width: 60%;
+    }
+
+    /* for listposts page */
+    .titleAllWidth {
+        height: 310px;
+    }
+    .titleAllWidth > img {
+        top: 0px;
+    }
+}
+

@@ -11,13 +11,10 @@ class TranslateUsersAdminStatus
      */
     public static function translate(array $users)
     {
-        foreach($users as $user)
-        {
-            if($user->getAdmin() == 1)
-            {
+        foreach ($users as $user) {
+            if ($user->getAdmin() == 1) {
                 $user->adminToShow = 'Admin';
-            } else
-            {
+            } else {
                 $user->adminToShow = 'Utilisateur simple';
             }
             $usersModified[] = $user;

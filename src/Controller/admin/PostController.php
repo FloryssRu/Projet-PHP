@@ -3,8 +3,6 @@
 namespace App\Controller\admin;
 
 use App\Core\BaseController;
-use App\Entity\Post;
-use Cocur\Slugify\Slugify;
 use App\Repository\Manager\PostManager;
 use App\Services\DateFormat;
 use App\Services\HandlerPicture;
@@ -14,19 +12,17 @@ use Ramsey\Uuid\Uuid;
 
 class PostController extends BaseController
 {
-
     protected const PATH_TO_ADMIN_POSTS = '/admin-posts';
     private const ADMIN_POSTS_TEMPLATE = 'admin/adminPosts.html.twig';
     protected const DATE = "Y-m-d H:i:s";
-    
+
     /**
      * Form to create a new Post
      */
     public function newPost()
     {
-        $session = new PHPSession;
-		if($session->get('admin') == NULL || !$session->get('admin'))
-        {
+        $session = new PHPSession();
+		if ($session->get('admin') == NULL || !$session->get('admin')) {
             return $this->redirect(parent::ERROR_403_PATH);
         }
         $uuid = Uuid::uuid4();
@@ -34,7 +30,7 @@ class PostController extends BaseController
         $session->set('token', $uuid);
         return $this->render('admin/newPost.html.twig');
     }
-    
+
     /**
      * Add a new post to the database
      */
@@ -43,15 +39,14 @@ class PostController extends BaseController
         $handlerAddPost = new HandlerPost();
         return $handlerAddPost->handlerAddPost();
     }
-    
+
     /**
      * retrieves all published posts and forwards them to the page
      */
     public function adminPosts()
     {
-        $session = new PHPSession;
-		if($session->get('admin') == NULL || !$session->get('admin'))
-        {
+        $session = new PHPSession();
+		if ($session->get('admin') == NULL || !$session->get('admin')) {
             return $this->redirect(parent::ERROR_403_PATH);
         }
         $adminPostManager = new PostManager('Post');
@@ -65,7 +60,7 @@ class PostController extends BaseController
 
         return $this->render(self::ADMIN_POSTS_TEMPLATE, [
             "allPosts" => $getAllPosts
-        ]);   
+        ]);
     }
     
     /**
@@ -73,16 +68,14 @@ class PostController extends BaseController
      */
     public function editPost()
     {
-        $session = new PHPSession;
-		if($session->get('admin') == NULL || !$session->get('admin'))
-        {
+        $session = new PHPSession();
+		if ($session->get('admin') == NULL || !$session->get('admin')) {
             return $this->redirect(parent::ERROR_403_PATH);
         }
         $postManager = new PostManager('Post');
-        $id = $postManager->getIdBySlug($_GET['slug']); //une seule requete
-        $post = $postManager->getById($id);
+        $post = $postManager->getBySlug($_GET['slug']);
 
-        $handlerPicture = new HandlerPicture;
+        $handlerPicture = new HandlerPicture();
         $picture = $handlerPicture->searchPicture($post->getDatePublication());
 
         $uuid = Uuid::uuid4();
@@ -112,13 +105,11 @@ class PostController extends BaseController
      */
     public function deletePost($slug = NULL, string $token = NULL)
     {
-        $session = new PHPSession;
-		if($session->get('admin') == NULL || !$session->get('admin'))
-        {
+        $session = new PHPSession();
+		if ($session->get('admin') == NULL || !$session->get('admin')) {
             return $this->redirect(parent::ERROR_403_PATH);
         }
-        if($token == $session->get('token'))
-        {
+        if ($token == $session->get('token')) {
             $session->delete('token');
             $postManager = new PostManager('post');
             $id = $postManager->getIdBySlug($slug);
@@ -127,10 +118,8 @@ class PostController extends BaseController
             $session->set('success', 'Votre post a bien été supprimé.');
 
             return $this->redirect(self::PATH_TO_ADMIN_POSTS);
-        } else
-        {
+        } else {
             return $this->redirect('/');
         }
-        
     }
 }
