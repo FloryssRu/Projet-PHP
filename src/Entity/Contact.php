@@ -24,8 +24,7 @@ class Contact extends Entity
 
     public function getId(): int
     {
-        $id = $this->id;
-        return $id;
+        return $this->id;
     }
 
     public function setFirstName(string $firstName): void
@@ -35,8 +34,7 @@ class Contact extends Entity
 
     public function getFirstName(): string
     {
-        $firstName = $this->firstName;
-        return $firstName;
+        return $this->firstName;
     }
 
     public function setLastName(string $lastName): void
@@ -46,8 +44,7 @@ class Contact extends Entity
 
     public function getLastName(): string
     {
-        $lastName = $this->lastName;
-        return $lastName;
+        return $this->lastName;
     }
 
     public function setEmail(string $email): void
@@ -57,8 +54,7 @@ class Contact extends Entity
 
     public function getEmail(): string
     {
-        $email = $this->email;
-        return $email;
+        return $this->email;
     }
 
     public function setTitle(string $title): void
@@ -68,8 +64,7 @@ class Contact extends Entity
 
     public function getTitle(): string
     {
-        $title = $this->title;
-        return $title;
+        return $this->title;
     }
 
     public function setContent(string $content): void
@@ -79,8 +74,7 @@ class Contact extends Entity
 
     public function getContent(): string
     {
-        $content = $this->content;
-        return $content;
+        return $this->content;
     }
 
     public function setIsProcessed(bool $isProcessed): void

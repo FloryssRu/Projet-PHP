@@ -94,7 +94,7 @@ class HandlerResetPassword extends AuthenticateController
             $user = $userManager->getById($idUser);
 
             if ($idUser == NULL) {
-                $this->redirect(parent::PATH_TO_PSWD_RESET . $data['uuid']);
+                $this->redirect(parent::PATH_TO_PSWD_RESET . htmlspecialchars($data['uuid']));
             } else {
                 $password = password_hash($data['password'], PASSWORD_DEFAULT);
 

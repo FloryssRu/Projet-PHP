@@ -49,6 +49,7 @@ class HttpRequest
 		{
 			case "GET":
 			case "DELETE":
+			default:
 				foreach ($this->route->getParam() as $param) {
 					if (isset($_GET[$param])) {
 						$this->param[] = $_GET[$param];
