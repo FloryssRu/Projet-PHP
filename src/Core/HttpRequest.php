@@ -47,6 +47,7 @@ class HttpRequest
 	{
 		switch($this->method)
 		{
+			default:
 			case "GET":
 			case "DELETE":
 				foreach ($this->route->getParam() as $param) {

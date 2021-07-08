@@ -56,14 +56,14 @@ class Route
 
 	public function run($httpRequest)
 	{
-		$controller = null;
+		$controllerSearched = null;
 		$controllerName = 'App\Controller\\' . $this->controller . 'Controller';
 
         if (class_exists($controllerName)) {
-            $controller = new $controllerName($httpRequest);
+            $controllerSearched = new $controllerName($httpRequest);
 
-            if (method_exists($controller, $this->action)) {
-				$controller->{$this->action}(...$httpRequest->getParam());
+            if (method_exists($controllerSearched, $this->action)) {
+				$controllerSearched->{$this->action}(...$httpRequest->getParam());
             } else {
                 throw new ActionNotFoundException();
             }
@@ -71,10 +71,10 @@ class Route
             $controllerName = 'App\Controller\admin\\' . $this->controller . 'Controller';
 
 			if (class_exists($controllerName)) {
-				$controller = new $controllerName($httpRequest);
+				$controllerSearched = new $controllerName($httpRequest);
 
-				if (method_exists($controller, $this->action)) {
-					$controller->{$this->action}(...$httpRequest->getParam());
+				if (method_exists($controllerSearched, $this->action)) {
+					$controllerSearched->{$this->action}(...$httpRequest->getParam());
 				} else {
 					throw new ActionNotFoundException();
 				}
